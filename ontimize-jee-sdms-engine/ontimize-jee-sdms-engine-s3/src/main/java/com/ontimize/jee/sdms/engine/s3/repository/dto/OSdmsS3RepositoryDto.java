@@ -1,0 +1,221 @@
+package com.ontimize.jee.sdms.engine.s3.repository.dto;
+
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.Owner;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.ontimize.jee.sdms.common.response.builder.IOSdmsMappeable;
+import com.ontimize.jee.sdms.common.zip.IOSdmsZippeable;
+import com.ontimize.jee.sdms.common.zip.OSdmsZipData;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+
+
+/**
+ * Class that represents the data in response of the S3 Repository.
+ *
+ * @see IOSdmsMappeable
+ * @see IOSdmsZippeable
+ */
+@NoArgsConstructor
+@Data
+public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
+
+    /** The name of the file that marks a folder in S3 */
+    public final static String FILE_NAME_MARK_FOLDER = ".ontimizeSdmsFolder";
+
+    /** The bucket name of S3 */
+    private String bucket;
+
+    /** The key of S3 */
+    private String key;
+
+    /** The relative key of S3 */
+    private String relativeKey;
+
+    /** The prefix of S3 */
+    private String prefix;
+
+    /** The relative prefix of S3 */
+    private String relativePrefix;
+
+    /** The name of S3 object */
+    private String name;
+
+    /** The owner of S3 object */
+    private String owner;
+
+    /** The size of S3 object */
+    private Long size;
+
+    /** Flag that indicates if the object is a folder */
+    private boolean folder = false;
+
+    /** The last modified date of S3 object */
+    private Date lastModified;
+
+    /** The metadata of S3 object */
+    private Map<String, Object> metadata;
+
+    /** The bytes of S3 file */
+    private InputStream file;
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    /**
+     * Method that sets the bucket name, key and prefix, the bytes of file and the file metadata from S3Object.
+     *
+     * @param s3Object The S3Object.
+     *
+     * @see S3Object
+     */
+    public void set( final S3Object s3Object ){
+        this.processKey( s3Object.getKey() );
+        this.bucket = s3Object.getBucketName();
+        this.file = s3Object.getObjectContent();
+        final ObjectMetadata objectMetadata = s3Object.getObjectMetadata();
+        this.set( objectMetadata );
+    }
+
+
+
+    /**
+     * Method that sets the bucket name, key and prefix, the object size, the object owner and the last modified date from
+     * S3ObjectSummary.
+     *
+     * @param s3ObjectSummary The S3ObjectSummary.
+     *
+     * @see S3ObjectSummary
+     */
+    public void set( final S3ObjectSummary s3ObjectSummary ){
+        this.processKey( s3ObjectSummary.getKey() );
+        this.bucket = s3ObjectSummary.getBucketName();
+        this.size = s3ObjectSummary.getSize();
+        this.lastModified = s3ObjectSummary.getLastModified();
+        final Owner owner = s3ObjectSummary.getOwner();
+        if( owner != null ) this.owner = owner.getDisplayName();
+    }
+
+
+    /**
+     * Method that sets the bucket name, key and prefix, the object size and the object metadata from ObjectMetadata.
+     *
+     * @param objectMetadata The ObjectMetadata.
+     *
+     * @see ObjectMetadata
+     */
+    public void set( final ObjectMetadata objectMetadata ){
+        this.size = objectMetadata.getContentLength();
+        this.metadata = objectMetadata.getRawMetadata();
+    }
+
+
+    /**
+     * Method that sets the folder data from bucket and prefix.
+     *
+     * @param bucket The bucket name.
+     * @param prefix The prefix.
+     */
+    public void setFolderData( final String bucket, final String prefix ){
+        this.processKey( prefix );
+        this.key = prefix;
+        this.bucket = bucket;
+        this.folder = true;
+    }
+
+
+    /**
+     * Method that sets the relative key from workspace list.
+     *
+     * @param workspaces The workspace list.
+     */
+    public void setRelativeKey( final List<String> workspaces ){
+        this.relativeKey = this.key;
+        workspaces.forEach( target -> this.relativeKey = this.relativeKey.replaceFirst( target, "" ));
+    }
+
+
+    /**
+     * Method that sets the relative prefix from workspace list.
+     *
+     * @param workspaces The workspace list.
+     */
+    public void setRelativePrefix( final List<String> workspaces ){
+        this.relativePrefix = this.prefix;
+        workspaces.forEach( target -> this.relativePrefix = this.relativePrefix.replaceFirst( target, "" ));
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    @Override
+    public Map<?, ?> toMap() {
+        final SimpleDateFormat simpleDateFormatter = new SimpleDateFormat( "dd/MM/yyyy" );
+        final Map<String, Object> result = new HashMap<>();
+
+        if( this.bucket != null ) result.put( "bucket", this.bucket );
+        if( this.prefix != null ) result.put( "prefix", this.prefix );
+        if( this.relativePrefix != null ) result.put( "relativePrefix", this.relativePrefix );
+        if( this.key != null ) result.put( "key", this.key );
+        if( this.relativeKey != null ) result.put( "relativeKey", this.relativeKey );
+        if( this.name != null ) result.put( "name", this.name );
+        if( this.owner != null ) result.put( "owner", this.owner );
+        if( this.file != null ) result.put( "file", this.file );
+        if( this.size != null ) result.put( "size", this.size );
+        if( this.lastModified != null ) result.put( "lastModified", simpleDateFormatter.format( this.lastModified ) );
+        if( this.metadata != null && !this.metadata.isEmpty() ) result.put( "metadata", this.metadata );
+        result.put( "folder", this.folder );
+
+        return result;
+    }
+
+    @Override
+    public OSdmsZipData getDataToZip() {
+        OSdmsZipData result = null;
+        if( !this.folder && !this.name.equals( OSdmsS3RepositoryDto.FILE_NAME_MARK_FOLDER ) ) {
+            String fileName = this.key.replaceAll("/", ".");
+            if( fileName.endsWith( "." )) fileName = fileName.substring( 0, fileName.length() - 1 );
+            result = new OSdmsZipData();
+            result.setInputStream(this.file);
+            result.setFileName( fileName );
+        }
+        return result;
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// ------| UTILITIES |----------------------------------------------------------------------------------------------- \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    /**
+     * Method that process the key to get the bucket name, key and prefix.
+     *
+     * @param key The key.
+     */
+    public void processKey( final String key ){
+        //Get key
+        this.key = key;
+
+        //Get name
+        final String[] keyParts = key.split( "/" );
+        final int lastPosition = keyParts.length - 1;
+        if( lastPosition >= 0 ){
+            this.name = keyParts[ lastPosition ];
+        }
+
+        //Get Prefix
+        if( this.name != null ) this.prefix = this.key.replaceAll( String.format( "/%s/?$", this.name ), "" );
+        if( !this.prefix.endsWith( "/" )) this.prefix = this.prefix.concat( "/" );
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+}
+
