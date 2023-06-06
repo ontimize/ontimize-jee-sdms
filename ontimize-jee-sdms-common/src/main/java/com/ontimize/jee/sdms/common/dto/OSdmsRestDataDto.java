@@ -1,7 +1,4 @@
 package com.ontimize.jee.sdms.common.dto;
-
-import lombok.Data;
-
 import java.util.Map;
 
 
@@ -9,7 +6,6 @@ import java.util.Map;
 /**
  * Class to define the data to be sent to the DMS.
  */
-@Data
 public class OSdmsRestDataDto {
 
     /** The map containing the filter data. */

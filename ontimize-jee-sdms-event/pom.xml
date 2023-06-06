@@ -7,8 +7,8 @@
     <artifactId>ontimize-jee-sdms-event</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Ontimize EE Storage DMS (Event module)</name>
-    <description>Ontimize EE Storage DMS (Event module)</description>
+    <name>Ontimize EE SDMS (Event module)</name>
+    <description>Ontimize EE Storage DMS (SDMS) - Event module</description>
     <url>https://www.ontimize.com</url>
 
     <parent>
@@ -41,7 +41,7 @@
     <scm>
         <connection>scm:git:git://github.com/ontimize/ontimize-jee-sdms.git</connection>
         <developerConnection>scm:git:ssh://github.com:ontimize/ontimize-jee-sdms.git</developerConnection>
-        <url>https://github.com/ontimize/ontimize-jee-sdms/tree/master</url>
+        <url>https://github.com/ontimize/ontimize-jee-sdms/tree/main</url>
     </scm>
 
     <dependencies>
@@ -55,12 +55,6 @@
         <dependency>
             <groupId>com.ontimize.jee</groupId>
             <artifactId>ontimize-jee-common</artifactId>
-        </dependency>
-
-        <!-- LOMBOK -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 

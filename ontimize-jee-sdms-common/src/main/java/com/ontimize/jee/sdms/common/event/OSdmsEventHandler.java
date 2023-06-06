@@ -2,7 +2,6 @@ package com.ontimize.jee.sdms.common.event;
 
 import com.ontimize.jee.sdms.common.event.data.IOSdmsEventData;
 import com.ontimize.jee.sdms.common.event.listener.IOSdmsEventListener;
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
  *
  * @see IOSdmsEventHandler
  */
-@NoArgsConstructor
 public class OSdmsEventHandler implements IOSdmsEventHandler {
 
     /**
@@ -30,6 +28,12 @@ public class OSdmsEventHandler implements IOSdmsEventHandler {
     /** Map to store events as keys and listeners as values. */
     private final Map<Enum, Set<IOSdmsEventListener>> events = new HashMap<>();
 
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public OSdmsEventHandler(){}
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override

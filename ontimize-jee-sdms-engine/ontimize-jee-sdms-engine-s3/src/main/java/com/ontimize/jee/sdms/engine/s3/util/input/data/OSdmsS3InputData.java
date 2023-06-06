@@ -1,9 +1,5 @@
 package com.ontimize.jee.sdms.engine.s3.util.input.data;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Map;
 
 
@@ -11,9 +7,6 @@ import java.util.Map;
 /**
  * This class represents the input data that can be used to build a S3 engine.
  */
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 public class OSdmsS3InputData {
 
     /** The current prefix from the realized the action. */
@@ -34,6 +27,73 @@ public class OSdmsS3InputData {
     /** The metadata. */
     private Map<String, String> metadata;
 
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public OSdmsS3InputData(){}
+
+    public OSdmsS3InputData( final String currentPrefix, final String prefix, final String fileName, final String id, final String key, final Map<String, String> metadata) {
+        this.setCurrentPrefix( currentPrefix );
+        this.setPrefix( prefix );
+        this.setFileName( fileName );
+        this.setId( id );
+        this.setKey( key );
+        this.setMetadata( metadata );
+    }
+
+    // ------------------------------------------------------------------------------------------------------------------ \\
+// -------| GETTERS AND SETTERS |------------------------------------------------------------------------------------ \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public String getCurrentPrefix() {
+        return this.currentPrefix;
+    }
+
+    public void setCurrentPrefix( final String currentPrefix ) {
+        this.currentPrefix = currentPrefix;
+    }
+
+    public String getPrefix() {
+        return this.prefix;
+    }
+
+    public void setPrefix( final String prefix ) {
+        this.prefix = prefix;
+    }
+
+    public String getFileName() {
+        return this.fileName;
+    }
+
+    public void setFileName( final String fileName ) {
+        this.fileName = fileName;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public void setId( final String id ) {
+        this.id = id;
+    }
+
+    public String getKey() {
+        return this.key;
+    }
+
+    public void setKey( final String key ) {
+        this.key = key;
+    }
+
+    public Map<String, String> getMetadata() {
+        return this.metadata;
+    }
+
+    public void setMetadata( final Map<String, String> metadata ) {
+        this.metadata = metadata;
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// -------| HAS METHODS |-------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     /**

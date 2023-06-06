@@ -1,7 +1,5 @@
 package com.ontimize.jee.sdms.common.crypter;
 
-
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -16,7 +14,6 @@ import java.util.Base64;
  *
  * @see Base64
  */
-@NoArgsConstructor
 @Component( "OSdmsBase64Crypter" )
 public class OSdmsBase64Crypter implements IOSdmsCrypter {
 
@@ -25,6 +22,10 @@ public class OSdmsBase64Crypter implements IOSdmsCrypter {
      * during program execution.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsBase64Crypter.class );
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public OSdmsBase64Crypter(){}
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------ \\

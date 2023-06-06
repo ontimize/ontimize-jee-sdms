@@ -7,8 +7,6 @@ import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.ontimize.jee.sdms.common.response.builder.IOSdmsMappeable;
 import com.ontimize.jee.sdms.common.zip.IOSdmsZippeable;
 import com.ontimize.jee.sdms.common.zip.OSdmsZipData;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -25,8 +23,6 @@ import java.util.Map;
  * @see IOSdmsMappeable
  * @see IOSdmsZippeable
  */
-@NoArgsConstructor
-@Data
 public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
 
     /** The name of the file that marks a folder in S3 */
@@ -68,6 +64,118 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
     /** The bytes of S3 file */
     private InputStream file;
 
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public OSdmsS3RepositoryDto(){}
+
+    public OSdmsS3RepositoryDto( final S3Object s3Object, final S3ObjectSummary s3ObjectSummary, final ObjectMetadata objectMetadata ){
+        this.set( s3Object );
+        this.set( s3ObjectSummary );
+        this.set( objectMetadata );
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// ------| GETTERS AND SETTERS |------------------------------------------------------------------------------------- \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public String getBucket() {
+        return this.bucket;
+    }
+
+    public void setBucket( final String bucket ) {
+        this.bucket = bucket;
+    }
+
+    public String getKey() {
+        return this.key;
+    }
+
+    public void setKey( final String key ) {
+        this.key = key;
+    }
+
+    public String getRelativeKey() {
+        return this.relativeKey;
+    }
+
+    public void setRelativeKey( final String relativeKey ) {
+        this.relativeKey = relativeKey;
+    }
+
+    public String getPrefix() {
+        return this.prefix;
+    }
+
+    public void setPrefix( final String prefix ) {
+        this.prefix = prefix;
+    }
+
+    public String getRelativePrefix() {
+        return this.relativePrefix;
+    }
+
+    public void setRelativePrefix( final String relativePrefix ) {
+        this.relativePrefix = relativePrefix;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName( final String name ) {
+        this.name = name;
+    }
+
+    public String getOwner() {
+        return this.owner;
+    }
+
+    public void setOwner( final String owner ) {
+        this.owner = owner;
+    }
+
+    public Long getSize() {
+        return this.size;
+    }
+
+    public void setSize( final Long size ) {
+        this.size = size;
+    }
+
+    public boolean isFolder() {
+        return this.folder;
+    }
+
+    public void setFolder( final boolean folder ) {
+        this.folder = folder;
+    }
+
+    public Date getLastModified() {
+        return this.lastModified;
+    }
+
+    public void setLastModified( final Date lastModified ) {
+        this.lastModified = lastModified;
+    }
+
+    public Map<String, Object> getMetadata() {
+        return this.metadata;
+    }
+
+    public void setMetadata( final Map<String, Object> metadata ) {
+        this.metadata = metadata;
+    }
+
+    public InputStream getFile() {
+        return this.file;
+    }
+
+    public void setFile( final InputStream file ) {
+        this.file = file;
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// ------| SET METHODS |--------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     /**

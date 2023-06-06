@@ -1,8 +1,6 @@
 package com.ontimize.jee.sdms.engine.s3.repository.request;
 
 import com.amazonaws.AmazonWebServiceRequest;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -14,8 +12,6 @@ import java.io.Serializable;
  * @see AmazonWebServiceRequest
  * @see Serializable
  */
-@Getter
-@NoArgsConstructor
 public class OSdmsS3RepositorySimpleRequest extends AmazonWebServiceRequest implements Serializable {
 
     /** The name of the S3 bucket */
@@ -28,6 +24,46 @@ public class OSdmsS3RepositorySimpleRequest extends AmazonWebServiceRequest impl
     private String key;
 
 
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public OSdmsS3RepositorySimpleRequest(){}
+
+    public OSdmsS3RepositorySimpleRequest( final String bucketName, final String prefix, final String key ) {
+        this.setBucketName( bucketName );
+        this.setPrefix( prefix );
+        this.setKey( key );
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// ------| GETTERS AND SETTERS |------------------------------------------------------------------------------------- \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public String getBucketName() {
+        return this.bucketName;
+    }
+
+    public void setBucketName( final String bucketName ) {
+        this.bucketName = bucketName;
+    }
+
+    public String getPrefix() {
+        return this.prefix;
+    }
+
+    public void setPrefix( final String prefix ) {
+        this.prefix = prefix;
+    }
+
+    public String getKey() {
+        return this.key;
+    }
+
+    public void setKey( final String key ) {
+        this.key = key;
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// ------| WITH METHODS |-------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     /**

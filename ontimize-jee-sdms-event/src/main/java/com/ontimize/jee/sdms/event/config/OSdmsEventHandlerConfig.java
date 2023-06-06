@@ -33,6 +33,10 @@ public class OSdmsEventHandlerConfig {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
+    public OSdmsEventHandlerConfig(){}
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+
     /**
      * This method creates and returns an instance of OSdmsEventHandler as a Spring bean. It uses the
      * getAnnotedOntimzeEventListeners() method to obtain a list of all the Ontimize Event Listeners in the application

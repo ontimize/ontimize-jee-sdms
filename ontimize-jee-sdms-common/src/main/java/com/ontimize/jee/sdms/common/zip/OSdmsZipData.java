@@ -1,11 +1,5 @@
 package com.ontimize.jee.sdms.common.zip;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 import java.io.InputStream;
 import java.util.Objects;
 
@@ -14,10 +8,6 @@ import java.util.Objects;
 /**
  * This class represents the data that will be compressed by the {@link IOSdmsZipCompressor}.
  */
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
-@EqualsAndHashCode
 public class OSdmsZipData {
 
     /**
@@ -30,7 +20,37 @@ public class OSdmsZipData {
      */
     private InputStream inputStream;
 
+// ------------------------------------------------------------------------------------------------------------------ \\
 
+    public OSdmsZipData(){}
+
+    public OSdmsZipData( final String fileName, final InputStream inputStream ) {
+        this.setFileName( fileName );
+        this.setInputStream( inputStream );
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// ------| GETTERS AND SETTERS |------------------------------------------------------------------------------------- \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public String getFileName() {
+        return this.fileName;
+    }
+
+    public void setFileName( final String fileName ) {
+        this.fileName = fileName;
+    }
+
+    public InputStream getInputStream() {
+        return this.inputStream;
+    }
+
+    public void setInputStream( final InputStream inputStream ) {
+        this.inputStream = inputStream;
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// ------| EQUALS AND HASHCODE |------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override

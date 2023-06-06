@@ -19,7 +19,6 @@ import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
 import com.ontimize.jee.sdms.engine.s3.util.response.mapper.IOSdmsS3ResponseMapper;
 import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
 import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
-import lombok.SneakyThrows;
 
 
 
@@ -143,7 +142,6 @@ public class OSdmsS3UpdateCommand implements IOSdmsCommand {
 // ------| RUN |----------------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    @SneakyThrows
     @Override
     public void run() {
         final ListObjectsRequest request = new ListObjectsRequest()

@@ -2,12 +2,11 @@ package com.ontimize.jee.sdms.server.service;
 
 import com.ontimize.jee.common.dto.EntityResult;
 import com.ontimize.jee.sdms.common.dto.OSdmsRestDataDto;
+import com.ontimize.jee.sdms.common.engine.IOSdmsEngine;
 import com.ontimize.jee.sdms.common.event.IOSdmsEventHandler;
 import com.ontimize.jee.sdms.common.event.data.OSdmsEventData;
 import com.ontimize.jee.sdms.common.event.data.builder.IOSdmsEventDataBuilder;
-import com.ontimize.jee.sdms.common.engine.IOSdmsEngine;
 import com.ontimize.jee.sdms.event.OSdmsServiceEvent;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,7 +22,6 @@ import java.io.Serializable;
  * @see IOSdmsService
  * @see InitializingBean
  */
-@NoArgsConstructor
 @Component( "OSdmsService" )
 public class OSdmsService implements IOSdmsService {
 
@@ -34,6 +32,10 @@ public class OSdmsService implements IOSdmsService {
     private @Autowired IOSdmsEventHandler eventHandler;
 
     private @Autowired IOSdmsEngine engine;
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public OSdmsService(){}
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 

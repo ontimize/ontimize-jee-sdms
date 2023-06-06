@@ -6,8 +6,8 @@
     <artifactId>ontimize-jee-sdms</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>Ontimize EE Storage DMS</name>
-    <description>Ontimize EE Storage DMS is a system for storing and managing files by entity.</description>
+    <name>Ontimize EE SDMS</name>
+    <description>Ontimize EE Storage DMS (SDMS) is a system for storing and managing files by entity.</description>
     <url>https://www.ontimize.com</url>
 
     <parent>
@@ -40,7 +40,7 @@
     <scm>
         <connection>scm:git:git://github.com/ontimize/ontimize-jee-sdms.git</connection>
         <developerConnection>scm:git:ssh://github.com/ontimize/ontimize-jee-sdms.git</developerConnection>
-        <url>https://github.com/ontimize/ontimize-jee-sdms.git/tree/master</url>
+        <url>https://github.com/ontimize/ontimize-jee-sdms.git/tree/main</url>
     </scm>
 
     <distributionManagement>
@@ -72,9 +72,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- DEPENDENCIES -->
-        <ontimize-jee.version>5.4.0</ontimize-jee.version>
+        <ontimize-jee.version>5.7.0</ontimize-jee.version>
         <reflections.version>0.10.2</reflections.version>
-        <lombok.version>1.18.24</lombok.version>
         <amazonaws.version>1.12.382</amazonaws.version>
 
         <!-- PLUGINS -->
@@ -151,13 +150,6 @@
                 <groupId>org.reflections</groupId>
                 <artifactId>reflections</artifactId>
                 <version>${reflections.version}</version>
-            </dependency>
-
-            <!-- LOMBOK -->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
             </dependency>
 
             <!-- AMAZON AWS S3 -->

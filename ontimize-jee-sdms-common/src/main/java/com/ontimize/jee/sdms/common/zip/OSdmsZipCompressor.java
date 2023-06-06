@@ -1,6 +1,5 @@
 package com.ontimize.jee.sdms.common.zip;
 
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,6 @@ import java.util.zip.ZipOutputStream;
  * The OSdmsZipCompressor class is an implementation of the {@link IOSdmsZipCompressor} interface, which provides
  * functionality to compress lists of {@link IOSdmsZippeable} elements into a ZIP file.
  */
-@NoArgsConstructor
 @Component( "OSdmsZipCompressor" )
 public class OSdmsZipCompressor implements IOSdmsZipCompressor {
 
@@ -31,6 +29,10 @@ public class OSdmsZipCompressor implements IOSdmsZipCompressor {
      * during program execution.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsZipCompressor.class );
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public OSdmsZipCompressor(){}
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\

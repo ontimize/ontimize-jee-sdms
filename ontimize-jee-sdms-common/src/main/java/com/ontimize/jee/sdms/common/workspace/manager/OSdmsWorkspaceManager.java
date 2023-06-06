@@ -3,7 +3,6 @@ package com.ontimize.jee.sdms.common.workspace.manager;
 import com.ontimize.jee.sdms.common.path.builder.IOSdmsPathBuilder;
 import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
 import com.ontimize.jee.sdms.common.workspace.autoregister.IOSdmsWorkspaceManagerAutoRegister;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -19,7 +18,6 @@ import java.util.*;
  *
  * @see IOSdmsWorkspaceManager
  */
-@NoArgsConstructor
 @Component( "OSdmsWorkspaceManager" )
 @Scope( value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS )
 public class OSdmsWorkspaceManager implements IOSdmsWorkspaceManager {
@@ -44,15 +42,7 @@ public class OSdmsWorkspaceManager implements IOSdmsWorkspaceManager {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    /**
-     * Method that registers the workspaces annotated with the {@link OSdmsWorkspace} annotation.
-     */
-    private void autoRegister() {
-        if( this.isAutoRegisterEnable ){
-            this.isAutoRegisterEnable = false;
-            this.workspaceManagerAutoRegister.run( this );
-        }
-    }
+    public OSdmsWorkspaceManager(){}
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
@@ -226,6 +216,20 @@ public class OSdmsWorkspaceManager implements IOSdmsWorkspaceManager {
     @Override
     public boolean exists( final OSdmsWorkspace workspace ) {
         return this.exists( workspace.getName() );
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// ------| UTILITIES |----------------------------------------------------------------------------------------------- \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    /**
+     * Method that registers the workspaces annotated with the {@link OSdmsWorkspace} annotation.
+     */
+    private void autoRegister() {
+        if( this.isAutoRegisterEnable ){
+            this.isAutoRegisterEnable = false;
+            this.workspaceManagerAutoRegister.run( this );
+        }
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

@@ -1,6 +1,5 @@
 package com.ontimize.jee.sdms.common.path.validator;
 
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -16,7 +15,6 @@ import java.util.regex.Pattern;
  *
  * @see IOSdmsPathValidator
  */
-@NoArgsConstructor
 @Component( "OSdmsS3PathValidator" )
 public class OSdmsPathValidator implements IOSdmsPathValidator {
 
@@ -25,6 +23,10 @@ public class OSdmsPathValidator implements IOSdmsPathValidator {
      * during program execution.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsPathValidator.class );
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public OSdmsPathValidator(){}
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\

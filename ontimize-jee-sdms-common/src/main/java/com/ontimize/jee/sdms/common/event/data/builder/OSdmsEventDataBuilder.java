@@ -1,8 +1,6 @@
 package com.ontimize.jee.sdms.common.event.data.builder;
 
 import com.ontimize.jee.sdms.common.event.data.OSdmsEventData;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -16,8 +14,6 @@ import java.util.Map;
  *
  * @see IOSdmsEventDataBuilder
  */
-@Data
-@NoArgsConstructor
 @Component( "OSdmsEventDataBuilder" )
 public class OSdmsEventDataBuilder implements IOSdmsEventDataBuilder {
 
@@ -26,6 +22,10 @@ public class OSdmsEventDataBuilder implements IOSdmsEventDataBuilder {
 
     /** Input data */
     private Map<String, Object> inputs = new HashMap<>();
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public OSdmsEventDataBuilder(){}
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------ \\
@@ -55,6 +55,19 @@ public class OSdmsEventDataBuilder implements IOSdmsEventDataBuilder {
         this.clear();
         return result;
     }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// -------| GETTERS |------------------------------------------------------------------------------------------------ \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public Class<?> getSource() {
+        return this.source;
+    }
+
+    public Map<String, Object> getInputs() {
+        return this.inputs;
+    }
+
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| UTILITIES |---------------------------------------------------------------------------------------------- \\

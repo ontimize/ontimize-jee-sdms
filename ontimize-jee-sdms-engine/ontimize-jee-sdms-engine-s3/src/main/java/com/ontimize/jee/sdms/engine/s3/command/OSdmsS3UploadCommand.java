@@ -19,9 +19,9 @@ import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
 import com.ontimize.jee.sdms.engine.s3.util.response.mapper.IOSdmsS3ResponseMapper;
 import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
 import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
-import lombok.SneakyThrows;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 
 
 /**
@@ -126,16 +126,20 @@ public class OSdmsS3UploadCommand implements IOSdmsCommand {
 // ------| RUN |----------------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    @SneakyThrows
     @Override
     public void run() {
         final ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength( this.file.getSize() );
 
-        final PutObjectRequest request = new PutObjectRequest( this.bucket, this.key, this.file.getInputStream(), metadata );
-        if( this.data.hasMetadata() ) this.data.getMetadata().forEach( metadata::addUserMetadata );
+        try {
+            final PutObjectRequest request = new PutObjectRequest(this.bucket, this.key, this.file.getInputStream(), metadata);
+            if (this.data.hasMetadata()) this.data.getMetadata().forEach(metadata::addUserMetadata);
 
-        this.response = this.repository.upload( request );
+            this.response = this.repository.upload(request);
+        }
+        catch ( final IOException e ) {
+            //Empty
+        }
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

@@ -13,6 +13,8 @@ public class OSdmsS3RepositoryConfigCondition implements Condition {
     //Properties Key Constants
     public static final String KEY = "ontimize.sdms.s3";
 
+    public OSdmsS3RepositoryConfigCondition(){}
+
     @Override
     public boolean matches( final ConditionContext context, final AnnotatedTypeMetadata metadata ) {
         boolean result = true;

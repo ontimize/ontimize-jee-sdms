@@ -1,10 +1,5 @@
 package com.ontimize.jee.sdms.common.event.data;
 
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,9 +9,6 @@ import java.util.Map;
  *
  * @see IOSdmsEventData
  */
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 public class OSdmsEventData<T> implements IOSdmsEventData {
 
     /** The source */
@@ -31,19 +23,42 @@ public class OSdmsEventData<T> implements IOSdmsEventData {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
+    public OSdmsEventData(){}
+
     public OSdmsEventData(final Class<?> source, final Map<String, Object> inputs ){
         this.setSource( source );
         this.setInputs( inputs );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
-// -------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------ \\
+// ------| GETTERS AND SETTERS |------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
+
+    public Class<?> getSource() {
+        return this.source;
+    }
+
+    public void setSource( final Class<?> source ) {
+        this.source = source;
+    }
+
+    public Enum getEvent() {
+        return this.event;
+    }
 
     @Override
     public void setEvent( final Enum event ){
         this.event = event;
     }
+
+    public Map<String, Object> getInputs() {
+        return this.inputs;
+    }
+
+    public void setInputs( final Map<String, Object> inputs) {
+        this.inputs = inputs;
+    }
+
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 }

@@ -9,7 +9,6 @@ import com.ontimize.jee.sdms.engine.s3.repository.dto.OSdmsS3RepositoryDto;
 import com.ontimize.jee.sdms.engine.s3.repository.request.OSdmsS3RepositorySimpleRequest;
 import com.ontimize.jee.sdms.engine.s3.repository.response.OSdmsS3RepositoryResponse;
 import com.ontimize.jee.sdms.event.OSdmsS3RepositoryEvent;
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +28,6 @@ import static com.ontimize.jee.sdms.engine.s3.repository.IOSdmsS3Repository.*;
  *
  * @see IOSdmsS3Repository
  */
-@NoArgsConstructor
 @Repository("OSdmsS3RepositoryProxy")
 public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
 
@@ -50,6 +48,10 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
     /** The S3 Repository */
     @Qualifier( "OSdmsS3Repository" )
     private @Autowired IOSdmsS3Repository repository;
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public OSdmsS3RepositoryProxy(){}
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| FIND |--------------------------------------------------------------------------------------------------- \\

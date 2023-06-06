@@ -10,7 +10,6 @@ import com.ontimize.jee.sdms.engine.s3.repository.request.OSdmsS3RepositorySimpl
 import com.ontimize.jee.sdms.engine.s3.repository.response.OSdmsS3RepositoryResponse;
 import com.ontimize.jee.sdms.engine.s3.repository.response.builder.IOSdmsS3RepositoryResponseBuilder;
 import com.ontimize.jee.sdms.engine.s3.repository.response.codes.OSdmsS3RepositoryResponseCodes;
-import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,6 @@ import java.util.stream.Collectors;
  *
  * @see IOSdmsS3Repository
  */
-@NoArgsConstructor
 @Repository( "OSdmsS3Repository" )
 public class OSdmsS3Repository implements IOSdmsS3Repository {
 
@@ -59,6 +57,10 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
 
     /** The s3 repository response builder to build the response of each operation. */
     private @Autowired IOSdmsS3RepositoryResponseBuilder oSdmsS3RepositoryResponseBuilder;
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    public OSdmsS3Repository(){}
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| FIND |--------------------------------------------------------------------------------------------------- \\

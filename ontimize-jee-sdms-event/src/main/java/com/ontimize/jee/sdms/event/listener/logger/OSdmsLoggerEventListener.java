@@ -4,7 +4,7 @@ import com.ontimize.jee.sdms.common.event.data.OSdmsEventData;
 import com.ontimize.jee.sdms.common.event.listener.IOSdmsEventListener;
 import com.ontimize.jee.sdms.event.OSdmsS3RepositoryEvent;
 import com.ontimize.jee.sdms.event.OSdmsServiceEvent;
-import lombok.EqualsAndHashCode;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,6 @@ import java.util.Map;
  * @see IOSdmsEventListener
  * @see OSdmsEventData
  */
-@EqualsAndHashCode
 @OSdmsEventListener
 public class OSdmsLoggerEventListener implements IOSdmsEventListener<OSdmsEventData> {
 
