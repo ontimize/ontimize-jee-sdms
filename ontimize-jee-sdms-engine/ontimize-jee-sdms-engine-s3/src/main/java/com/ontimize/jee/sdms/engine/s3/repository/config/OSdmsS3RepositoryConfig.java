@@ -2,6 +2,7 @@ package com.ontimize.jee.sdms.engine.s3.repository.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -34,6 +35,11 @@ public class OSdmsS3RepositoryConfig {
     @Value( "${ontimize.sdms.s3.region}" )
     private String region;
 
+
+    /** The endpoing of Amazon S3 */
+    @Value( "${ontimize.sdms.s3.endpoint:}" )
+    private String endpoint;
+
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     public OSdmsS3RepositoryConfig() {}
@@ -51,10 +57,17 @@ public class OSdmsS3RepositoryConfig {
         BasicAWSCredentials awsCreds = new BasicAWSCredentials( this.accessKey, this.secretKey );
 
         //Configure and return AmazonS3 bean
-        return AmazonS3ClientBuilder.standard()
-                .withRegion( Regions.fromName( this.region ) )
-                .withCredentials( new AWSStaticCredentialsProvider( awsCreds ) )
-                .build();
+        final AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard()
+                .withCredentials( new AWSStaticCredentialsProvider( awsCreds ) );
+
+        if( this.endpoint != null && !this.endpoint.isEmpty() ){
+            builder.withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(this.endpoint, this.region));
+        }
+        else {
+            builder.withRegion(Regions.fromName(this.region));
+        }
+
+        return builder.build();
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
