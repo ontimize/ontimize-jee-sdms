@@ -49,7 +49,7 @@ public class OSdmsS3RepositoryResponse<T> {
     public OSdmsS3RepositoryResponse( final OSdmsS3RepositoryResponseCodes code, final String message, final List<T> data ) {
         this.setCode( code );
         this.setMessage( message );
-        this.setCode( code );
+        this.setData( data );
     }
 
     // ------------------------------------------------------------------------------------------------------------------ \\
