@@ -1,14 +1,15 @@
 package com.ontimize.jee.sdms.common.zip;
 
+import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
+import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -39,12 +40,7 @@ public class OSdmsZipCompressor implements IOSdmsZipCompressor {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public <T extends IOSdmsZippeable> OSdmsZipDto compress(final String zipName, final List<T> dataToZip ){
-        //Initialize result as null
-        OSdmsZipDto result = null;
-
-        //Initialize data
-        byte[] buffer = new byte[ 1024 ];
+    public <T extends IOSdmsZippeable> OSdmsZipDto compress( final String zipName, final List<T> dataToZip ) {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ZipOutputStream zos = new ZipOutputStream(baos);
         final Set<OSdmsZipData> data = dataToZip.stream()
@@ -52,50 +48,46 @@ public class OSdmsZipCompressor implements IOSdmsZipCompressor {
                 .filter( target -> target != null )
                 .collect( Collectors.toSet() );
 
-        try {
-            //Iterate data
-            for( final OSdmsZipData oSdmsZipData : data ){
-
-                //Check data
-                if( oSdmsZipData != null ) { //If exists data
-                    //Get name and bytes from data
-                    final String fileName = oSdmsZipData.getFileName();
-                    final InputStream inputStream = oSdmsZipData.getInputStream();
-
-                    //Add entry to zip
-                    zos.putNextEntry(new ZipEntry(fileName));
-
-                    //Read File
-                    int length;
-                    while ((length = inputStream.read(buffer)) > 0) {
-                        //Write Zip
-                        zos.write(buffer, 0, length);
-                    }
-
-                    //Close resources
-                    zos.closeEntry();
-                    inputStream.close();
+        for( final OSdmsZipData zipData : data ) {
+            final ZipEntry entry = new ZipEntry( zipData.getFileName() );
+            try {
+                zos.putNextEntry(entry);
+                final byte[] bytes = new byte[1024];
+                int length;
+                while( (length = zipData.getInputStream().read( bytes )) >= 0 ) {
+                    zos.write( bytes, 0, length );
                 }
             }
-
-            //Check baos size
-            if( baos.size() > 0 ) { //If exists data
-                //Add data to result
-                result = new OSdmsZipDto();
-                result.setFile(new ByteArrayInputStream(baos.toByteArray()));
-                result.setName(zipName);
-                result.setSize(baos.size());
+            catch ( final IOException e ) {
+                LOGGER.error( "Error compressing data to ZIP file: {}", e.getMessage() );
             }
+            finally {
+                try {
+                    zos.closeEntry();
+                    zipData.getInputStream().close();
+                }
+                catch ( final IOException e) {
+                    LOGGER.error( "Error closing Resoources: {}", e.getMessage() );
+                }
+            }
+        }
 
-            //Close ZipOutputStream resource
+        try {
             zos.close();
         }
-        catch( final IOException exception ){
-            LOGGER.error( exception.getMessage() );
+        catch ( final IOException e) {
+            LOGGER.error( "Error closing ZIP file: {}", e.getMessage());
         }
 
-        return result;
+        final ByteArrayInputStream bais = new ByteArrayInputStream( baos.toByteArray() );
+        final OSdmsZipDto zipDto = new OSdmsZipDto();
+        zipDto.setFile(bais);
+        zipDto.setName(zipName);
+        zipDto.setSize( baos.size() );
+
+        return zipDto;
     }
+
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
