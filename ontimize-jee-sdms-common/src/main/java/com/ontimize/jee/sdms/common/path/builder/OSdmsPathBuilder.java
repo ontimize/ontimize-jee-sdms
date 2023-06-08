@@ -62,7 +62,7 @@ public class OSdmsPathBuilder implements IOSdmsPathBuilder {
             }
         }
 
-        return result.stream().filter( target -> !this.pathValidator.isPattern( target )).collect( Collectors.toList());
+        return result.stream().collect( Collectors.toList());
     }
 
 
