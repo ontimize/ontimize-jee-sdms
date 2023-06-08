@@ -61,7 +61,8 @@ public class OSdmsS3RepositoryConfig {
                 .withCredentials( new AWSStaticCredentialsProvider( awsCreds ) );
 
         if( this.endpoint != null && !this.endpoint.isEmpty() ){
-            builder.withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(this.endpoint, this.region));
+            builder.withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(this.endpoint, this.region))
+                    .withPathStyleAccessEnabled(true);
         }
         else {
             builder.withRegion(Regions.fromName(this.region));
