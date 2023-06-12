@@ -1,4 +1,4 @@
-## 1.0.0 - In progress
+## 1.0.0 - 12/06/2023
 ### 🚀 Features:
 * **Abstract Controller:** Created an abstract controller that adds endpoints and executes the corresponding methods of the DMS system for an entity.
 * **S3 Engine:** Implemented an engine to manage the DMS system through the Amazon AWS S3 service API.
