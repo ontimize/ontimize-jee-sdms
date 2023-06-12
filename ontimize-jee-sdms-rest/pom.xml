@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.ontimize.jee.sdms</groupId>
+    <artifactId>ontimize-jee-sdms-rest</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>Ontimize EE SDMS (Rest module)</name>
+    <description>Ontimize EE Storage DMS (SDMS) - Rest module</description>
+    <url>https://www.ontimize.com</url>
+
+    <parent>
+        <groupId>com.ontimize.jee.sdms</groupId>
+        <artifactId>ontimize-jee-sdms</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <organization>
+        <name>Imatia Innovation</name>
+        <url>http://imatia.com</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Ángel Herce Soto</name>
+            <email>angel.herce@imatia.com</email>
+            <organization>Imatia Innovation</organization>
+            <organizationUrl>http://imatia.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/ontimize/ontimize-jee-sdms.git</connection>
+        <developerConnection>scm:git:ssh://github.com:ontimize/ontimize-jee-sdms.git</developerConnection>
+        <url>https://github.com/ontimize/ontimize-jee-sdms/tree/main</url>
+    </scm>
+
+    <dependencies>
+        <!-- MODULES -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>ontimize-jee-sdms-common</artifactId>
+        </dependency>
+
+        <!-- ONTIMIZE JEE -->
+        <dependency>
+            <groupId>com.ontimize.jee</groupId>
+            <artifactId>ontimize-jee-common</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.ontimize.jee</groupId>
+            <artifactId>ontimize-jee-server-rest</artifactId>
+        </dependency>
+    </dependencies>
+</project>
