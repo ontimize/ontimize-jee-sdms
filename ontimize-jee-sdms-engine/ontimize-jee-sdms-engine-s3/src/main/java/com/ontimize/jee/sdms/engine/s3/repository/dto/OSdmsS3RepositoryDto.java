@@ -320,7 +320,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         }
 
         //Get Prefix
-        if( this.name != null ) this.prefix = this.key.replaceAll( String.format( "/%s/?$", this.name ), "" );
+        if( this.name != null ) this.prefix = this.key.substring( 0, ( this.key.length() - this.name.length() ) );
         if( !this.prefix.endsWith( "/" )) this.prefix = this.prefix.concat( "/" );
     }
 
