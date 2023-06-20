@@ -270,17 +270,17 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         final SimpleDateFormat simpleDateFormatter = new SimpleDateFormat( "dd/MM/yyyy" );
         final Map<String, Object> result = new HashMap<>();
 
-        if( this.bucket != null ) result.put( "bucket", this.bucket );
-        if( this.prefix != null ) result.put( "prefix", this.prefix );
-        if( this.relativePrefix != null ) result.put( "relativePrefix", this.relativePrefix );
-        if( this.key != null ) result.put( "key", this.key );
-        if( this.relativeKey != null ) result.put( "relativeKey", this.relativeKey );
-        if( this.name != null ) result.put( "name", this.name );
-        if( this.owner != null ) result.put( "owner", this.owner );
-        if( this.file != null ) result.put( "file", this.file );
-        if( this.size != null ) result.put( "size", this.size );
-        if( this.lastModified != null ) result.put( "lastModified", simpleDateFormatter.format( this.lastModified ) );
-        if( this.metadata != null && !this.metadata.isEmpty() ) result.put( "metadata", this.metadata );
+        result.put( "bucket", this.bucket );
+        result.put( "prefix", this.prefix );
+        result.put( "relativePrefix", this.relativePrefix );
+        result.put( "key", this.key );
+        result.put( "relativeKey", this.relativeKey );
+        result.put( "name", this.name );
+        result.put( "owner", this.owner );
+        result.put( "file", this.file );
+        result.put( "size", this.size );
+        result.put( "lastModified", simpleDateFormatter.format( this.lastModified ) );
+        result.put( "metadata", this.metadata );
         result.put( "folder", this.folder );
 
         return result;
