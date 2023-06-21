@@ -9,6 +9,7 @@ import com.ontimize.jee.sdms.common.zip.IOSdmsZippeable;
 import com.ontimize.jee.sdms.common.zip.OSdmsZipData;
 
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -306,12 +307,12 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         result.put( "metadata", this.metadata );
         result.put( "folder", this.folder );
 
-        String creationDate = null;
-        if( this.creationDate != null ) creationDate = simpleDateFormatter.format( this.creationDate );
+        Long creationDate = null;
+        if( this.creationDate != null ) creationDate = this.creationDate.getTime();
         result.put( "creationDate", creationDate );
 
-        String lastModified = null;
-        if( this.creationDate != null ) lastModified = simpleDateFormatter.format( this.lastModified );
+        Long lastModified = null;
+        if( this.creationDate != null ) lastModified = this.lastModified.getTime();
         result.put( "lastModified", lastModified );
 
         return result;
