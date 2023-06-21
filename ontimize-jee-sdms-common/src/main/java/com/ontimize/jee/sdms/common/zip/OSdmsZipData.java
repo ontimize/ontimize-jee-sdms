@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.util.Objects;
 
 
-
 /**
  * This class represents the data that will be compressed by the {@link IOSdmsZipCompressor}.
  */
@@ -22,7 +21,8 @@ public class OSdmsZipData {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsZipData(){}
+    public OSdmsZipData() {
+    }
 
     public OSdmsZipData( final String fileName, final InputStream inputStream ) {
         this.setFileName( fileName );
@@ -55,9 +55,9 @@ public class OSdmsZipData {
 
     @Override
     public boolean equals( final Object obj ) {
-        if ( this == obj ) return true;
-        if ( obj == null || getClass() != obj.getClass()) return false;
-        final OSdmsZipData target = (OSdmsZipData) obj;
+        if( this == obj ) return true;
+        if( obj == null || getClass() != obj.getClass() ) return false;
+        final OSdmsZipData target = ( OSdmsZipData ) obj;
         return Objects.equals( this.fileName, target.fileName );
     }
 

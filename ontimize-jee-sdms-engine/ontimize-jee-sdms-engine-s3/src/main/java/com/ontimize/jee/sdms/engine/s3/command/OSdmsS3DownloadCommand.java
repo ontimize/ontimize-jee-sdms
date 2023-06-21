@@ -1,11 +1,12 @@
 package com.ontimize.jee.sdms.engine.s3.command;
 
 import com.amazonaws.services.s3.model.ListObjectsRequest;
-
 import com.ontimize.jee.common.dto.EntityResult;
 import com.ontimize.jee.sdms.common.command.IOSdmsCommand;
 import com.ontimize.jee.sdms.common.inyector.IOSdmsInyector;
 import com.ontimize.jee.sdms.common.response.builder.IOSdmsResponseBuilder;
+import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
+import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
 import com.ontimize.jee.sdms.common.zip.IOSdmsZipCompressor;
 import com.ontimize.jee.sdms.common.zip.OSdmsZipDto;
 import com.ontimize.jee.sdms.engine.s3.repository.IOSdmsS3Repository;
@@ -18,13 +19,10 @@ import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.reader.IOSdmsS3FilterReader;
 import com.ontimize.jee.sdms.engine.s3.util.response.mapper.IOSdmsS3ResponseMapper;
-import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
-import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 
 /**
@@ -42,7 +40,6 @@ public class OSdmsS3DownloadCommand implements IOSdmsCommand {
     private static final String MESSAGE_NO_CONTENT = "No file has been obtained from the query";
 
 
-
     // Dependencies
     private IOSdmsS3Repository repository;
     private IOSdmsS3EngineConfig s3EngineConfig;
@@ -54,13 +51,11 @@ public class OSdmsS3DownloadCommand implements IOSdmsCommand {
     private OSdmsWorkspace workspace;
 
 
-
     //Data
     private String bucket;
     private OSdmsS3InputFilter filter;
     private OSdmsS3InputData data;
     private List<String> queries = new ArrayList<>();
-
 
 
     //Respone
@@ -70,7 +65,7 @@ public class OSdmsS3DownloadCommand implements IOSdmsCommand {
 // ------| ENTRYPOINT |---------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3DownloadCommand(final OSdmsS3InputFilter filter, final OSdmsS3InputData data ) {
+    public OSdmsS3DownloadCommand( final OSdmsS3InputFilter filter, final OSdmsS3InputData data ) {
         this.filter = filter;
         this.data = data;
     }
@@ -103,7 +98,7 @@ public class OSdmsS3DownloadCommand implements IOSdmsCommand {
 
     @Override
     public EntityResult validate() {
-        if( this.workspaceManager.getActive() == null ){
+        if( this.workspaceManager.getActive() == null ) {
             return this.responseBuilder
                     .code( EntityResult.OPERATION_WRONG )
                     .message( MESSAGE_ERROR_NO_ACTIVE_WORKSPACE )
@@ -138,7 +133,7 @@ public class OSdmsS3DownloadCommand implements IOSdmsCommand {
             if( this.filter.hasMarker() ) request.withMarker( this.filter.getMarker() );
 
             requests.add( request );
-        });
+        } );
 
         this.response = this.repository.download( requests );
     }
@@ -151,21 +146,21 @@ public class OSdmsS3DownloadCommand implements IOSdmsCommand {
     public EntityResult response() {
         EntityResult result = null;
 
-        if( this.response != null ){
+        if( this.response != null ) {
             final OSdmsS3RepositoryResponseCodes code = this.response.getCode();
-            if( code == OSdmsS3RepositoryResponseCodes.OK ){
+            if( code == OSdmsS3RepositoryResponseCodes.OK ) {
                 result = this.responseBuilder
                         .code( EntityResult.OPERATION_SUCCESSFUL )
                         .message( MESSAGE_NO_CONTENT )
                         .build();
 
                 List<OSdmsS3RepositoryDto> data = this.response.getData().stream()
-                        .filter( target -> !target.getName().equals( OSdmsS3RepositoryDto.FILE_NAME_MARK_FOLDER ))
-                        .collect(Collectors.toList());
+                        .filter( target -> ! target.getName().equals( OSdmsS3RepositoryDto.FILE_NAME_MARK_FOLDER ) )
+                        .collect( Collectors.toList() );
 
-                if( !data.isEmpty() ){
-                    final OSdmsZipDto zip = this.zipCompressor.compress(ZIP_NAME, data);
-                    result = this.responseMapper.map(zip);
+                if( ! data.isEmpty() ) {
+                    final OSdmsZipDto zip = this.zipCompressor.compress( ZIP_NAME, data );
+                    result = this.responseMapper.map( zip );
                 }
             }
         }

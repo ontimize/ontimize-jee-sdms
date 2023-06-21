@@ -27,7 +27,8 @@ public class OSdmsZipDto implements IOSdmsMappeable {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsZipDto(){}
+    public OSdmsZipDto() {
+    }
 
     public OSdmsZipDto( final InputStream file, final String name, final Long size ) {
         this.setFile( file );
@@ -65,7 +66,7 @@ public class OSdmsZipDto implements IOSdmsMappeable {
      *
      * @param size The size of the compressed file as Integer.
      */
-    public void setSize( final Integer size ){
+    public void setSize( final Integer size ) {
         this.size = size.longValue();
     }
 
@@ -74,7 +75,7 @@ public class OSdmsZipDto implements IOSdmsMappeable {
      *
      * @param size The size of the compressed file as Long.
      */
-    public void setSize( final Long size ){
+    public void setSize( final Long size ) {
         this.size = size;
     }
 
@@ -83,11 +84,12 @@ public class OSdmsZipDto implements IOSdmsMappeable {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OSdmsZipDto that = (OSdmsZipDto) o;
-        return Objects.equals( this.file, that.file ) && Objects.equals( this.name, that.name ) && Objects.equals( this.size, that.size );
+    public boolean equals( Object o ) {
+        if( this == o ) return true;
+        if( o == null || getClass() != o.getClass() ) return false;
+        OSdmsZipDto that = ( OSdmsZipDto ) o;
+        return Objects.equals( this.file, that.file ) && Objects.equals( this.name, that.name ) && Objects.equals(
+                this.size, that.size );
     }
 
     @Override

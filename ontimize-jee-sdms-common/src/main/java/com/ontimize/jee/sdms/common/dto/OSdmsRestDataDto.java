@@ -1,6 +1,6 @@
 package com.ontimize.jee.sdms.common.dto;
-import java.util.Map;
 
+import java.util.Map;
 
 
 /**
@@ -16,7 +16,8 @@ public class OSdmsRestDataDto {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsRestDataDto() {}
+    public OSdmsRestDataDto() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| GETTERS AND SETTERS |------------------------------------------------------------------------------------- \\
@@ -26,7 +27,7 @@ public class OSdmsRestDataDto {
         return this.filter;
     }
 
-    public void setFilter( final Map<String, Object> filter) {
+    public void setFilter( final Map<String, Object> filter ) {
         this.filter = filter;
     }
 
@@ -34,7 +35,7 @@ public class OSdmsRestDataDto {
         return this.data;
     }
 
-    public void setData(final Map<String, Object> data) {
+    public void setData( final Map<String, Object> data ) {
         this.data = data;
     }
 

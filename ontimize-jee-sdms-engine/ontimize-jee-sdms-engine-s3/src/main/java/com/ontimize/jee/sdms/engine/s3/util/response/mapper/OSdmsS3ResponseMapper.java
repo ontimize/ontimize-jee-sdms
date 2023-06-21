@@ -26,14 +26,15 @@ public class OSdmsS3ResponseMapper implements IOSdmsS3ResponseMapper {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3ResponseMapper(){}
+    public OSdmsS3ResponseMapper() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public <T extends IOSdmsMappeable> EntityResult map(final OSdmsS3RepositoryResponse<T> response ) {
+    public <T extends IOSdmsMappeable> EntityResult map( final OSdmsS3RepositoryResponse<T> response ) {
         //Intialize Response
         EntityResult result = this.responseBuilder
                 .code( EntityResult.OPERATION_WRONG )
@@ -48,7 +49,7 @@ public class OSdmsS3ResponseMapper implements IOSdmsS3ResponseMapper {
                     .build();
 
             final List<T> data = response.getData();
-            if( response.getCode() == OSdmsS3RepositoryResponseCodes.OK && data != null && !data.isEmpty() ) {
+            if( response.getCode() == OSdmsS3RepositoryResponseCodes.OK && data != null && ! data.isEmpty() ) {
                 for( final T mappeable : data ) {
                     result.addRecord( mappeable.toMap() );
                 }
@@ -60,7 +61,7 @@ public class OSdmsS3ResponseMapper implements IOSdmsS3ResponseMapper {
 
 
     @Override
-    public <T extends IOSdmsMappeable> EntityResult map(final T data ) {
+    public <T extends IOSdmsMappeable> EntityResult map( final T data ) {
         //Intialize Response
         EntityResult result = this.responseBuilder
                 .code( EntityResult.OPERATION_WRONG )

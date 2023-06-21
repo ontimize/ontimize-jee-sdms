@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 
-
 /**
  * The OBase64Crypter class provides methods to encode and decode data using the Base64 encryption algorithm.
  *
@@ -25,7 +24,8 @@ public class OSdmsBase64Crypter implements IOSdmsCrypter {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsBase64Crypter(){}
+    public OSdmsBase64Crypter() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------ \\
@@ -39,9 +39,9 @@ public class OSdmsBase64Crypter implements IOSdmsCrypter {
      * @return The encoded string.
      */
     @Override
-    public String encode( final String data ){
+    public String encode( final String data ) {
         final String dataToEncrypt = data != null ? data : "";
-        return new String( Base64.getEncoder().encode( dataToEncrypt.getBytes( StandardCharsets.UTF_8 )));
+        return new String( Base64.getEncoder().encode( dataToEncrypt.getBytes( StandardCharsets.UTF_8 ) ) );
     }
 
 
@@ -53,10 +53,10 @@ public class OSdmsBase64Crypter implements IOSdmsCrypter {
      * @return The decoded string.
      */
     @Override
-    public String decode( final String data ){
+    public String decode( final String data ) {
         String result = null;
         if( data != null ) {
-            result = new String(Base64.getDecoder().decode( data ));
+            result = new String( Base64.getDecoder().decode( data ) );
         }
         return result;
     }

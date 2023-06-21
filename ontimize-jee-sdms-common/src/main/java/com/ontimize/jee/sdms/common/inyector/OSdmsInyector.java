@@ -5,7 +5,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 
-
 /**
  * Implementation of {@link IOSdmsInyector}.
  *
@@ -19,7 +18,8 @@ public class OSdmsInyector implements IOSdmsInyector {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsInyector(){}
+    public OSdmsInyector() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
@@ -31,7 +31,7 @@ public class OSdmsInyector implements IOSdmsInyector {
     }
 
     @Override
-    public <T> T get(final Class<T> clazz ) {
+    public <T> T get( final Class<T> clazz ) {
         return this.context.getBean( clazz );
     }
 

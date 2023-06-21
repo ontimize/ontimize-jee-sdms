@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
 /**
  * Implementation of {@link Converter} to convert a {@link String} to a {@link OSdmsRestDataDto}.
  *
@@ -20,18 +19,19 @@ import java.util.Map;
  * @see OSdmsRestDataDto
  */
 @Component( "StringJsonToOSdmsDataParamConverter" )
-public class StringJsonToOSdmsDataParamConverter implements Converter<String, OSdmsRestDataDto>{
+public class StringJsonToOSdmsDataParamConverter implements Converter<String, OSdmsRestDataDto> {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public StringJsonToOSdmsDataParamConverter(){}
+    public StringJsonToOSdmsDataParamConverter() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public OSdmsRestDataDto convert(final String source ) {
+    public OSdmsRestDataDto convert( final String source ) {
         //Intialize the result and ObjectMapper
         OSdmsRestDataDto result = null;
         final ObjectMapper mapper = new ObjectMapper();
@@ -45,10 +45,10 @@ public class StringJsonToOSdmsDataParamConverter implements Converter<String, OS
 
             //Set data in the result
             result = new OSdmsRestDataDto();
-            result.setFilter( (Map<String, Object>) data.get( "filter" ));
-            result.setData( (Map<String, Object>) data.get( "data" ));
+            result.setFilter( ( Map<String, Object> ) data.get( "filter" ) );
+            result.setData( ( Map<String, Object> ) data.get( "data" ) );
         }
-        catch ( final JsonProcessingException e ) {
+        catch( final JsonProcessingException e ) {
             //Empty
         }
 

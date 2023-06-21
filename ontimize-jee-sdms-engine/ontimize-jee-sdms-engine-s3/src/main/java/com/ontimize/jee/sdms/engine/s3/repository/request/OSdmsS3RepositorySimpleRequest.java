@@ -5,7 +5,6 @@ import com.amazonaws.AmazonWebServiceRequest;
 import java.io.Serializable;
 
 
-
 /**
  * Class that represents a simple request to the S3 repository.
  *
@@ -26,7 +25,8 @@ public class OSdmsS3RepositorySimpleRequest extends AmazonWebServiceRequest impl
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3RepositorySimpleRequest(){}
+    public OSdmsS3RepositorySimpleRequest() {
+    }
 
     public OSdmsS3RepositorySimpleRequest( final String bucketName, final String prefix, final String key ) {
         this.setBucketName( bucketName );
@@ -73,7 +73,7 @@ public class OSdmsS3RepositorySimpleRequest extends AmazonWebServiceRequest impl
      *
      * @return The request.
      */
-    public OSdmsS3RepositorySimpleRequest withBucketName(final String bucketName ){
+    public OSdmsS3RepositorySimpleRequest withBucketName( final String bucketName ) {
         this.bucketName = bucketName;
         return this;
     }
@@ -86,7 +86,7 @@ public class OSdmsS3RepositorySimpleRequest extends AmazonWebServiceRequest impl
      *
      * @return The request.
      */
-    public OSdmsS3RepositorySimpleRequest withPrefix(final String prefix ){
+    public OSdmsS3RepositorySimpleRequest withPrefix( final String prefix ) {
         this.prefix = prefix;
         return this;
     }
@@ -99,7 +99,7 @@ public class OSdmsS3RepositorySimpleRequest extends AmazonWebServiceRequest impl
      *
      * @return The request.
      */
-    public OSdmsS3RepositorySimpleRequest withKey(final String key ){
+    public OSdmsS3RepositorySimpleRequest withKey( final String key ) {
         this.key = key;
         return this;
     }

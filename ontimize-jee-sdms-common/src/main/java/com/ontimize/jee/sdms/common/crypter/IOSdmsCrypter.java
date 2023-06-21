@@ -1,7 +1,6 @@
 package com.ontimize.jee.sdms.common.crypter;
 
 
-
 /**
  * The IOCrypter interface provides methods to encode and decode data using a encryption algorithm.
  */

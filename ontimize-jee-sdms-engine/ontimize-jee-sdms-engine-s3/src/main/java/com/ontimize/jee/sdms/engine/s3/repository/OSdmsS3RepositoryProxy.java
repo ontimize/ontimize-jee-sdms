@@ -17,18 +17,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.ontimize.jee.sdms.engine.s3.repository.IOSdmsS3Repository.*;
-
-
 
 /**
- * Implementation of {@link IOSdmsS3Repository}.
- * This class represents the repository proxy, which will perform extra actions before performing the task. In this case
- * it will trigger the events of each action via the Ontimize EventHandler.
+ * Implementation of {@link IOSdmsS3Repository}. This class represents the repository proxy, which will perform extra
+ * actions before performing the task. In this case it will trigger the events of each action via the Ontimize
+ * EventHandler.
  *
  * @see IOSdmsS3Repository
  */
-@Repository("OSdmsS3RepositoryProxy")
+@Repository( "OSdmsS3RepositoryProxy" )
 public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
 
     /**
@@ -51,14 +48,15 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3RepositoryProxy(){}
+    public OSdmsS3RepositoryProxy() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| FIND |--------------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> find(final ListObjectsRequest request ) {
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> find( final ListObjectsRequest request ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, request )
@@ -69,12 +67,12 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
     }
 
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> find(final List<ListObjectsRequest> requests ) {
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> find( final List<ListObjectsRequest> requests ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, requests )
                 .build();
-        
+
         this.eventHandler.trigger( OSdmsS3RepositoryEvent.FIND, eventData );
         return this.repository.find( requests );
     }
@@ -84,18 +82,18 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> download(final ListObjectsRequest request ){
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> download( final ListObjectsRequest request ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, request )
                 .build();
-        
+
         this.eventHandler.trigger( OSdmsS3RepositoryEvent.GET_METADATA, eventData );
         return this.repository.download( request );
     }
 
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> download(final List<ListObjectsRequest> requests ){
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> download( final List<ListObjectsRequest> requests ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, requests )
@@ -110,7 +108,7 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> upload(final PutObjectRequest request ){
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> upload( final PutObjectRequest request ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, request )
@@ -121,7 +119,7 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
     }
 
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> upload(final List<PutObjectRequest> requests ){
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> upload( final List<PutObjectRequest> requests ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, requests )
@@ -136,7 +134,7 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> copy(final ListObjectsRequest request, String bucket, String key ){
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> copy( final ListObjectsRequest request, String bucket, String key ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, request )
@@ -149,13 +147,13 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
     }
 
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> copy(final List<ListObjectsRequest> requests, String bucket, String prefix, String currentPrefix ){
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> copy( final List<ListObjectsRequest> requests, String bucket, String prefix, String currentPrefix ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, requests )
                 .input( PARAM_BUCKET, bucket )
-                .input( PARAM_PREFIX, prefix)
-                .input( PARAM_CURRENT_PREFIX, currentPrefix)
+                .input( PARAM_PREFIX, prefix )
+                .input( PARAM_CURRENT_PREFIX, currentPrefix )
                 .build();
 
         this.eventHandler.trigger( OSdmsS3RepositoryEvent.COPY, eventData );
@@ -167,7 +165,7 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> move(final ListObjectsRequest request, String bucket, String key ){
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> move( final ListObjectsRequest request, String bucket, String key ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, request )
@@ -180,13 +178,13 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
     }
 
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> move(final List<ListObjectsRequest> requests, String bucket, String prefix, String currentPrefix ){
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> move( final List<ListObjectsRequest> requests, String bucket, String prefix, String currentPrefix ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, requests )
                 .input( PARAM_BUCKET, bucket )
-                .input( PARAM_PREFIX, prefix)
-                .input( PARAM_CURRENT_PREFIX, currentPrefix)
+                .input( PARAM_PREFIX, prefix )
+                .input( PARAM_CURRENT_PREFIX, currentPrefix )
                 .build();
 
         this.eventHandler.trigger( OSdmsS3RepositoryEvent.MOVE, eventData );
@@ -198,7 +196,7 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> delete(final ListObjectsRequest request ){
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> delete( final ListObjectsRequest request ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, request )
@@ -209,7 +207,7 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
     }
 
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> delete(final List<ListObjectsRequest> requests ){
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> delete( final List<ListObjectsRequest> requests ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, requests )
@@ -224,7 +222,7 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public OSdmsS3RepositoryResponse<Boolean> exists(OSdmsS3RepositorySimpleRequest request ){
+    public OSdmsS3RepositoryResponse<Boolean> exists( OSdmsS3RepositorySimpleRequest request ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_REQUEST, request )

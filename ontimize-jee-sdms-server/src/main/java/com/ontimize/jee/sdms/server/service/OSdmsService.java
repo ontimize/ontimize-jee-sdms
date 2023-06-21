@@ -16,8 +16,7 @@ import java.io.Serializable;
 
 
 /**
- * Implementation of the {@link IOSdmsService} interface.
- * Also, it implements the {@link InitializingBean} interface.
+ * Implementation of the {@link IOSdmsService} interface. Also, it implements the {@link InitializingBean} interface.
  *
  * @see IOSdmsService
  * @see InitializingBean
@@ -35,12 +34,13 @@ public class OSdmsService implements IOSdmsService {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsService(){}
+    public OSdmsService() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public void setEngine( final IOSdmsEngine engine ){
+    public void setEngine( final IOSdmsEngine engine ) {
         this.engine = engine;
     }
 
@@ -103,7 +103,7 @@ public class OSdmsService implements IOSdmsService {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public EntityResult upload(final OSdmsRestDataDto data, final MultipartFile file ) {
+    public EntityResult upload( final OSdmsRestDataDto data, final MultipartFile file ) {
         final OSdmsEventData eventData = this.eventDataBuilder
                 .source( this.getClass() )
                 .input( PARAM_DATA, data )

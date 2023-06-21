@@ -1,11 +1,13 @@
 package com.ontimize.jee.sdms.engine.s3.command;
 
 import com.amazonaws.services.s3.model.ListObjectsRequest;
-
 import com.ontimize.jee.common.dto.EntityResult;
 import com.ontimize.jee.sdms.common.command.IOSdmsCommand;
 import com.ontimize.jee.sdms.common.inyector.IOSdmsInyector;
+import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
 import com.ontimize.jee.sdms.common.response.builder.IOSdmsResponseBuilder;
+import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
+import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
 import com.ontimize.jee.sdms.engine.s3.repository.IOSdmsS3Repository;
 import com.ontimize.jee.sdms.engine.s3.repository.OSdmsS3RepositoryProxy;
 import com.ontimize.jee.sdms.engine.s3.repository.dto.OSdmsS3RepositoryDto;
@@ -15,14 +17,10 @@ import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.reader.IOSdmsS3DataReader;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.reader.IOSdmsS3FilterReader;
-import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
 import com.ontimize.jee.sdms.engine.s3.util.response.mapper.IOSdmsS3ResponseMapper;
-import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
-import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 
 /**
@@ -51,7 +49,6 @@ public class OSdmsS3MoveCommand implements IOSdmsCommand {
     private IOSdmsS3DataReader dataReader;
 
 
-
     //Data
     private String bucket;
     private OSdmsS3InputFilter filter;
@@ -62,7 +59,6 @@ public class OSdmsS3MoveCommand implements IOSdmsCommand {
     private String currentPrefix;
 
 
-
     //Response
     private OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> response;
 
@@ -70,7 +66,7 @@ public class OSdmsS3MoveCommand implements IOSdmsCommand {
 // ------| ENTRYPOINT |---------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3MoveCommand(final OSdmsS3InputFilter filter, final OSdmsS3InputData data ) {
+    public OSdmsS3MoveCommand( final OSdmsS3InputFilter filter, final OSdmsS3InputData data ) {
         this.filter = filter;
         this.data = data;
     }
@@ -107,46 +103,48 @@ public class OSdmsS3MoveCommand implements IOSdmsCommand {
 
     @Override
     public EntityResult validate() {
-        if( this.workspaceManager.getActive() == null ){
+        if( this.workspaceManager.getActive() == null ) {
             return this.responseBuilder
                     .code( EntityResult.OPERATION_WRONG )
-                    .message(MESSAGE_ERROR_NO_ACTIVE_WORKSPACE)
+                    .message( MESSAGE_ERROR_NO_ACTIVE_WORKSPACE )
                     .build();
         }
 
         if( this.keys == null || this.keys.isEmpty() ) {
             return this.responseBuilder
                     .code( EntityResult.OPERATION_WRONG )
-                    .message(MESSAGE_ERROR_NO_KEYS)
+                    .message( MESSAGE_ERROR_NO_KEYS )
                     .build();
         }
 
         if( this.destinationKey == null && this.destinationPrefix == null ) {
             return this.responseBuilder
                     .code( EntityResult.OPERATION_WRONG )
-                    .message(MESSAGE_ERROR_NO_DESTINATION)
+                    .message( MESSAGE_ERROR_NO_DESTINATION )
                     .build();
         }
 
-        if( this.destinationKey != null && !this.pathValidator.validate( this.destinationKey, this.workspace.getPatterns() ) ) {
+        if( this.destinationKey != null && ! this.pathValidator.validate( this.destinationKey,
+                                                                          this.workspace.getPatterns()
+                                                                        ) ) {
             return this.responseBuilder
                     .code( EntityResult.OPERATION_WRONG )
-                    .message(MESSAGE_ERROR_INVALID_DESTINATION_KEY_FOR_WORKSPACE)
+                    .message( MESSAGE_ERROR_INVALID_DESTINATION_KEY_FOR_WORKSPACE )
                     .build();
         }
 
-        if( this.destinationKey == null && this.destinationPrefix != null ){
-            if( !this.pathValidator.validate( this.destinationPrefix, this.workspace.getPatterns() ) ) {
+        if( this.destinationKey == null && this.destinationPrefix != null ) {
+            if( ! this.pathValidator.validate( this.destinationPrefix, this.workspace.getPatterns() ) ) {
                 return this.responseBuilder
-                        .code(EntityResult.OPERATION_WRONG)
-                        .message(MESSAGE_ERROR_INVALID_DESTINATION_PREFIX_FOR_WORKSPACE)
+                        .code( EntityResult.OPERATION_WRONG )
+                        .message( MESSAGE_ERROR_INVALID_DESTINATION_PREFIX_FOR_WORKSPACE )
                         .build();
             }
 
             if( this.currentPrefix == null ) {
                 return this.responseBuilder
-                        .code(EntityResult.OPERATION_WRONG)
-                        .message(MESSAGE_ERROR_NO_CURRENT_PREFIX)
+                        .code( EntityResult.OPERATION_WRONG )
+                        .message( MESSAGE_ERROR_NO_CURRENT_PREFIX )
                         .build();
             }
         }
@@ -166,13 +164,13 @@ public class OSdmsS3MoveCommand implements IOSdmsCommand {
                     .withBucketName( this.bucket )
                     .withPrefix( target );
             requests.add( request );
-        });
+        } );
 
         if( this.destinationKey != null ) {
             final ListObjectsRequest request = requests.get( 0 );
             this.response = this.repository.move( request, this.bucket, this.destinationKey );
         }
-        else if ( this.destinationPrefix != null && this.currentPrefix != null ) {
+        else if( this.destinationPrefix != null && this.currentPrefix != null ) {
             this.response = this.repository.move( requests, this.bucket, this.destinationPrefix, this.currentPrefix );
         }
     }

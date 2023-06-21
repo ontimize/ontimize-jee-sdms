@@ -2,10 +2,10 @@ package com.ontimize.jee.sdms.engine.s3;
 
 import com.ontimize.jee.common.dto.EntityResult;
 import com.ontimize.jee.sdms.common.command.handler.IOSdmsCommandHandler;
-import com.ontimize.jee.sdms.engine.s3.util.input.OSdmsS3InputMapper;
 import com.ontimize.jee.sdms.common.dto.OSdmsRestDataDto;
 import com.ontimize.jee.sdms.common.engine.IOSdmsEngine;
 import com.ontimize.jee.sdms.engine.s3.command.*;
+import com.ontimize.jee.sdms.engine.s3.util.input.OSdmsS3InputMapper;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
-
 
 
 /**
@@ -38,7 +37,8 @@ public class OSdmsS3Engine implements IOSdmsEngine {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3Engine(){}
+    public OSdmsS3Engine() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| DMS - FIND |--------------------------------------------------------------------------------------------- \\
@@ -48,14 +48,15 @@ public class OSdmsS3Engine implements IOSdmsEngine {
     public EntityResult findById( final Serializable id, final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
         final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3FindByIdCommand( String.valueOf( id ), requestFilter, requestData ));
+        return this.oSdmsCommandHandler.run(
+                new OSdmsS3FindByIdCommand( String.valueOf( id ), requestFilter, requestData ) );
     }
 
     @Override
     public EntityResult find( final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
         final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3FindCommand( requestFilter, requestData ));
+        return this.oSdmsCommandHandler.run( new OSdmsS3FindCommand( requestFilter, requestData ) );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -66,14 +67,15 @@ public class OSdmsS3Engine implements IOSdmsEngine {
     public EntityResult downloadById( final Serializable id, final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
         final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3DownloadByIdCommand( String.valueOf( id ), requestFilter, requestData ));
+        return this.oSdmsCommandHandler.run(
+                new OSdmsS3DownloadByIdCommand( String.valueOf( id ), requestFilter, requestData ) );
     }
 
     @Override
     public EntityResult download( final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
         final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3DownloadCommand( requestFilter, requestData ));
+        return this.oSdmsCommandHandler.run( new OSdmsS3DownloadCommand( requestFilter, requestData ) );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -81,10 +83,10 @@ public class OSdmsS3Engine implements IOSdmsEngine {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public EntityResult upload(final OSdmsRestDataDto data, final MultipartFile file ) {
+    public EntityResult upload( final OSdmsRestDataDto data, final MultipartFile file ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
         final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3UploadCommand( requestFilter, requestData, file ));
+        return this.oSdmsCommandHandler.run( new OSdmsS3UploadCommand( requestFilter, requestData, file ) );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -95,7 +97,7 @@ public class OSdmsS3Engine implements IOSdmsEngine {
     public EntityResult create( final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
         final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3CreateCommand( requestFilter, requestData ));
+        return this.oSdmsCommandHandler.run( new OSdmsS3CreateCommand( requestFilter, requestData ) );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -106,7 +108,7 @@ public class OSdmsS3Engine implements IOSdmsEngine {
     public EntityResult update( final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
         final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3UpdateCommand( requestFilter, requestData ));
+        return this.oSdmsCommandHandler.run( new OSdmsS3UpdateCommand( requestFilter, requestData ) );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -117,7 +119,7 @@ public class OSdmsS3Engine implements IOSdmsEngine {
     public EntityResult copy( final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
         final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3CopyCommand( requestFilter, requestData ));
+        return this.oSdmsCommandHandler.run( new OSdmsS3CopyCommand( requestFilter, requestData ) );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -128,7 +130,7 @@ public class OSdmsS3Engine implements IOSdmsEngine {
     public EntityResult move( final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
         final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3MoveCommand( requestFilter, requestData ));
+        return this.oSdmsCommandHandler.run( new OSdmsS3MoveCommand( requestFilter, requestData ) );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -139,14 +141,15 @@ public class OSdmsS3Engine implements IOSdmsEngine {
     public EntityResult deleteById( final Serializable id, final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
         final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3DeleteByIdCommand( String.valueOf( id ), requestFilter, requestData ));
+        return this.oSdmsCommandHandler.run(
+                new OSdmsS3DeleteByIdCommand( String.valueOf( id ), requestFilter, requestData ) );
     }
 
     @Override
     public EntityResult delete( final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
         final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3DeleteCommand( requestFilter, requestData ));
+        return this.oSdmsCommandHandler.run( new OSdmsS3DeleteCommand( requestFilter, requestData ) );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
