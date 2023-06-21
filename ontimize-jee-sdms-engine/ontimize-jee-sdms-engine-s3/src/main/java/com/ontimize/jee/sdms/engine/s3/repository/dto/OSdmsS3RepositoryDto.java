@@ -10,6 +10,9 @@ import com.ontimize.jee.sdms.common.zip.OSdmsZipData;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +60,8 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
 
     /** The last modified date of S3 object */
     private Date lastModified;
+
+    private Date creationDate;
 
     /** The metadata of S3 object */
     private Map<String, Object> metadata;
@@ -150,6 +155,19 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         this.folder = folder;
     }
 
+    public Date getCreationDate() {
+        return this.creationDate;
+    }
+
+    public void setCreationDate( final Date creationDate ) {
+        this.creationDate = creationDate;
+    }
+    public void setCreationDate( final String creationDate ) {
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern( "dd/MM/yyyy-HH:mm:ss" );
+        LocalDateTime localDateTime = LocalDateTime.parse( creationDate, dateTimeFormatter );
+        this.creationDate = Date.from( localDateTime.atZone( ZoneId.systemDefault() ).toInstant() );
+    }
+
     public Date getLastModified() {
         return this.lastModified;
     }
@@ -221,8 +239,14 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      * @see ObjectMetadata
      */
     public void set( final ObjectMetadata objectMetadata ){
-        this.size = objectMetadata.getContentLength();
-        this.metadata = objectMetadata.getRawMetadata();
+        if( objectMetadata != null ){
+            this.size = objectMetadata.getContentLength();
+            this.metadata = objectMetadata.getRawMetadata();
+            final Map<String, String> userMetadata = objectMetadata.getUserMetadata();
+            if( userMetadata != null && userMetadata.containsKey( "creation_date" )) {
+                this.setCreationDate( userMetadata.get( "creation_date" ));
+            }
+        }
     }
 
 
@@ -267,7 +291,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
 
     @Override
     public Map<?, ?> toMap() {
-        final SimpleDateFormat simpleDateFormatter = new SimpleDateFormat( "dd/MM/yyyy" );
+        final SimpleDateFormat simpleDateFormatter = new SimpleDateFormat( "dd/MM/yyyy HH:mm:ss" );
         final Map<String, Object> result = new HashMap<>();
 
         result.put( "bucket", this.bucket );
@@ -279,9 +303,16 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         result.put( "owner", this.owner );
         result.put( "file", this.file );
         result.put( "size", this.size );
-        result.put( "lastModified", simpleDateFormatter.format( this.lastModified ) );
         result.put( "metadata", this.metadata );
         result.put( "folder", this.folder );
+
+        String creationDate = null;
+        if( this.creationDate != null ) creationDate = simpleDateFormatter.format( this.creationDate );
+        result.put( "creationDate", creationDate );
+
+        String lastModified = null;
+        if( this.creationDate != null ) lastModified = simpleDateFormatter.format( this.lastModified );
+        result.put( "lastModified", lastModified );
 
         return result;
     }

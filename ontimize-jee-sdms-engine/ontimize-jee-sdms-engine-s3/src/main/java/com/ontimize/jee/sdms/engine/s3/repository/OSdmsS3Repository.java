@@ -80,8 +80,10 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
             final List<S3ObjectSummary> objectSummaries = requestResult.getObjectSummaries();
             if( objectSummaries != null && !objectSummaries.isEmpty() ) {
                 final List<OSdmsS3RepositoryDto> files = objectSummaries.stream().map(target -> {
+                    final ObjectMetadata objectMetadata = this.amazonS3.getObjectMetadata( target.getBucketName(), target.getKey() );
                     final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
-                    dto.set(target);
+                    dto.set( target );
+                    dto.set( objectMetadata );
                     return dto;
                 }).collect(Collectors.toList());
                 data.addAll( files );

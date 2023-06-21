@@ -22,6 +22,10 @@ import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Locale;
 
 
 /**
@@ -131,9 +135,17 @@ public class OSdmsS3UploadCommand implements IOSdmsCommand {
         final ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength( this.file.getSize() );
 
+        //Create DateTimeFormatter to format the creation date
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern( "dd/MM/yyyy-HH:mm:ss" )
+                .withLocale( Locale.getDefault() );
+
         try {
             final PutObjectRequest request = new PutObjectRequest(this.bucket, this.key, this.file.getInputStream(), metadata);
-            if (this.data.hasMetadata()) this.data.getMetadata().forEach(metadata::addUserMetadata);
+
+            if (!this.data.hasMetadata()) this.data.setMetadata( new HashMap<>() );
+            final String creationDate = LocalDateTime.now().format( dateTimeFormatter );
+            this.data.getMetadata().put( "creation_date", creationDate );
+            this.data.getMetadata().forEach(metadata::addUserMetadata);
 
             this.response = this.repository.upload(request);
         }
