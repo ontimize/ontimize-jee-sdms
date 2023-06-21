@@ -1,12 +1,12 @@
 package com.ontimize.jee.sdms.engine.s3.repository;
 
-import com.amazonaws.services.s3.model.*;
+import com.amazonaws.services.s3.model.ListObjectsRequest;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ontimize.jee.sdms.engine.s3.repository.dto.OSdmsS3RepositoryDto;
 import com.ontimize.jee.sdms.engine.s3.repository.request.OSdmsS3RepositorySimpleRequest;
 import com.ontimize.jee.sdms.engine.s3.repository.response.OSdmsS3RepositoryResponse;
 
 import java.util.List;
-
 
 
 /**
@@ -22,7 +22,6 @@ public interface IOSdmsS3Repository {
     String PARAM_CURRENT_PREFIX = "current_prefix";
 
 
-
     /**
      * Method that finds the S3 objects that match with a request.
      *
@@ -34,7 +33,7 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> find(ListObjectsRequest request );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> find( ListObjectsRequest request );
 
 
     /**
@@ -48,7 +47,7 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> find(List<ListObjectsRequest> requests );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> find( List<ListObjectsRequest> requests );
 
 
     /**
@@ -62,7 +61,7 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> download(ListObjectsRequest request );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> download( ListObjectsRequest request );
 
 
     /**
@@ -76,7 +75,7 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> download(List<ListObjectsRequest> requests );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> download( List<ListObjectsRequest> requests );
 
 
     /**
@@ -90,7 +89,7 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> upload(PutObjectRequest request );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> upload( PutObjectRequest request );
 
 
     /**
@@ -104,15 +103,15 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> upload(List<PutObjectRequest> requests );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> upload( List<PutObjectRequest> requests );
 
 
     /**
      * Method that copies the S3 objects that match with a request.
      *
      * @param request The request to copy the S3 objects
-     * @param bucket The bucket to be copied the S3 objects
-     * @param key The new key of the copied S3 object
+     * @param bucket  The bucket to be copied the S3 objects
+     * @param key     The new key of the copied S3 object
      *
      * @return The S3 repository response with the information of the S3 objects
      *
@@ -120,15 +119,15 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> copy(ListObjectsRequest request, String bucket, String key );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> copy( ListObjectsRequest request, String bucket, String key );
 
 
     /**
      * Method that copìes the S3 objects that match with a list of requests.
      *
-     * @param requests The list of requests to copy the S3 objects
-     * @param bucket The bucket to be copied the S3 objects
-     * @param prefix The prefix to save the copied S3 objects
+     * @param requests      The list of requests to copy the S3 objects
+     * @param bucket        The bucket to be copied the S3 objects
+     * @param prefix        The prefix to save the copied S3 objects
      * @param currentPrefix The current prefix from where the S3 objects are copied
      *
      * @return The S3 repository response with the information of the S3 objects
@@ -137,15 +136,15 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> copy(List<ListObjectsRequest> requests, String bucket, String prefix, String currentPrefix );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> copy( List<ListObjectsRequest> requests, String bucket, String prefix, String currentPrefix );
 
 
     /**
      * Method that moves the S3 objects that match with a request.
      *
      * @param request The request to move the S3 objects
-     * @param bucket The bucket to be moved the S3 objects
-     * @param key The new key of the moved S3 object
+     * @param bucket  The bucket to be moved the S3 objects
+     * @param key     The new key of the moved S3 object
      *
      * @return The S3 repository response with the information of the S3 objects
      *
@@ -153,15 +152,15 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> move(ListObjectsRequest request, String bucket, String key );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> move( ListObjectsRequest request, String bucket, String key );
 
 
     /**
      * Method that moves the S3 objects that match with a list of requests.
      *
-     * @param requests The list of requests to move the S3 objects
-     * @param bucket The bucket to be moved the S3 objects
-     * @param prefix The prefix to save the moved S3 objects
+     * @param requests      The list of requests to move the S3 objects
+     * @param bucket        The bucket to be moved the S3 objects
+     * @param prefix        The prefix to save the moved S3 objects
      * @param currentPrefix The current prefix from where the S3 objects are moved
      *
      * @return The S3 repository response with the information of the S3 objects
@@ -170,7 +169,7 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> move(List<ListObjectsRequest> requests, String bucket, String prefix, String currentPrefix );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> move( List<ListObjectsRequest> requests, String bucket, String prefix, String currentPrefix );
 
 
     /**
@@ -184,7 +183,7 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> delete(ListObjectsRequest request );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> delete( ListObjectsRequest request );
 
 
     /**
@@ -198,7 +197,7 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> delete(List<ListObjectsRequest> requests );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> delete( List<ListObjectsRequest> requests );
 
 
     /**
@@ -211,6 +210,6 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositorySimpleRequest
      * @see OSdmsS3RepositoryResponse
      */
-    OSdmsS3RepositoryResponse<Boolean> exists(OSdmsS3RepositorySimpleRequest request );
+    OSdmsS3RepositoryResponse<Boolean> exists( OSdmsS3RepositorySimpleRequest request );
 
 }

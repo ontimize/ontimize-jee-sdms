@@ -3,7 +3,6 @@ package com.ontimize.jee.sdms.engine.s3.repository.response.codes;
 import com.ontimize.jee.common.dto.EntityResult;
 
 
-
 /**
  * This enum represents the diferent codes to be used the S3 Repository response.
  */
@@ -23,7 +22,7 @@ public enum OSdmsS3RepositoryResponseCodes {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    OSdmsS3RepositoryResponseCodes(final Integer code, final Integer entityResultCode ) {
+    OSdmsS3RepositoryResponseCodes( final Integer code, final Integer entityResultCode ) {
         this.code = code;
         this.entityResultCode = entityResultCode;
     }

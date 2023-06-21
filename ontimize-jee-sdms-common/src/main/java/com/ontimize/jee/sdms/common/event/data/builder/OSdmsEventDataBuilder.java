@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-
-
 /**
  * Implementation of the {@link IOSdmsEventDataBuilder} interface.
  *
@@ -25,26 +23,27 @@ public class OSdmsEventDataBuilder implements IOSdmsEventDataBuilder {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsEventDataBuilder(){}
+    public OSdmsEventDataBuilder() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------ \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public OSdmsEventDataBuilder source(final Class<?> source ){
+    public OSdmsEventDataBuilder source( final Class<?> source ) {
         this.source = source;
         return this;
     }
 
     @Override
-    public OSdmsEventDataBuilder input(final Enum key, final Object value ){
+    public OSdmsEventDataBuilder input( final Enum key, final Object value ) {
         this.inputs.put( key.name(), value );
         return this;
     }
 
     @Override
-    public OSdmsEventDataBuilder input(final String key, final Object value ){
+    public OSdmsEventDataBuilder input( final String key, final Object value ) {
         this.inputs.put( key, value );
         return this;
     }
@@ -76,7 +75,7 @@ public class OSdmsEventDataBuilder implements IOSdmsEventDataBuilder {
     /**
      * Clears the builder information.
      */
-    private void clear(){
+    private void clear() {
         this.source = null;
         this.inputs.clear();
     }

@@ -21,7 +21,7 @@ public interface IOSdmsS3RepositoryResponseBuilder {
      *
      * @see OSdmsS3RepositoryResponseCodes
      */
-    IOSdmsS3RepositoryResponseBuilder code(OSdmsS3RepositoryResponseCodes code );
+    IOSdmsS3RepositoryResponseBuilder code( OSdmsS3RepositoryResponseCodes code );
 
 
     /**
@@ -31,7 +31,7 @@ public interface IOSdmsS3RepositoryResponseBuilder {
      *
      * @return The builder.
      */
-    IOSdmsS3RepositoryResponseBuilder message(String message );
+    IOSdmsS3RepositoryResponseBuilder message( String message );
 
 
     /**
@@ -49,7 +49,7 @@ public interface IOSdmsS3RepositoryResponseBuilder {
      *
      * @return The S3 repository response.
      */
-    <T> OSdmsS3RepositoryResponse<T> build(T data );
+    <T> OSdmsS3RepositoryResponse<T> build( T data );
 
 
     /**
@@ -59,7 +59,7 @@ public interface IOSdmsS3RepositoryResponseBuilder {
      *
      * @return The S3 repository response.
      */
-    <T> OSdmsS3RepositoryResponse<T> build(List<T> data );
+    <T> OSdmsS3RepositoryResponse<T> build( List<T> data );
 
 
     /**
@@ -69,6 +69,6 @@ public interface IOSdmsS3RepositoryResponseBuilder {
      *
      * @return The S3 repository response.
      */
-    <T> OSdmsS3RepositoryResponse<T> build(Set<T> data );
+    <T> OSdmsS3RepositoryResponse<T> build( Set<T> data );
 
 }

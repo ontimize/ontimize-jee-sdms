@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 
-
 /**
  * Interface to define the methods to build a response from a DMS operation
  */
@@ -19,7 +18,7 @@ public interface IOSdmsResponseBuilder {
      *
      * @return The builder
      */
-    IOSdmsResponseBuilder code(Integer code );
+    IOSdmsResponseBuilder code( Integer code );
 
 
     /**
@@ -29,7 +28,7 @@ public interface IOSdmsResponseBuilder {
      *
      * @return The builder
      */
-    IOSdmsResponseBuilder message(String message );
+    IOSdmsResponseBuilder message( String message );
 
 
     /**
@@ -67,7 +66,7 @@ public interface IOSdmsResponseBuilder {
      *
      * @return The response as an EntityResult
      */
-    <T extends IOSdmsMappeable> EntityResult buildWithMappeable(T data );
+    <T extends IOSdmsMappeable> EntityResult buildWithMappeable( T data );
 
 
     /**
@@ -77,5 +76,5 @@ public interface IOSdmsResponseBuilder {
      *
      * @return The response as an EntityResult
      */
-    <T extends IOSdmsMappeable> EntityResult buildWithMappeable(List<T> data );
+    <T extends IOSdmsMappeable> EntityResult buildWithMappeable( List<T> data );
 }

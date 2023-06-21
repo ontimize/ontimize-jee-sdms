@@ -2,11 +2,13 @@ package com.ontimize.jee.sdms.engine.s3.command;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-
 import com.ontimize.jee.common.dto.EntityResult;
 import com.ontimize.jee.sdms.common.command.IOSdmsCommand;
 import com.ontimize.jee.sdms.common.inyector.IOSdmsInyector;
+import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
 import com.ontimize.jee.sdms.common.response.builder.IOSdmsResponseBuilder;
+import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
+import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
 import com.ontimize.jee.sdms.engine.s3.repository.IOSdmsS3Repository;
 import com.ontimize.jee.sdms.engine.s3.repository.OSdmsS3RepositoryProxy;
 import com.ontimize.jee.sdms.engine.s3.repository.dto.OSdmsS3RepositoryDto;
@@ -15,10 +17,7 @@ import com.ontimize.jee.sdms.engine.s3.util.config.IOSdmsS3EngineConfig;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.reader.IOSdmsS3DataReader;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
-import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
 import com.ontimize.jee.sdms.engine.s3.util.response.mapper.IOSdmsS3ResponseMapper;
-import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
-import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -39,7 +38,6 @@ public class OSdmsS3UploadCommand implements IOSdmsCommand {
     private static final String MESSAGE_ERROR_INVALID_KEY_FOR_WORKSPACE = "The S3 key is invalid for the selected Workspace";
 
 
-
     // Dependencies
     private IOSdmsS3Repository repository;
     private IOSdmsS3EngineConfig s3EngineConfig;
@@ -51,14 +49,12 @@ public class OSdmsS3UploadCommand implements IOSdmsCommand {
     private IOSdmsS3DataReader dataReader;
 
 
-
     //Data
     private String bucket;
     private OSdmsS3InputFilter filter;
     private OSdmsS3InputData data;
     private MultipartFile file;
     private String key;
-
 
 
     //Response
@@ -68,7 +64,7 @@ public class OSdmsS3UploadCommand implements IOSdmsCommand {
 // ------| ENTRYPOINT |---------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3UploadCommand(final OSdmsS3InputFilter filter, final OSdmsS3InputData data, final MultipartFile file ) {
+    public OSdmsS3UploadCommand( final OSdmsS3InputFilter filter, final OSdmsS3InputData data, final MultipartFile file ) {
         this.filter = filter;
         this.data = data;
         this.file = file;
@@ -102,10 +98,10 @@ public class OSdmsS3UploadCommand implements IOSdmsCommand {
 
     @Override
     public EntityResult validate() {
-        if( this.workspaceManager.getActive() == null ){
+        if( this.workspaceManager.getActive() == null ) {
             return this.responseBuilder
                     .code( EntityResult.OPERATION_WRONG )
-                    .message(MESSAGE_ERROR_NO_ACTIVE_WORKSPACE)
+                    .message( MESSAGE_ERROR_NO_ACTIVE_WORKSPACE )
                     .build();
         }
 
@@ -116,7 +112,7 @@ public class OSdmsS3UploadCommand implements IOSdmsCommand {
                     .build();
         }
 
-        if( !this.pathValidator.validate( this.key, this.workspace.getPatterns() ) ) {
+        if( ! this.pathValidator.validate( this.key, this.workspace.getPatterns() ) ) {
             return this.responseBuilder
                     .code( EntityResult.OPERATION_WRONG )
                     .message( MESSAGE_ERROR_INVALID_KEY_FOR_WORKSPACE )
@@ -140,16 +136,18 @@ public class OSdmsS3UploadCommand implements IOSdmsCommand {
                 .withLocale( Locale.getDefault() );
 
         try {
-            final PutObjectRequest request = new PutObjectRequest(this.bucket, this.key, this.file.getInputStream(), metadata);
+            final PutObjectRequest request = new PutObjectRequest( this.bucket, this.key, this.file.getInputStream(),
+                                                                   metadata
+            );
 
-            if (!this.data.hasMetadata()) this.data.setMetadata( new HashMap<>() );
+            if( ! this.data.hasMetadata() ) this.data.setMetadata( new HashMap<>() );
             final String creationDate = LocalDateTime.now().format( dateTimeFormatter );
             this.data.getMetadata().put( "creation_date", creationDate );
-            this.data.getMetadata().forEach(metadata::addUserMetadata);
+            this.data.getMetadata().forEach( metadata::addUserMetadata );
 
-            this.response = this.repository.upload(request);
+            this.response = this.repository.upload( request );
         }
-        catch ( final IOException e ) {
+        catch( final IOException e ) {
             //Empty
         }
     }

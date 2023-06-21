@@ -7,7 +7,6 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
-
 /**
  * Implementation of {@link WebMvcConfigurer} to add {@link StringJsonToOSdmsDataParamConverter} to the Spring MVC.
  *
@@ -22,7 +21,8 @@ public class OSdmsConverterConfig implements WebMvcConfigurer {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsConverterConfig(){}
+    public OSdmsConverterConfig() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\

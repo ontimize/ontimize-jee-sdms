@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 /**
  * Class that represents a workspace.
  */
@@ -23,7 +22,8 @@ public class OSdmsWorkspace {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsWorkspace(){}
+    public OSdmsWorkspace() {
+    }
 
     public OSdmsWorkspace( final String name, final String value, final List<String> patterns ) {
         this.setName( name );

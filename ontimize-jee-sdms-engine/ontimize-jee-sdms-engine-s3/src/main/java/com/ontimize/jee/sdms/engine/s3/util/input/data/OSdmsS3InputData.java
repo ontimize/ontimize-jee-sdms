@@ -3,7 +3,6 @@ package com.ontimize.jee.sdms.engine.s3.util.input.data;
 import java.util.Map;
 
 
-
 /**
  * This class represents the input data that can be used to build a S3 engine.
  */
@@ -29,9 +28,10 @@ public class OSdmsS3InputData {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3InputData(){}
+    public OSdmsS3InputData() {
+    }
 
-    public OSdmsS3InputData( final String currentPrefix, final String prefix, final String fileName, final String id, final String key, final Map<String, String> metadata) {
+    public OSdmsS3InputData( final String currentPrefix, final String prefix, final String fileName, final String id, final String key, final Map<String, String> metadata ) {
         this.setCurrentPrefix( currentPrefix );
         this.setPrefix( prefix );
         this.setFileName( fileName );
@@ -152,7 +152,7 @@ public class OSdmsS3InputData {
      * @return true, if the input data has metadata field
      */
     public boolean hasMetadata() {
-        return this.metadata != null && !this.metadata.isEmpty();
+        return this.metadata != null && ! this.metadata.isEmpty();
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

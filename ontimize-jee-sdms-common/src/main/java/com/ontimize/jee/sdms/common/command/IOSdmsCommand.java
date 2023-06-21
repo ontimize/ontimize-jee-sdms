@@ -16,7 +16,8 @@ public interface IOSdmsCommand {
      *
      * @see IOSdmsInyector
      */
-    default void init( IOSdmsInyector inyector ){}
+    default void init( IOSdmsInyector inyector ) {
+    }
 
 
     /**
@@ -27,13 +28,16 @@ public interface IOSdmsCommand {
      *
      * @see EntityResult
      */
-    default EntityResult validate(){ return null; }
+    default EntityResult validate() {
+        return null;
+    }
 
 
     /**
      * Method that is executed before the command is executed.
      */
-    default void before(){}
+    default void before() {
+    }
 
 
     /**
@@ -42,11 +46,11 @@ public interface IOSdmsCommand {
     void run();
 
 
-
     /**
      * Method that is executed before the command is executed.
      */
-    default void after(){}
+    default void after() {
+    }
 
 
     /**

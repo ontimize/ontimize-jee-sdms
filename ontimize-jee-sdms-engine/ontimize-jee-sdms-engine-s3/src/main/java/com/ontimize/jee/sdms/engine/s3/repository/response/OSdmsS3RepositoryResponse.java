@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.List;
 
 
-
 /**
  * Class that represents the response of the S3 Repository.
  */
@@ -24,24 +23,25 @@ public class OSdmsS3RepositoryResponse<T> {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3RepositoryResponse(){}
-
-    /**
-     * Constructor of the class.
-     *
-     * @param code The response code of the S3 Repository response.
-     */
-    public OSdmsS3RepositoryResponse(final OSdmsS3RepositoryResponseCodes code ) {
-        this.setCode( code );
+    public OSdmsS3RepositoryResponse() {
     }
 
     /**
      * Constructor of the class.
      *
      * @param code The response code of the S3 Repository response.
+     */
+    public OSdmsS3RepositoryResponse( final OSdmsS3RepositoryResponseCodes code ) {
+        this.setCode( code );
+    }
+
+    /**
+     * Constructor of the class.
+     *
+     * @param code    The response code of the S3 Repository response.
      * @param message The response message of the S3 Repository response.
      */
-    public OSdmsS3RepositoryResponse(final OSdmsS3RepositoryResponseCodes code, final String message ) {
+    public OSdmsS3RepositoryResponse( final OSdmsS3RepositoryResponseCodes code, final String message ) {
         this.setCode( code );
         this.setMessage( message );
     }

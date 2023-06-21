@@ -23,7 +23,7 @@ public interface IOSdmsS3ResponseMapper {
      * @see OSdmsS3RepositoryResponse
      * @see EntityResult
      */
-    <T extends IOSdmsMappeable> EntityResult map(OSdmsS3RepositoryResponse<T> response );
+    <T extends IOSdmsMappeable> EntityResult map( OSdmsS3RepositoryResponse<T> response );
 
 
     /**
@@ -36,6 +36,6 @@ public interface IOSdmsS3ResponseMapper {
      * @see IOSdmsMappeable
      * @see EntityResult
      */
-    <T extends IOSdmsMappeable> EntityResult map(T data );
+    <T extends IOSdmsMappeable> EntityResult map( T data );
 
 }

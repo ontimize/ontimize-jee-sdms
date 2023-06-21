@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 
-
 /**
  * Implementation of the {@link IOSdmsPathValidator} interface.
  *
@@ -26,7 +25,8 @@ public class OSdmsPathValidator implements IOSdmsPathValidator {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsPathValidator(){}
+    public OSdmsPathValidator() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
@@ -34,7 +34,7 @@ public class OSdmsPathValidator implements IOSdmsPathValidator {
 
     @Override
     public boolean validate( final String path ) {
-        return this.validate( path, Arrays.asList( "" ));
+        return this.validate( path, Arrays.asList( "" ) );
     }
 
     @Override
@@ -45,19 +45,19 @@ public class OSdmsPathValidator implements IOSdmsPathValidator {
 
         if( pattern != null ) {
             //Initialize patterns
-            final Pattern slashRegex = Pattern.compile("\\/");
-            final Pattern pathVariableRegex = Pattern.compile("\\{[\\d\\w\\-_:;,.]*\\}");
+            final Pattern slashRegex = Pattern.compile( "\\/" );
+            final Pattern pathVariableRegex = Pattern.compile( "\\{[\\d\\w\\-_:;,.]*\\}" );
 
             //Build pattern
             final String patternRegexString = pattern
                     .replaceAll( slashRegex.pattern(), "\\\\/" )
                     .replaceAll( pathVariableRegex.pattern(), "[\\\\d\\\\w\\\\-_:;,.]*" );
 
-            final Pattern patternRegex = Pattern.compile( String.format( "^(%s).*", patternRegexString ));
+            final Pattern patternRegex = Pattern.compile( String.format( "^(%s).*", patternRegexString ) );
 
             //Return result
-            result = patternRegex.matcher(path).find() &&
-                    !pathVariableRegex.matcher(path).find();
+            result = patternRegex.matcher( path ).find() &&
+                    ! pathVariableRegex.matcher( path ).find();
         }
 
         return result;
@@ -66,16 +66,16 @@ public class OSdmsPathValidator implements IOSdmsPathValidator {
     @Override
     public boolean validate( final String path, final List<String> patterns ) {
         boolean result = false;
-        for( int i = 0; i < patterns.size() && !result ; i++ ) {
+        for( int i = 0 ; i < patterns.size() && ! result ; i++ ) {
             final String pattern = patterns.get( i );
-            result = this.validate(path, pattern );
+            result = this.validate( path, pattern );
         }
         return result;
     }
 
     @Override
     public boolean isPattern( final String path ) {
-        final Pattern pathVariableRegex = Pattern.compile("\\{[\\d\\w\\-_:;,.]*\\}");
+        final Pattern pathVariableRegex = Pattern.compile( "\\{[\\d\\w\\-_:;,.]*\\}" );
         return pathVariableRegex.matcher( path ).find();
     }
 

@@ -6,7 +6,6 @@ import java.util.EventListener;
 import java.util.List;
 
 
-
 /**
  * The interface sets the logic to be executed when a certain event is triggered.
  *
@@ -30,6 +29,6 @@ public interface IOSdmsEventListener<T extends IOSdmsEventData> extends EventLis
      *
      * @param data The data associated with the event.
      */
-    void run ( T data );
+    void run( T data );
 
 }

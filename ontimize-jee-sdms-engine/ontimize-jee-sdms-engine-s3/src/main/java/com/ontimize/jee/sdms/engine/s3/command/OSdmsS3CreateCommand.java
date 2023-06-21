@@ -2,11 +2,13 @@ package com.ontimize.jee.sdms.engine.s3.command;
 
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-
 import com.ontimize.jee.common.dto.EntityResult;
 import com.ontimize.jee.sdms.common.command.IOSdmsCommand;
 import com.ontimize.jee.sdms.common.inyector.IOSdmsInyector;
+import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
 import com.ontimize.jee.sdms.common.response.builder.IOSdmsResponseBuilder;
+import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
+import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
 import com.ontimize.jee.sdms.engine.s3.repository.IOSdmsS3Repository;
 import com.ontimize.jee.sdms.engine.s3.repository.OSdmsS3RepositoryProxy;
 import com.ontimize.jee.sdms.engine.s3.repository.dto.OSdmsS3RepositoryDto;
@@ -15,10 +17,7 @@ import com.ontimize.jee.sdms.engine.s3.util.config.IOSdmsS3EngineConfig;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.reader.IOSdmsS3DataReader;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
-import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
 import com.ontimize.jee.sdms.engine.s3.util.response.mapper.IOSdmsS3ResponseMapper;
-import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
-import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -35,7 +34,6 @@ public class OSdmsS3CreateCommand implements IOSdmsCommand {
     private static final String MESSAGE_ERROR_INVALID_PREFIX_FOR_WORKSPACE = "The S3 prefix is invalid for the selected workspace";
 
 
-
     // Dependencies
     private IOSdmsS3Repository repository;
     private IOSdmsS3EngineConfig s3EngineConfig;
@@ -47,13 +45,11 @@ public class OSdmsS3CreateCommand implements IOSdmsCommand {
     private IOSdmsS3DataReader dataReader;
 
 
-
     //Data
     private String bucket;
     private OSdmsS3InputFilter filter;
     private OSdmsS3InputData data;
     private String prefix;
-
 
 
     //Response
@@ -63,7 +59,7 @@ public class OSdmsS3CreateCommand implements IOSdmsCommand {
 // ------| ENTRYPOINT |---------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3CreateCommand(final OSdmsS3InputFilter filter, final OSdmsS3InputData data ) {
+    public OSdmsS3CreateCommand( final OSdmsS3InputFilter filter, final OSdmsS3InputData data ) {
         this.filter = filter;
         this.data = data;
     }
@@ -97,10 +93,10 @@ public class OSdmsS3CreateCommand implements IOSdmsCommand {
 
     @Override
     public EntityResult validate() {
-        if( this.workspaceManager.getActive() == null ){
+        if( this.workspaceManager.getActive() == null ) {
             return this.responseBuilder
                     .code( EntityResult.OPERATION_WRONG )
-                    .message(MESSAGE_ERROR_NO_ACTIVE_WORKSPACE)
+                    .message( MESSAGE_ERROR_NO_ACTIVE_WORKSPACE )
                     .build();
         }
 
@@ -111,7 +107,7 @@ public class OSdmsS3CreateCommand implements IOSdmsCommand {
                     .build();
         }
 
-        if( !this.pathValidator.validate( this.prefix, this.workspace.getPatterns() ) ) {
+        if( ! this.pathValidator.validate( this.prefix, this.workspace.getPatterns() ) ) {
             return this.responseBuilder
                     .code( EntityResult.OPERATION_WRONG )
                     .message( MESSAGE_ERROR_INVALID_PREFIX_FOR_WORKSPACE )
@@ -127,9 +123,9 @@ public class OSdmsS3CreateCommand implements IOSdmsCommand {
 
     @Override
     public void run() {
-        if( !this.prefix.endsWith( "/" )) this.prefix = this.prefix.concat( "/" );
+        if( ! this.prefix.endsWith( "/" ) ) this.prefix = this.prefix.concat( "/" );
         final String name = this.prefix.concat( OSdmsS3RepositoryDto.FILE_NAME_MARK_FOLDER );
-        final InputStream inputStream = new ByteArrayInputStream((new byte[0]));
+        final InputStream inputStream = new ByteArrayInputStream( ( new byte[ 0 ] ) );
         final ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength( 0 );
 

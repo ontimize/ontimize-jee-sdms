@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 
 
-
 /**
  * Class that represents the data in response of the S3 Repository.
  *
@@ -71,9 +70,10 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3RepositoryDto(){}
+    public OSdmsS3RepositoryDto() {
+    }
 
-    public OSdmsS3RepositoryDto( final S3Object s3Object, final S3ObjectSummary s3ObjectSummary, final ObjectMetadata objectMetadata ){
+    public OSdmsS3RepositoryDto( final S3Object s3Object, final S3ObjectSummary s3ObjectSummary, final ObjectMetadata objectMetadata ) {
         this.set( s3Object );
         this.set( s3ObjectSummary );
         this.set( objectMetadata );
@@ -162,6 +162,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
     public void setCreationDate( final Date creationDate ) {
         this.creationDate = creationDate;
     }
+
     public void setCreationDate( final String creationDate ) {
         final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern( "dd/MM/yyyy-HH:mm:ss" );
         LocalDateTime localDateTime = LocalDateTime.parse( creationDate, dateTimeFormatter );
@@ -203,7 +204,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      *
      * @see S3Object
      */
-    public void set( final S3Object s3Object ){
+    public void set( final S3Object s3Object ) {
         this.processKey( s3Object.getKey() );
         this.bucket = s3Object.getBucketName();
         this.file = s3Object.getObjectContent();
@@ -212,16 +213,15 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
     }
 
 
-
     /**
-     * Method that sets the bucket name, key and prefix, the object size, the object owner and the last modified date from
-     * S3ObjectSummary.
+     * Method that sets the bucket name, key and prefix, the object size, the object owner and the last modified date
+     * from S3ObjectSummary.
      *
      * @param s3ObjectSummary The S3ObjectSummary.
      *
      * @see S3ObjectSummary
      */
-    public void set( final S3ObjectSummary s3ObjectSummary ){
+    public void set( final S3ObjectSummary s3ObjectSummary ) {
         this.processKey( s3ObjectSummary.getKey() );
         this.bucket = s3ObjectSummary.getBucketName();
         this.size = s3ObjectSummary.getSize();
@@ -238,13 +238,13 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      *
      * @see ObjectMetadata
      */
-    public void set( final ObjectMetadata objectMetadata ){
-        if( objectMetadata != null ){
+    public void set( final ObjectMetadata objectMetadata ) {
+        if( objectMetadata != null ) {
             this.size = objectMetadata.getContentLength();
             this.metadata = objectMetadata.getRawMetadata();
             final Map<String, String> userMetadata = objectMetadata.getUserMetadata();
-            if( userMetadata != null && userMetadata.containsKey( "creation_date" )) {
-                this.setCreationDate( userMetadata.get( "creation_date" ));
+            if( userMetadata != null && userMetadata.containsKey( "creation_date" ) ) {
+                this.setCreationDate( userMetadata.get( "creation_date" ) );
             }
         }
     }
@@ -256,7 +256,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      * @param bucket The bucket name.
      * @param prefix The prefix.
      */
-    public void setFolderData( final String bucket, final String prefix ){
+    public void setFolderData( final String bucket, final String prefix ) {
         this.processKey( prefix );
         this.key = prefix;
         this.bucket = bucket;
@@ -269,9 +269,9 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      *
      * @param workspaces The workspace list.
      */
-    public void setRelativeKey( final List<String> workspaces ){
+    public void setRelativeKey( final List<String> workspaces ) {
         this.relativeKey = this.key;
-        workspaces.forEach( target -> this.relativeKey = this.relativeKey.replaceFirst( target, "" ));
+        workspaces.forEach( target -> this.relativeKey = this.relativeKey.replaceFirst( target, "" ) );
     }
 
 
@@ -280,9 +280,9 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      *
      * @param workspaces The workspace list.
      */
-    public void setRelativePrefix( final List<String> workspaces ){
+    public void setRelativePrefix( final List<String> workspaces ) {
         this.relativePrefix = this.prefix;
-        workspaces.forEach( target -> this.relativePrefix = this.relativePrefix.replaceFirst( target, "" ));
+        workspaces.forEach( target -> this.relativePrefix = this.relativePrefix.replaceFirst( target, "" ) );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -320,11 +320,11 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
     @Override
     public OSdmsZipData getDataToZip() {
         OSdmsZipData result = null;
-        if( !this.folder && !this.name.equals( OSdmsS3RepositoryDto.FILE_NAME_MARK_FOLDER ) ) {
-            String fileName = this.key.replaceAll("/", ".");
-            if( fileName.endsWith( "." )) fileName = fileName.substring( 0, fileName.length() - 1 );
+        if( ! this.folder && ! this.name.equals( OSdmsS3RepositoryDto.FILE_NAME_MARK_FOLDER ) ) {
+            String fileName = this.key.replaceAll( "/", "." );
+            if( fileName.endsWith( "." ) ) fileName = fileName.substring( 0, fileName.length() - 1 );
             result = new OSdmsZipData();
-            result.setInputStream(this.file);
+            result.setInputStream( this.file );
             result.setFileName( fileName );
         }
         return result;
@@ -339,20 +339,20 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      *
      * @param key The key.
      */
-    public void processKey( final String key ){
+    public void processKey( final String key ) {
         //Get key
         this.key = key;
 
         //Get name
         final String[] keyParts = key.split( "/" );
         final int lastPosition = keyParts.length - 1;
-        if( lastPosition >= 0 ){
+        if( lastPosition >= 0 ) {
             this.name = keyParts[ lastPosition ];
         }
 
         //Get Prefix
         if( this.name != null ) this.prefix = this.key.substring( 0, ( this.key.length() - this.name.length() ) );
-        if( !this.prefix.endsWith( "/" )) this.prefix = this.prefix.concat( "/" );
+        if( ! this.prefix.endsWith( "/" ) ) this.prefix = this.prefix.concat( "/" );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

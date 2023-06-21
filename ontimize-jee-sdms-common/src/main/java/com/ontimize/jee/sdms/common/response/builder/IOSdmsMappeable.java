@@ -3,7 +3,6 @@ package com.ontimize.jee.sdms.common.response.builder;
 import java.util.Map;
 
 
-
 /**
  * Interface to define a mappeable object.
  */
