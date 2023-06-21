@@ -1,11 +1,11 @@
 package com.ontimize.jee.sdms.engine.s3.util.input.filter.reader;
 
 import com.ontimize.jee.sdms.common.crypter.IOSdmsCrypter;
-import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
 import com.ontimize.jee.sdms.common.path.builder.IOSdmsPathBuilder;
 import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
 import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
 import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
+import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 
 /**
@@ -46,14 +45,15 @@ public class OSdmsS3FilterReader implements IOSdmsS3FilterReader {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3FilterReader(){}
+    public OSdmsS3FilterReader() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public List<String> readAllKeys(final OSdmsS3InputFilter filter ) {
+    public List<String> readAllKeys( final OSdmsS3InputFilter filter ) {
         if( filter == null ) return Collections.emptyList();
 
         final Set<String> result = new HashSet<>();
@@ -61,7 +61,7 @@ public class OSdmsS3FilterReader implements IOSdmsS3FilterReader {
 
         if( filter.hasIds() ) {
             final List<String> id = filter.getIds();
-            result.addAll( id.stream().map( this.crypter::decode ).collect( Collectors.toList() ));
+            result.addAll( id.stream().map( this.crypter::decode ).collect( Collectors.toList() ) );
         }
 
         if( filter.hasKeys() ) {
@@ -83,7 +83,7 @@ public class OSdmsS3FilterReader implements IOSdmsS3FilterReader {
             fileNames.addAll( filter.getFileNames() );
         }
 
-        if( !prefixes.isEmpty() || !fileNames.isEmpty() ) {
+        if( ! prefixes.isEmpty() || ! fileNames.isEmpty() ) {
             result.addAll( this.pathBuilder.buildKeyList( activeWorkspace.getPatterns(), prefixes, fileNames ) );
         }
 
@@ -91,7 +91,6 @@ public class OSdmsS3FilterReader implements IOSdmsS3FilterReader {
                 .filter( key -> this.pathValidator.validate( key, activeWorkspace.getPatterns() ) )
                 .collect( Collectors.toList() );
     }
-
 
 
     @Override
@@ -107,14 +106,14 @@ public class OSdmsS3FilterReader implements IOSdmsS3FilterReader {
             }
         }
 
-        if ( result == null && filter.hasKeys() ) {
+        if( result == null && filter.hasKeys() ) {
             final List<String> keys = filter.getKeys();
             if( keys.size() == 1 ) {
                 result = keys.get( 0 );
             }
         }
 
-        if ( result == null ) {
+        if( result == null ) {
             final OSdmsWorkspace activeWorkspace = this.workspaceManager.getActive();
             final List<String> workspaces = new ArrayList<>();
             if( activeWorkspace != null ) {
@@ -122,12 +121,12 @@ public class OSdmsS3FilterReader implements IOSdmsS3FilterReader {
             }
 
             final List<String> prefixes = new ArrayList<>();
-            if ( filter.hasPrefixes() ) {
+            if( filter.hasPrefixes() ) {
                 prefixes.addAll( filter.getPrefixes() );
             }
 
             final List<String> fileNames = new ArrayList<>();
-            if ( filter.hasFileNames() ) {
+            if( filter.hasFileNames() ) {
                 fileNames.addAll( filter.getFileNames() );
             }
 

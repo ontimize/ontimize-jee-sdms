@@ -1,7 +1,6 @@
 package com.ontimize.jee.sdms.engine.s3.util.input.data.field;
 
 
-
 /**
  * Enum that represents the diferent fields of the input data.
  */
@@ -20,12 +19,12 @@ public enum OSdmsS3InputDataField {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    OSdmsS3InputDataField(final String value ){
+    OSdmsS3InputDataField( final String value ) {
         this.value = value;
     }
 
 
-    public String getValue(){
+    public String getValue() {
         return this.value;
     }
 

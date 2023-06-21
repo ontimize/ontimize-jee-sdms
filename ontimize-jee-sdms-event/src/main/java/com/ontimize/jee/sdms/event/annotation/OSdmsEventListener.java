@@ -6,12 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 
-
 /**
  * This annotation marks a class as an Ontimize Event Listener. An Ontimize Event Listener is a class that implements
- * the {@link IOSdmsEventListener} interface and is
- * responsible for handling Ontimize events.
+ * the {@link IOSdmsEventListener} interface and is responsible for handling Ontimize events.
  */
 @Retention( RetentionPolicy.RUNTIME )
 @Target( ElementType.TYPE )
-public @interface OSdmsEventListener {}
+public @interface OSdmsEventListener {
+}

@@ -1,17 +1,16 @@
 package com.ontimize.jee.sdms.engine.s3.util.input.data.reader;
 
 import com.ontimize.jee.sdms.common.crypter.IOSdmsCrypter;
-import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.common.path.builder.IOSdmsPathBuilder;
 import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
 import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
 import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
+import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
 
 
 /**
@@ -59,31 +58,31 @@ public class OSdmsS3DataReader implements IOSdmsS3DataReader {
             result = data.getKey();
         }
 
-        if ( result == null ) {
+        if( result == null ) {
             String prefix = null;
-            if ( data.hasPrefix() ) {
+            if( data.hasPrefix() ) {
                 prefix = data.getPrefix();
             }
 
             String fileName = null;
-            if ( data.hasFileName() ) {
+            if( data.hasFileName() ) {
                 fileName = data.getFileName();
             }
 
             if( prefix != null && fileName != null ) {
                 final OSdmsWorkspace activeWorkspace = this.workspaceManager.getActive();
                 String workspace = null;
-                if (activeWorkspace != null) {
-                    workspace = !activeWorkspace.getPatterns().isEmpty() ? activeWorkspace.getPatterns().get(0) : workspace;
+                if( activeWorkspace != null ) {
+                    workspace = ! activeWorkspace.getPatterns().isEmpty() ? activeWorkspace.getPatterns().get(
+                            0 ) : workspace;
                 }
 
-                result = this.pathBuilder.buildKey(workspace, prefix, fileName);
+                result = this.pathBuilder.buildKey( workspace, prefix, fileName );
             }
         }
 
         return result;
     }
-
 
 
     @Override
@@ -91,22 +90,21 @@ public class OSdmsS3DataReader implements IOSdmsS3DataReader {
         if( data == null ) return null;
 
         String prefix = null;
-        if ( data.hasPrefix() ) {
+        if( data.hasPrefix() ) {
             prefix = data.getPrefix();
         }
 
         final OSdmsWorkspace activeWorkspace = this.workspaceManager.getActive();
         String workspace = null;
         if( prefix != null && activeWorkspace != null ) {
-            workspace = !activeWorkspace.getPatterns().isEmpty() ? activeWorkspace.getPatterns().get( 0 ) : workspace;
+            workspace = ! activeWorkspace.getPatterns().isEmpty() ? activeWorkspace.getPatterns().get( 0 ) : workspace;
         }
 
-        String result = this.pathBuilder.buildKey( workspace, prefix, (String) null);
-        if( result != null && !result.endsWith( "/" ) ) result = result.concat( "/" );
+        String result = this.pathBuilder.buildKey( workspace, prefix, ( String ) null );
+        if( result != null && ! result.endsWith( "/" ) ) result = result.concat( "/" );
 
         return result;
     }
-
 
 
     @Override
@@ -116,15 +114,16 @@ public class OSdmsS3DataReader implements IOSdmsS3DataReader {
         final OSdmsWorkspace activeWorkspace = this.workspaceManager.getActive();
 
         String currentPrefix = null;
-        if ( data.hasCurrentPrefix()) {
+        if( data.hasCurrentPrefix() ) {
             currentPrefix = data.getCurrentPrefix();
         }
 
         if( currentPrefix != null && currentPrefix.equals( "/" ) && activeWorkspace != null ) {
-            currentPrefix = !activeWorkspace.getPatterns().isEmpty() ? activeWorkspace.getPatterns().get(0) : currentPrefix;
+            currentPrefix = ! activeWorkspace.getPatterns().isEmpty() ? activeWorkspace.getPatterns().get(
+                    0 ) : currentPrefix;
         }
 
-        if( currentPrefix != null && !currentPrefix.endsWith( "/" ) ) currentPrefix = currentPrefix.concat( "/" );
+        if( currentPrefix != null && ! currentPrefix.endsWith( "/" ) ) currentPrefix = currentPrefix.concat( "/" );
 
         return currentPrefix;
     }

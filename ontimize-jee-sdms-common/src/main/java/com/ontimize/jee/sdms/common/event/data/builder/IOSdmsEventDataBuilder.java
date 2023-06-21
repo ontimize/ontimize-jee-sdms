@@ -15,28 +15,29 @@ public interface IOSdmsEventDataBuilder {
      *
      * @return The builder.
      */
-    IOSdmsEventDataBuilder source(Class<?> source );
+    IOSdmsEventDataBuilder source( Class<?> source );
 
 
     /**
      * Sets the input data from the event it's triggered.
      *
-     * @param key The key enum of the input data.
+     * @param key   The key enum of the input data.
      * @param value The value of the input data.
      *
      * @return The builder.
      */
-    IOSdmsEventDataBuilder input(Enum key, Object value );
+    IOSdmsEventDataBuilder input( Enum key, Object value );
 
 
-    /**from the event it's triggered.
+    /**
+     * from the event it's triggered.
      *
-     * @param key The key string of the input data.
+     * @param key   The key string of the input data.
      * @param value The value of the input data.
      *
      * @return The builder.
      */
-    IOSdmsEventDataBuilder input(String key, Object value );
+    IOSdmsEventDataBuilder input( String key, Object value );
 
 
     /**

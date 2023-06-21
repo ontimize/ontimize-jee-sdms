@@ -23,9 +23,10 @@ public class OSdmsEventData<T> implements IOSdmsEventData {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsEventData(){}
+    public OSdmsEventData() {
+    }
 
-    public OSdmsEventData(final Class<?> source, final Map<String, Object> inputs ){
+    public OSdmsEventData( final Class<?> source, final Map<String, Object> inputs ) {
         this.setSource( source );
         this.setInputs( inputs );
     }
@@ -47,7 +48,7 @@ public class OSdmsEventData<T> implements IOSdmsEventData {
     }
 
     @Override
-    public void setEvent( final Enum event ){
+    public void setEvent( final Enum event ) {
         this.event = event;
     }
 
@@ -55,7 +56,7 @@ public class OSdmsEventData<T> implements IOSdmsEventData {
         return this.inputs;
     }
 
-    public void setInputs( final Map<String, Object> inputs) {
+    public void setInputs( final Map<String, Object> inputs ) {
         this.inputs = inputs;
     }
 

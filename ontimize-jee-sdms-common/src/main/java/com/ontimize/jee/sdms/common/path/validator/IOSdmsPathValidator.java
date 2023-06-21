@@ -4,7 +4,6 @@ package com.ontimize.jee.sdms.common.path.validator;
 import java.util.List;
 
 
-
 /**
  * Interface that defines the methods to validate a path.
  *
@@ -25,7 +24,7 @@ public interface IOSdmsPathValidator {
     /**
      * Validates the given path with the given pattern.
      *
-     * @param path The given path to validate.
+     * @param path    The given path to validate.
      * @param pattern The given pattern to validate.
      *
      * @return True if the given path is valid, false otherwise.
@@ -36,7 +35,7 @@ public interface IOSdmsPathValidator {
     /**
      * Validates the given path with the given patterns.
      *
-     * @param path The given path to validate.
+     * @param path     The given path to validate.
      * @param patterns The given patterns to validate.
      *
      * @return True if the given path is valid, false otherwise.

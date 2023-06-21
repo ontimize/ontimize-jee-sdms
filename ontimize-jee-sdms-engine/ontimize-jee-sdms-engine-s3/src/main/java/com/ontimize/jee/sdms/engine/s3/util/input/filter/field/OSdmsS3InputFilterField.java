@@ -1,7 +1,6 @@
 package com.ontimize.jee.sdms.engine.s3.util.input.filter.field;
 
 
-
 /**
  * Enum that represents the diferent fields of the input filter.
  */
@@ -23,12 +22,12 @@ public enum OSdmsS3InputFilterField {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    OSdmsS3InputFilterField(final String value ){
+    OSdmsS3InputFilterField( final String value ) {
         this.value = value;
     }
 
 
-    public String getValue(){
+    public String getValue() {
         return this.value;
     }
 

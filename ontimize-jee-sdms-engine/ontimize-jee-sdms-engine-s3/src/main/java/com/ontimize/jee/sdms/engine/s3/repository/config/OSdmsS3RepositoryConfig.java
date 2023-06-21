@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 
-
 /**
  * AmazonS3 Bean configuration class
  */
@@ -42,7 +41,8 @@ public class OSdmsS3RepositoryConfig {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3RepositoryConfig() {}
+    public OSdmsS3RepositoryConfig() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
@@ -60,12 +60,13 @@ public class OSdmsS3RepositoryConfig {
         final AmazonS3ClientBuilder builder = AmazonS3ClientBuilder.standard()
                 .withCredentials( new AWSStaticCredentialsProvider( awsCreds ) );
 
-        if( this.endpoint != null && !this.endpoint.isEmpty() ){
-            builder.withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(this.endpoint, this.region))
-                    .withPathStyleAccessEnabled(true);
+        if( this.endpoint != null && ! this.endpoint.isEmpty() ) {
+            builder.withEndpointConfiguration(
+                            new AwsClientBuilder.EndpointConfiguration( this.endpoint, this.region ) )
+                    .withPathStyleAccessEnabled( true );
         }
         else {
-            builder.withRegion(Regions.fromName(this.region));
+            builder.withRegion( Regions.fromName( this.region ) );
         }
 
         return builder.build();

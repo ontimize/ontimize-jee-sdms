@@ -15,7 +15,7 @@ public interface IOSdmsAction {
     /**
      * Find an file or folder by id.
      *
-     * @param id The id of the file or folder
+     * @param id   The id of the file or folder
      * @param data The data to find the file or folder
      *
      * @return the entity result with the information of the file or folder
@@ -23,7 +23,7 @@ public interface IOSdmsAction {
      * @see Serializable
      * @see OSdmsRestDataDto
      */
-    EntityResult findById(Serializable id, OSdmsRestDataDto data );
+    EntityResult findById( Serializable id, OSdmsRestDataDto data );
 
 
     /**
@@ -44,7 +44,7 @@ public interface IOSdmsAction {
     /**
      * Download a file or folder by id.
      *
-     * @param id The id of the file or folder
+     * @param id   The id of the file or folder
      * @param data The data to download the file or folder
      *
      * @return the entity result with the information of the file or folder
@@ -81,7 +81,7 @@ public interface IOSdmsAction {
      * @see OSdmsRestDataDto
      * @see MultipartFile
      */
-    EntityResult upload(OSdmsRestDataDto data, MultipartFile file );
+    EntityResult upload( OSdmsRestDataDto data, MultipartFile file );
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| DMS - CREATE |------------------------------------------------------------------------------------------- \\
@@ -150,7 +150,7 @@ public interface IOSdmsAction {
     /**
      * Delete a file or folder by id.
      *
-     * @param id The id of the file or folder
+     * @param id   The id of the file or folder
      * @param data The data to delete the file or folder
      *
      * @return the entity result with the information of the file or folder

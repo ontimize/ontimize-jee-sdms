@@ -2,7 +2,7 @@ package com.ontimize.jee.sdms.common.inyector;
 
 
 /**
- oSdmsZnterface that defines the methods obtain dependencies from the context.
+ * oSdmsZnterface that defines the methods obtain dependencies from the context.
  */
 public interface IOSdmsInyector {
 
@@ -16,7 +16,6 @@ public interface IOSdmsInyector {
     Object get( String name );
 
 
-
     /**
      * Gets the dependency from the context from its class.
      *
@@ -27,11 +26,10 @@ public interface IOSdmsInyector {
     <T> T get( Class<T> clazz );
 
 
-
     /**
      * Gets the dependency from the context from its name and class.
      *
-     * @param name The name of the dependency.
+     * @param name  The name of the dependency.
      * @param clazz The class of the dependency.
      *
      * @return The dependency.

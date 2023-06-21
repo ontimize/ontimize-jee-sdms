@@ -5,7 +5,6 @@ import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
 import java.util.List;
 
 
-
 /**
  * Interface that defines the methods to read the filter data.
  *
@@ -22,7 +21,7 @@ public interface IOSdmsS3FilterReader {
      *
      * @see OSdmsS3InputFilter
      */
-    List<String> readAllKeys(OSdmsS3InputFilter filter );
+    List<String> readAllKeys( OSdmsS3InputFilter filter );
 
 
     /**

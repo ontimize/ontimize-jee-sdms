@@ -1,10 +1,9 @@
 package com.ontimize.jee.sdms.common.zip;
 
 
-
 /**
- * The IOSdmsZippeable interface defines the behavior that an object must implement to be able to be compressed
- * using the {@link IOSdmsZipCompressor} implementation.
+ * The IOSdmsZippeable interface defines the behavior that an object must implement to be able to be compressed using
+ * the {@link IOSdmsZipCompressor} implementation.
  */
 public interface IOSdmsZippeable {
 

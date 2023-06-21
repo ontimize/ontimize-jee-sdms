@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 
-
 /**
  * Interface that defines the methods to manage the workspaces.
  */
@@ -16,7 +15,7 @@ public interface IOSdmsWorkspaceManager {
     /**
      * Registers a workspace from name and value.
      *
-     * @param name The given name to register the workspace.
+     * @param name  The given name to register the workspace.
      * @param value The given value to register the workspace.
      */
     void register( String name, String value );
@@ -49,7 +48,7 @@ public interface IOSdmsWorkspaceManager {
     /**
      * Updates a workspace from name and value.
      *
-     * @param name The given name to update the workspace.
+     * @param name  The given name to update the workspace.
      * @param value The given value to update the workspace.
      */
     void update( String name, String value );
@@ -70,7 +69,7 @@ public interface IOSdmsWorkspaceManager {
      *
      * @return The workspace.
      */
-    OSdmsWorkspace get(String name );
+    OSdmsWorkspace get( String name );
 
 
     /**
@@ -132,9 +131,9 @@ public interface IOSdmsWorkspaceManager {
      * Activates a workspace with data.
      *
      * @param workspace The given workspace to activate.
-     * @param data The given data to build the workspace patterns.
+     * @param data      The given data to build the workspace patterns.
      */
-    void active(OSdmsWorkspace workspace, Map<String, Object> data );
+    void active( OSdmsWorkspace workspace, Map<String, Object> data );
 
 
     /**

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 
-
 /**
  * This class represents the input filter data that can be used to build a S3 engine.
  */
@@ -39,9 +38,10 @@ public class OSdmsS3InputFilter {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3InputFilter() {}
+    public OSdmsS3InputFilter() {
+    }
 
-    public OSdmsS3InputFilter( final String workspace, final List<String> prefixes, final List<String> fileNames, final List<String> ids, final List<String> keys, final Map<String, Object> data, final Integer maxKeys, final String marker, final String delimiter) {
+    public OSdmsS3InputFilter( final String workspace, final List<String> prefixes, final List<String> fileNames, final List<String> ids, final List<String> keys, final Map<String, Object> data, final Integer maxKeys, final String marker, final String delimiter ) {
         this.setWorkspace( workspace );
         this.setPrefixes( prefixes );
         this.setFileNames( fileNames );
@@ -149,7 +149,7 @@ public class OSdmsS3InputFilter {
      * @return true, if the input data has prefixes field
      */
     public boolean hasPrefixes() {
-        return this.prefixes != null && !this.prefixes.isEmpty();
+        return this.prefixes != null && ! this.prefixes.isEmpty();
     }
 
 
@@ -159,7 +159,7 @@ public class OSdmsS3InputFilter {
      * @return true, if the input data has file names field
      */
     public boolean hasFileNames() {
-        return this.fileNames != null && !this.fileNames.isEmpty();
+        return this.fileNames != null && ! this.fileNames.isEmpty();
     }
 
 
@@ -169,7 +169,7 @@ public class OSdmsS3InputFilter {
      * @return true, if the input data has ids field
      */
     public boolean hasIds() {
-        return this.ids != null && !this.ids.isEmpty();
+        return this.ids != null && ! this.ids.isEmpty();
     }
 
 
@@ -179,7 +179,7 @@ public class OSdmsS3InputFilter {
      * @return true, if the input data has keys field
      */
     public boolean hasKeys() {
-        return this.keys != null && !this.keys.isEmpty();
+        return this.keys != null && ! this.keys.isEmpty();
     }
 
 
@@ -189,7 +189,7 @@ public class OSdmsS3InputFilter {
      * @return true, if the input data has data field
      */
     public boolean hasData() {
-        return this.data != null && !this.data.isEmpty();
+        return this.data != null && ! this.data.isEmpty();
     }
 
 

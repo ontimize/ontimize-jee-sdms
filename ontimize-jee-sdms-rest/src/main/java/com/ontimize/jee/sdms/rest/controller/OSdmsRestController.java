@@ -44,7 +44,7 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 
     protected static final String METHOD_DMS_DOWNLOAD_BY_ID = "SdmsDownloadById";
 
-    protected static final String METHOD_DMS_DOWNLOAD= "SdmsDownload";
+    protected static final String METHOD_DMS_DOWNLOAD = "SdmsDownload";
 
     protected static final String METHOD_DMS_UPLOAD = "SdmsUpload";
 
@@ -77,8 +77,8 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     /**
-     * The MSG_SERVICE_IS_NULL constant, which is a constant containing the error message used when the provided
-     * service is null and cannot be used to process requests.
+     * The MSG_SERVICE_IS_NULL constant, which is a constant containing the error message used when the provided service
+     * is null and cannot be used to process requests.
      */
     protected static final String MSG_SERVICE_IS_NULL = "Service is null";
 
@@ -93,10 +93,10 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
     public ResponseEntity<EntityResult> sdmsFindById(
             @PathVariable( value = KEY_ENTITY, required = true ) final String entity,
             @PathVariable( value = KEY_ID, required = true ) final Serializable id,
-            @RequestParam( value= KEY_DATA, required = false ) final OSdmsRestDataDto data
-    ){
+            @RequestParam( value = KEY_DATA, required = false ) final OSdmsRestDataDto data
+                                                    ) {
 
-        CheckingTools.failIf(this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
+        CheckingTools.failIf( this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
 
         //Build the method name
         final String methodName = new StringBuffer()
@@ -106,16 +106,17 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 
         try {
             //Service Request
-            final EntityResult entityResult = (EntityResult) ReflectionTools.invoke( this.getService(), methodName, id, data );
+            final EntityResult entityResult = ( EntityResult ) ReflectionTools.invoke( this.getService(), methodName,
+                                                                                       id, data
+                                                                                     );
 
             //Return ResponseEntity
             return this.createResponseEntitiy( entityResult );
         }
-        catch( final Exception exception ){
+        catch( final Exception exception ) {
             return this.createResponseEntityInternalServerError( exception );
         }
     }
-
 
 
     @PostMapping(
@@ -126,9 +127,9 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
     public ResponseEntity<EntityResult> sdmsFind(
             @PathVariable( value = KEY_ENTITY, required = true ) final String entity,
             @RequestBody( required = true ) final OSdmsRestDataDto data
-    ){
+                                                ) {
 
-        CheckingTools.failIf(this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
+        CheckingTools.failIf( this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
 
         //Build the method name
         final String methodName = new StringBuffer()
@@ -138,12 +139,14 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 
         try {
             //Service Request
-            final EntityResult entityResult = (EntityResult) ReflectionTools.invoke( this.getService(), methodName, data );
+            final EntityResult entityResult = ( EntityResult ) ReflectionTools.invoke( this.getService(), methodName,
+                                                                                       data
+                                                                                     );
 
             //Return ResponseEntity
             return this.createResponseEntitiy( entityResult );
         }
-        catch( final Exception exception ){
+        catch( final Exception exception ) {
             return this.createResponseEntityInternalServerError( exception );
         }
     }
@@ -159,10 +162,10 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
     public ResponseEntity<EntityResult> sdmsDownloadById(
             @PathVariable( value = KEY_ENTITY, required = true ) final String entity,
             @PathVariable( value = KEY_ID, required = true ) final Serializable id,
-            @RequestParam( value= KEY_DATA, required = false ) final OSdmsRestDataDto data
-    ){
+            @RequestParam( value = KEY_DATA, required = false ) final OSdmsRestDataDto data
+                                                        ) {
 
-        CheckingTools.failIf(this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
+        CheckingTools.failIf( this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
 
         //Build the method name
         final String methodName = new StringBuffer()
@@ -172,16 +175,17 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 
         try {
             //Service Request
-            final EntityResult entityResult = (EntityResult) ReflectionTools.invoke( this.getService(), methodName, id, data );
+            final EntityResult entityResult = ( EntityResult ) ReflectionTools.invoke( this.getService(), methodName,
+                                                                                       id, data
+                                                                                     );
 
             //Return ResponseEntity
             return this.createResponseEntityWithDocument( entityResult );
         }
-        catch( final Exception exception ){
+        catch( final Exception exception ) {
             return this.createResponseEntityInternalServerError( exception );
         }
     }
-
 
 
     @PostMapping(
@@ -192,9 +196,9 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
     public ResponseEntity<EntityResult> sdmsDownload(
             @PathVariable( value = KEY_ENTITY, required = true ) final String entity,
             @RequestBody( required = true ) final OSdmsRestDataDto data
-    ){
+                                                    ) {
 
-        CheckingTools.failIf(this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
+        CheckingTools.failIf( this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
 
         //Build the method name
         final String methodName = new StringBuffer()
@@ -204,12 +208,14 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 
         try {
             //Service Request
-            final EntityResult entityResult = (EntityResult) ReflectionTools.invoke( this.getService(), methodName, data );
+            final EntityResult entityResult = ( EntityResult ) ReflectionTools.invoke( this.getService(), methodName,
+                                                                                       data
+                                                                                     );
 
             //Return ResponseEntity
             return this.createResponseEntityWithDocument( entityResult );
         }
-        catch( final Exception exception ){
+        catch( final Exception exception ) {
             return this.createResponseEntityInternalServerError( exception );
         }
     }
@@ -226,9 +232,9 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
             @PathVariable( value = KEY_ENTITY, required = true ) final String entity,
             @RequestParam( value = KEY_DATA, required = true ) final OSdmsRestDataDto data,
             @RequestParam( value = KEY_FILE, required = true ) final MultipartFile file
-    ){
+                                                  ) {
 
-        CheckingTools.failIf(this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
+        CheckingTools.failIf( this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
 
         //Build the method name
         final String methodName = new StringBuffer()
@@ -238,12 +244,14 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 
         try {
             //Service Request
-            final EntityResult entityResult = (EntityResult) ReflectionTools.invoke( this.getService(), methodName, data, file );
+            final EntityResult entityResult = ( EntityResult ) ReflectionTools.invoke( this.getService(), methodName,
+                                                                                       data, file
+                                                                                     );
 
             //Return ResponseEntity
             return this.createResponseEntitiy( entityResult );
         }
-        catch( final Exception exception ){
+        catch( final Exception exception ) {
             return this.createResponseEntityInternalServerError( exception );
         }
     }
@@ -260,9 +268,9 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
     public ResponseEntity<EntityResult> sdmsCreate(
             @PathVariable( value = KEY_ENTITY, required = true ) final String entity,
             @RequestBody( required = true ) final OSdmsRestDataDto data
-    ){
+                                                  ) {
 
-        CheckingTools.failIf(this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
+        CheckingTools.failIf( this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
 
         //Build the method name
         final String methodName = new StringBuffer()
@@ -272,12 +280,14 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 
         try {
             //Service Request
-            final EntityResult entityResult = (EntityResult) ReflectionTools.invoke( this.getService(), methodName, data );
+            final EntityResult entityResult = ( EntityResult ) ReflectionTools.invoke( this.getService(), methodName,
+                                                                                       data
+                                                                                     );
 
             //Return ResponseEntity
             return this.createResponseEntitiy( entityResult );
         }
-        catch( final Exception exception ){
+        catch( final Exception exception ) {
             return this.createResponseEntityInternalServerError( exception );
         }
     }
@@ -294,9 +304,9 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
     public ResponseEntity<EntityResult> sdmsUpdate(
             @PathVariable( value = KEY_ENTITY, required = true ) final String entity,
             @RequestBody( required = true ) final OSdmsRestDataDto data
-    ){
+                                                  ) {
 
-        CheckingTools.failIf(this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
+        CheckingTools.failIf( this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
 
         //Build the method name
         final String methodName = new StringBuffer()
@@ -306,12 +316,14 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 
         try {
             //Service Request
-            final EntityResult entityResult = (EntityResult) ReflectionTools.invoke( this.getService(), methodName, data );
+            final EntityResult entityResult = ( EntityResult ) ReflectionTools.invoke( this.getService(), methodName,
+                                                                                       data
+                                                                                     );
 
             //Return ResponseEntity
             return this.createResponseEntitiy( entityResult );
         }
-        catch( final Exception exception ){
+        catch( final Exception exception ) {
             return this.createResponseEntityInternalServerError( exception );
         }
     }
@@ -328,9 +340,9 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
     public ResponseEntity<EntityResult> sdmsCopy(
             @PathVariable( value = KEY_ENTITY, required = true ) final String entity,
             @RequestBody( required = true ) final OSdmsRestDataDto data
-    ){
+                                                ) {
 
-        CheckingTools.failIf(this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
+        CheckingTools.failIf( this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
 
         //Build the method name
         final String methodName = new StringBuffer()
@@ -340,12 +352,14 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 
         try {
             //Service Request
-            final EntityResult entityResult = (EntityResult) ReflectionTools.invoke( this.getService(), methodName, data );
+            final EntityResult entityResult = ( EntityResult ) ReflectionTools.invoke( this.getService(), methodName,
+                                                                                       data
+                                                                                     );
 
             //Return ResponseEntity
             return this.createResponseEntitiy( entityResult );
         }
-        catch( final Exception exception ){
+        catch( final Exception exception ) {
             return this.createResponseEntityInternalServerError( exception );
         }
     }
@@ -358,9 +372,9 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
     public ResponseEntity<EntityResult> sdmsMove(
             @PathVariable( value = KEY_ENTITY, required = true ) final String entity,
             @RequestBody( required = true ) final OSdmsRestDataDto data
-    ){
+                                                ) {
 
-        CheckingTools.failIf(this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
+        CheckingTools.failIf( this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
 
         //Build the method name
         final String methodName = new StringBuffer()
@@ -370,12 +384,14 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 
         try {
             //Service Request
-            final EntityResult entityResult = (EntityResult) ReflectionTools.invoke( this.getService(), methodName, data );
+            final EntityResult entityResult = ( EntityResult ) ReflectionTools.invoke( this.getService(), methodName,
+                                                                                       data
+                                                                                     );
 
             //Return ResponseEntity
             return this.createResponseEntitiy( entityResult );
         }
-        catch( final Exception exception ){
+        catch( final Exception exception ) {
             return this.createResponseEntityInternalServerError( exception );
         }
     }
@@ -392,9 +408,9 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
             @PathVariable( value = KEY_ENTITY, required = true ) final String entity,
             @PathVariable( value = KEY_ID, required = true ) final Serializable id,
             @RequestParam( value = KEY_DATA, required = false ) final OSdmsRestDataDto data
-    ){
+                                                      ) {
 
-        CheckingTools.failIf(this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
+        CheckingTools.failIf( this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
 
         //Build the method name
         final String methodName = new StringBuffer()
@@ -404,16 +420,17 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 
         try {
             //Service Request
-            final EntityResult entityResult = (EntityResult) ReflectionTools.invoke( this.getService(), methodName, id, data );
+            final EntityResult entityResult = ( EntityResult ) ReflectionTools.invoke( this.getService(), methodName,
+                                                                                       id, data
+                                                                                     );
 
             //Return ResponseEntity
             return this.createResponseEntitiy( entityResult );
         }
-        catch( final Exception exception ){
+        catch( final Exception exception ) {
             return this.createResponseEntityInternalServerError( exception );
         }
     }
-
 
 
     @DeleteMapping(
@@ -424,9 +441,9 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
     public ResponseEntity<EntityResult> sdmsDelete(
             @PathVariable( value = KEY_ENTITY, required = true ) final String entity,
             @RequestBody( required = true ) final OSdmsRestDataDto data
-    ){
+                                                  ) {
 
-        CheckingTools.failIf(this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
+        CheckingTools.failIf( this.getService() == null, NullPointerException.class, MSG_SERVICE_IS_NULL );
 
         //Build the method name
         final String methodName = new StringBuffer()
@@ -436,12 +453,14 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 
         try {
             //Service Request
-            final EntityResult entityResult = (EntityResult) ReflectionTools.invoke( this.getService(), methodName, data );
+            final EntityResult entityResult = ( EntityResult ) ReflectionTools.invoke( this.getService(), methodName,
+                                                                                       data
+                                                                                     );
 
             //Return ResponseEntity
             return this.createResponseEntitiy( entityResult );
         }
-        catch( final Exception exception ){
+        catch( final Exception exception ) {
             return this.createResponseEntityInternalServerError( exception );
         }
     }
@@ -450,11 +469,13 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
 // -------| UTILITIES |---------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    protected ResponseEntity<EntityResult> createResponseEntityInternalServerError(final Exception exception ){
+    protected ResponseEntity<EntityResult> createResponseEntityInternalServerError( final Exception exception ) {
         LOGGER.error( null, exception );
 
         //Create EntityResult
-        EntityResult entityResult = new EntityResultMapImpl( EntityResult.OPERATION_WRONG, EntityResult.BEST_COMPRESSION );
+        EntityResult entityResult = new EntityResultMapImpl( EntityResult.OPERATION_WRONG,
+                                                             EntityResult.BEST_COMPRESSION
+        );
         entityResult.setMessage( exception.getMessage() );
 
         //Return the EntityResult with HTTP Status 500
@@ -462,13 +483,13 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
     }
 
 
-
-    protected ResponseEntity createResponseEntitiy( final EntityResult entityResult ){
+    protected ResponseEntity createResponseEntitiy( final EntityResult entityResult ) {
         //Initialize the result default
-        ResponseEntity result = ResponseEntity.status( HttpStatus.INTERNAL_SERVER_ERROR ).body( entityResult );;
+        ResponseEntity result = ResponseEntity.status( HttpStatus.INTERNAL_SERVER_ERROR ).body( entityResult );
+        ;
 
         //Check if there is a result
-        if( entityResult.getCode() != EntityResult.OPERATION_WRONG ){ // If there is a result
+        if( entityResult.getCode() != EntityResult.OPERATION_WRONG ) { // If there is a result
             //Build the result
             result = ResponseEntity.ok().body( entityResult );
         }
@@ -477,9 +498,7 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
     }
 
 
-
-
-    protected ResponseEntity createResponseEntityWithDocument(final EntityResult entityResult ){
+    protected ResponseEntity createResponseEntityWithDocument( final EntityResult entityResult ) {
         //Initialize the result default
         ResponseEntity result = ResponseEntity.status( HttpStatus.INTERNAL_SERVER_ERROR ).body( entityResult );
 
@@ -489,22 +508,24 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
         InputStreamResource file = null;
 
         //Check if there is a result
-        if( entityResult.getCode() != EntityResult.OPERATION_WRONG && entityResult.calculateRecordNumber() == 1 ){ // If there is a result
+        if( entityResult.getCode() != EntityResult.OPERATION_WRONG && entityResult.calculateRecordNumber() == 1 ) { // If there is a result
             //Get result
             final Map<String, Object> recordValues = entityResult.getRecordValues( 0 );
 
             //Get Data
-            file = new InputStreamResource( (InputStream) recordValues.get( "file" ) );
-            fileName = (String) recordValues.get( "name" );
-            fileSize = (long) recordValues.get( "size" );
+            file = new InputStreamResource( ( InputStream ) recordValues.get( "file" ) );
+            fileName = ( String ) recordValues.get( "name" );
+            fileSize = ( long ) recordValues.get( "size" );
 
             if( fileSize != 0 ) {
                 //Build the result
                 result = ResponseEntity.ok()
-                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                        .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment;filename=\"%s\"", fileName))
-                        .header(HttpHeaders.CONTENT_LENGTH, String.valueOf(fileSize))
-                        .body(file);
+                        .contentType( MediaType.APPLICATION_OCTET_STREAM )
+                        .header( HttpHeaders.CONTENT_DISPOSITION,
+                                 String.format( "attachment;filename=\"%s\"", fileName )
+                               )
+                        .header( HttpHeaders.CONTENT_LENGTH, String.valueOf( fileSize ) )
+                        .body( file );
             }
         }
 

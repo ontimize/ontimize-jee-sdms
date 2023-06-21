@@ -6,7 +6,6 @@ import com.ontimize.jee.sdms.common.event.listener.IOSdmsEventListener;
 import java.util.List;
 
 
-
 /**
  * The IOSdmsEventHandler interface provides methods to manage event listeners.
  */
@@ -19,7 +18,7 @@ public interface IOSdmsEventHandler {
      *
      * @see IOSdmsEventListener
      */
-    void addEventListener ( IOSdmsEventListener... listeners );
+    void addEventListener( IOSdmsEventListener... listeners );
 
 
     /**
@@ -29,7 +28,7 @@ public interface IOSdmsEventHandler {
      *
      * @see IOSdmsEventListener
      */
-    void removeEventListener ( IOSdmsEventListener... listeners );
+    void removeEventListener( IOSdmsEventListener... listeners );
 
 
     /**
@@ -37,29 +36,29 @@ public interface IOSdmsEventHandler {
      *
      * @param events The events from which event listeners are to be removed.
      */
-    void clearEvent ( Enum... events );
+    void clearEvent( Enum... events );
 
 
     /**
      * Triggers the specified event with the given data.
      *
      * @param event The event to trigger.
-     * @param data The data to pass to the event listeners.
+     * @param data  The data to pass to the event listeners.
      *
      * @see IOSdmsEventData
      */
-    void trigger ( Enum event, IOSdmsEventData data );
+    void trigger( Enum event, IOSdmsEventData data );
 
 
     /**
      * Triggers the specified list of events with the given data.
      *
      * @param events The list of events to trigger.
-     * @param data The data to pass to the event listeners.
+     * @param data   The data to pass to the event listeners.
      *
      * @see IOSdmsEventData
      */
-    void trigger ( List<Enum> events, IOSdmsEventData data );
+    void trigger( List<Enum> events, IOSdmsEventData data );
 
 }
 

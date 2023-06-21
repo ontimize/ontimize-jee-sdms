@@ -10,13 +10,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-
 /**
  * Implementation of the interface {@link IOSdmsResponseBuilder}.
  *
  * @see IOSdmsResponseBuilder
  */
-@Component( "OSdmsResponseBuilder")
+@Component( "OSdmsResponseBuilder" )
 public class OSdmsResponseBuilder implements IOSdmsResponseBuilder {
 
     /** The code of the response */
@@ -27,20 +26,21 @@ public class OSdmsResponseBuilder implements IOSdmsResponseBuilder {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsResponseBuilder(){}
+    public OSdmsResponseBuilder() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
-    public IOSdmsResponseBuilder code(final Integer code ) {
+    public IOSdmsResponseBuilder code( final Integer code ) {
         this.code = code;
         return this;
     }
 
     @Override
-    public IOSdmsResponseBuilder message(final String message ) {
+    public IOSdmsResponseBuilder message( final String message ) {
         this.message = message;
         return this;
     }
@@ -52,7 +52,7 @@ public class OSdmsResponseBuilder implements IOSdmsResponseBuilder {
 
     @Override
     public EntityResult buildWithMap( final Map data ) {
-        return this.build( this.code, this.message, Arrays.asList( data ));
+        return this.build( this.code, this.message, Arrays.asList( data ) );
     }
 
     @Override
@@ -61,13 +61,13 @@ public class OSdmsResponseBuilder implements IOSdmsResponseBuilder {
     }
 
     @Override
-    public <T extends IOSdmsMappeable> EntityResult buildWithMappeable(final T data ) {
+    public <T extends IOSdmsMappeable> EntityResult buildWithMappeable( final T data ) {
         final List<Map> dataMap = Arrays.asList( data.toMap() );
         return this.build( this.code, this.message, dataMap );
     }
 
     @Override
-    public <T extends IOSdmsMappeable> EntityResult buildWithMappeable(final List<T> data ) {
+    public <T extends IOSdmsMappeable> EntityResult buildWithMappeable( final List<T> data ) {
         final List<Map> dataMap = data.stream().map( IOSdmsMappeable::toMap ).collect( Collectors.toList() );
         return this.build( this.code, this.message, dataMap );
     }
@@ -78,27 +78,26 @@ public class OSdmsResponseBuilder implements IOSdmsResponseBuilder {
     /**
      * Clears the information of the builder.
      */
-    private void clear(){
+    private void clear() {
         this.code = null;
         this.message = null;
     }
 
 
-
     /**
      * Builds the response.
      *
-     * @param code The code of the response
+     * @param code    The code of the response
      * @param message The message of the response
-     * @param data The data to build the response
+     * @param data    The data to build the response
      *
      * @return The response as an EntityResult
      */
-    private EntityResult build( final Integer code, final String message, final List<Map> data ){
+    private EntityResult build( final Integer code, final String message, final List<Map> data ) {
         final EntityResult result = new EntityResultMapImpl();
-        if( this.code != null ) result.setCode( Integer.valueOf( code ));
+        if( this.code != null ) result.setCode( Integer.valueOf( code ) );
         if( this.message != null ) result.setMessage( message );
-        if( data != null ) data.forEach( target -> result.addRecord( target ));
+        if( data != null ) data.forEach( target -> result.addRecord( target ) );
         this.clear();
         return result;
     }

@@ -1,8 +1,8 @@
 package com.ontimize.jee.sdms.common.command.handler;
 
 import com.ontimize.jee.common.dto.EntityResult;
-import com.ontimize.jee.sdms.common.inyector.IOSdmsInyector;
 import com.ontimize.jee.sdms.common.command.IOSdmsCommand;
+import com.ontimize.jee.sdms.common.inyector.IOSdmsInyector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,20 +20,15 @@ public class OSdmsCommandHandler implements IOSdmsCommandHandler {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsCommandHandler(){}
+    public OSdmsCommandHandler() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------ \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     /**
-     * Method to execute a command in following steps:
-     * 1- init
-     * 2- validate
-     * 3- before
-     * 4- run
-     * 5- after
-     * 6- response
+     * Method to execute a command in following steps: 1- init 2- validate 3- before 4- run 5- after 6- response
      *
      * @param command The command to execute.
      *
@@ -46,7 +41,7 @@ public class OSdmsCommandHandler implements IOSdmsCommandHandler {
 
         //Validate
         final EntityResult validationResult = command.validate();
-        if( validationResult != null ){
+        if( validationResult != null ) {
             return validationResult;
         }
 

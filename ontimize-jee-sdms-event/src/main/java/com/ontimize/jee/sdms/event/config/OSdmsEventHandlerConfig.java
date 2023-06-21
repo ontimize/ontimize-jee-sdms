@@ -2,8 +2,8 @@ package com.ontimize.jee.sdms.event.config;
 
 import com.ontimize.jee.sdms.common.event.IOSdmsEventHandler;
 import com.ontimize.jee.sdms.common.event.OSdmsEventHandler;
-import com.ontimize.jee.sdms.event.annotation.OSdmsEventListener;
 import com.ontimize.jee.sdms.common.event.listener.IOSdmsEventListener;
+import com.ontimize.jee.sdms.event.annotation.OSdmsEventListener;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,11 +16,10 @@ import java.util.List;
 import java.util.Set;
 
 
-
 /**
  * This class is a Spring configuration class that defines a bean for an Ontimize event handler. It uses the Ontimize
- * EventHandler implementation to handle Ontimize events. The handler uses a list of Ontimize Event Listeners to
- * execute specific behavior when an event is triggered.
+ * EventHandler implementation to handle Ontimize events. The handler uses a list of Ontimize Event Listeners to execute
+ * specific behavior when an event is triggered.
  */
 @Configuration
 public class OSdmsEventHandlerConfig {
@@ -33,7 +32,8 @@ public class OSdmsEventHandlerConfig {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsEventHandlerConfig(){}
+    public OSdmsEventHandlerConfig() {
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
@@ -45,14 +45,15 @@ public class OSdmsEventHandlerConfig {
      * @return an instance of OSdmsEventHandler
      */
     @Bean
-    public IOSdmsEventHandler OSdmsEventHandler(){
+    public IOSdmsEventHandler OSdmsEventHandler() {
         final IOSdmsEventHandler result = new OSdmsEventHandler();
 
         final String rootPackageToFindAnnotation = this.getNameOfRootPackage();
-        final List<IOSdmsEventListener> observers = this.getAnnotedOntimzeEventListeners( "com.ontimize.jee.sdms.event" );
-        observers.addAll( this.getAnnotedOntimzeEventListeners( rootPackageToFindAnnotation ));
+        final List<IOSdmsEventListener> observers = this.getAnnotedOntimzeEventListeners(
+                "com.ontimize.jee.sdms.event" );
+        observers.addAll( this.getAnnotedOntimzeEventListeners( rootPackageToFindAnnotation ) );
 
-        result.addEventListener( observers.toArray( new IOSdmsEventListener[0] ));
+        result.addEventListener( observers.toArray( new IOSdmsEventListener[ 0 ] ) );
 
         return result;
     }
@@ -69,21 +70,22 @@ public class OSdmsEventHandlerConfig {
      *
      * @see IOSdmsEventListener
      */
-    private List<IOSdmsEventListener> getAnnotedOntimzeEventListeners( final String rootPackageNameToFindAnnotation ){
+    private List<IOSdmsEventListener> getAnnotedOntimzeEventListeners( final String rootPackageNameToFindAnnotation ) {
         final List<IOSdmsEventListener> result = new ArrayList<>();
 
         final Reflections reflections = new Reflections( rootPackageNameToFindAnnotation );
         final Set<Class<?>> listAnnotatedClasses = reflections.getTypesAnnotatedWith( OSdmsEventListener.class );
 
-        for( final Class<?> clazz : listAnnotatedClasses ){
-            try{
-                if( IOSdmsEventListener.class.isAssignableFrom( clazz ) ){
-                    final IOSdmsEventListener eventListener = (IOSdmsEventListener) clazz.getDeclaredConstructor().newInstance();
+        for( final Class<?> clazz : listAnnotatedClasses ) {
+            try {
+                if( IOSdmsEventListener.class.isAssignableFrom( clazz ) ) {
+                    final IOSdmsEventListener eventListener = ( IOSdmsEventListener ) clazz.getDeclaredConstructor().newInstance();
 
-                    result.add(eventListener);
+                    result.add( eventListener );
                 }
             }
-            catch( final InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException exception ){
+            catch( final InstantiationException | IllegalAccessException | InvocationTargetException |
+                         NoSuchMethodException exception ) {
                 LOGGER.error( exception.getMessage() );
             }
         }
@@ -92,14 +94,13 @@ public class OSdmsEventHandlerConfig {
     }
 
 
-
     /**
      * This method returns the name of the root package where the OSdmsEventHandlerConfig class is located by getting
      * the package name from the last element of the current thread's stack trace.
      *
      * @return a String with the name of the root package
      */
-    private String getNameOfRootPackage(){
+    private String getNameOfRootPackage() {
         String result = "";
 
         final StackTraceElement[] stackTraceElements = Thread.currentThread().getStackTrace();
@@ -110,7 +111,7 @@ public class OSdmsEventHandlerConfig {
         try {
             result = Class.forName( lastStackTraceElement.getClassName() ).getPackageName();
         }
-        catch ( final ClassNotFoundException exception ) {
+        catch( final ClassNotFoundException exception ) {
             LOGGER.error( exception.getMessage() );
         }
 
