@@ -1,8 +1,8 @@
 name: Generate a RELEASE in Maven Central
 on:
   pull_request:
-    types: [ closed ]
-    branches: [ main ]
+    types: [closed]
+    branches: [main]
   workflow_dispatch:
     inputs:
       RELEASE_BRANCH:

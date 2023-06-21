@@ -1,8 +1,8 @@
 name: Generate a version in MVNCentral
 on:
   pull_request:
-    types: [ closed ]
-    branches: [ develop ]
+    types: [closed]
+    branches: [develop]
 jobs:
   Generate-a-snapshot-in-MVNCentral:
     if: github.event.pull_request.merged
