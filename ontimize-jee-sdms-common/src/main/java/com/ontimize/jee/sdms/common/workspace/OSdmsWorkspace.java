@@ -9,13 +9,14 @@ import java.util.List;
  */
 public class OSdmsWorkspace {
 
-    public static final String DEFAULT = "default";
+    public static final String DEFAULT_NAME = "default";
+    public static final String DEFAULT_VALUE = "/{id}";
 
     /** The name of the workspace. */
-    private String name = OSdmsWorkspace.DEFAULT;
+    private String name = OSdmsWorkspace.DEFAULT_NAME;
 
     /** The value of the workspace. */
-    private String value;
+    private String value = OSdmsWorkspace.DEFAULT_VALUE;
 
     /** The patterns of the workspace. */
     private List<String> patterns = new ArrayList<>();

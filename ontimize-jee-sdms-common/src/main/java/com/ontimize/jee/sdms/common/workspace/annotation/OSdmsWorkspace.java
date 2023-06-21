@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 public @interface OSdmsWorkspace {
 
     /** The name of the workspace. */
-    String name() default com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace.DEFAULT;
+    String name() default com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace.DEFAULT_NAME;
 
     /** The value of the workspace. */
     String value();

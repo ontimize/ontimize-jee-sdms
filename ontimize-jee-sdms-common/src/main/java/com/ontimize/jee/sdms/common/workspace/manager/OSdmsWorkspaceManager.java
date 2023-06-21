@@ -117,7 +117,7 @@ public class OSdmsWorkspaceManager implements IOSdmsWorkspaceManager {
     public OSdmsWorkspace getDefault() {
         this.autoRegister();
         OSdmsWorkspace result = null;
-        if( this.workspaceDefault == null ) this.workspaceDefault = this.get( OSdmsWorkspace.DEFAULT );
+        if( this.workspaceDefault == null ) this.workspaceDefault = this.get( OSdmsWorkspace.DEFAULT_NAME );
         if( this.workspaceDefault != null ) {
             final List<String> paths = List.copyOf( this.workspaceDefault.getPatterns() );
             result = new OSdmsWorkspace( this.workspaceDefault.getName(), this.workspaceDefault.getValue(), paths );
@@ -147,14 +147,14 @@ public class OSdmsWorkspaceManager implements IOSdmsWorkspaceManager {
 
     @Override
     public void activeDefault( final Map<String, Object> data ) {
-        this.active( OSdmsWorkspace.DEFAULT, data );
+        this.active( OSdmsWorkspace.DEFAULT_NAME, data );
     }
 
 
     @Override
     public void active( final String name, final Map<String, Object> data ) {
         this.autoRegister();
-        if( OSdmsWorkspace.DEFAULT.equals( name ) || name == null || ! this.exists( name ) ) {
+        if( OSdmsWorkspace.DEFAULT_NAME.equals( name ) || name == null || ! this.exists( name ) ) {
             this.active = this.getDefault();
         }
         else {
