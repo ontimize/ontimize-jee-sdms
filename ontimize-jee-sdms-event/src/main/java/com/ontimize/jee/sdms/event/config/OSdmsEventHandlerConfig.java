@@ -1,8 +1,8 @@
 package com.ontimize.jee.sdms.event.config;
 
-import com.ontimize.jee.sdms.common.event.IOSdmsEventHandler;
-import com.ontimize.jee.sdms.common.event.OSdmsEventHandler;
-import com.ontimize.jee.sdms.common.event.listener.IOSdmsEventListener;
+import com.ontimize.jee.sdms.common.event.handler.IOSdmsEventHandler;
+import com.ontimize.jee.sdms.common.event.handler.OSdmsEventHandler;
+import com.ontimize.jee.sdms.common.event.IOSdmsEventListener;
 import com.ontimize.jee.sdms.event.annotation.OSdmsEventListener;
 import org.reflections.Reflections;
 import org.slf4j.Logger;

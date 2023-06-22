@@ -171,7 +171,7 @@ public class OSdmsS3MoveCommand implements IOSdmsCommand {
             this.response = this.repository.move( request, this.bucket, this.destinationKey );
         }
         else if( this.destinationPrefix != null && this.currentPrefix != null ) {
-            this.response = this.repository.move( requests, this.bucket, this.destinationPrefix, this.currentPrefix );
+            this.response = this.repository.moveAll( requests, this.bucket, this.destinationPrefix, this.currentPrefix );
         }
     }
 

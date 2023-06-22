@@ -172,7 +172,7 @@ public class OSdmsS3CopyCommand implements IOSdmsCommand {
             this.response = this.repository.copy( request, this.bucket, this.destinationKey );
         }
         else if( this.destinationPrefix != null && this.currentPrefix != null ) {
-            this.response = this.repository.copy( requests, this.bucket, this.destinationPrefix, this.currentPrefix );
+            this.response = this.repository.copyAll( requests, this.bucket, this.destinationPrefix, this.currentPrefix );
         }
     }
 

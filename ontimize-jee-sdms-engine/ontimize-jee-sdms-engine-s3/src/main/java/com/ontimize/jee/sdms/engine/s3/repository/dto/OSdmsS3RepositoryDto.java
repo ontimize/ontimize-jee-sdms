@@ -332,6 +332,30 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
+// ------| TO STRING |----------------------------------------------------------------------------------------------- \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    @Override
+    public String toString() {
+        return new StringBuilder( "OSdmsS3RepositoryDto{" )
+                .append( "bucket='" ).append( this.getBucket() ).append( '\'' )
+                .append( ", key='" ).append( this.getKey() ).append( '\'' )
+                .append( ", relativeKey='" ).append( this.getRelativeKey() ).append( '\'' )
+                .append( ", prefix='" ).append( this.getPrefix() ).append( '\'' )
+                .append( ", relativePrefix='" ).append( this.getRelativePrefix() ).append( '\'' )
+                .append( ", name='" ).append( this.getName() ).append( '\'' )
+                .append( ", owner='" ).append( this.getOwner() ).append( '\'' )
+                .append( ", size=" ).append( this.getSize() )
+                .append( ", folder=" ).append( this.isFolder() )
+                .append( ", lastModified=" ).append( this.getLastModified() )
+                .append( ", creationDate=" ).append( this.getCreationDate() )
+                .append( ", metadata=" ).append( this.getMetadata() )
+                .append( ", file=" ).append( this.getFile() )
+                .append( '}' )
+                .toString();
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
 // ------| UTILITIES |----------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 

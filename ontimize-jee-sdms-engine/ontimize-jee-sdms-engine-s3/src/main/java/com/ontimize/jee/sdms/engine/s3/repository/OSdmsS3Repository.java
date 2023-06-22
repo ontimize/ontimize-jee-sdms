@@ -299,7 +299,7 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
 
     @Transactional
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> copy( final List<ListObjectsRequest> requests, final String bucket, final String prefix, String currentPrefix ) {
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> copyAll( final List<ListObjectsRequest> requests, final String bucket, final String prefix, String currentPrefix ) {
         final Set<OSdmsS3RepositoryDto> data = new HashSet<>();
         OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> result = this.oSdmsS3RepositoryResponseBuilder
                 .code( OSdmsS3RepositoryResponseCodes.ERROR ).message( MSG_ERROR_COPY ).build();
@@ -404,7 +404,7 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
 
     @Transactional
     @Override
-    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> move( final List<ListObjectsRequest> requests, final String bucket, final String prefix, String currentPrefix ) {
+    public OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> moveAll( final List<ListObjectsRequest> requests, final String bucket, final String prefix, String currentPrefix ) {
         final Set<OSdmsS3RepositoryDto> data = new HashSet<>();
         OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> result = this.oSdmsS3RepositoryResponseBuilder
                 .code( OSdmsS3RepositoryResponseCodes.ERROR ).message( MSG_ERROR_COPY ).build();
@@ -514,26 +514,6 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
 
         if( ! data.isEmpty() ) {
             result = this.oSdmsS3RepositoryResponseBuilder.code( OSdmsS3RepositoryResponseCodes.OK ).build( data );
-        }
-
-        return result;
-    }
-
-// ------------------------------------------------------------------------------------------------------------------ \\
-// -------| EXISTS |------------------------------------------------------------------------------------------------- \\
-// ------------------------------------------------------------------------------------------------------------------ \\
-
-    @Override
-    public OSdmsS3RepositoryResponse<Boolean> exists( final OSdmsS3RepositorySimpleRequest request ) {
-        OSdmsS3RepositoryResponse result = this.oSdmsS3RepositoryResponseBuilder.code(
-                OSdmsS3RepositoryResponseCodes.NOT_FOUND ).build();
-
-        final boolean isRequestObjectExists = this.amazonS3.doesObjectExist( request.getBucketName(),
-                                                                             request.getKey()
-                                                                           );
-
-        if( isRequestObjectExists ) {
-            result = this.oSdmsS3RepositoryResponseBuilder.code( OSdmsS3RepositoryResponseCodes.OK ).build();
         }
 
         return result;
