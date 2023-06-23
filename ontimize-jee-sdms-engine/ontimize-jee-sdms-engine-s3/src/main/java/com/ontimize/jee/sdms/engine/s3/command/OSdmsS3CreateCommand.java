@@ -37,13 +37,11 @@ public class OSdmsS3CreateCommand implements IOSdmsCommand {
 
     // Dependencies
     private IOSdmsS3Repository repository;
-    private IOSdmsS3EngineConfig s3EngineConfig;
     private IOSdmsWorkspaceManager workspaceManager;
     private OSdmsWorkspace workspace;
     private IOSdmsResponseBuilder responseBuilder;
     private IOSdmsS3ResponseMapper responseMapper;
     private IOSdmsPathValidator pathValidator;
-    private IOSdmsS3DataReader dataReader;
 
 
     //Data
@@ -73,20 +71,20 @@ public class OSdmsS3CreateCommand implements IOSdmsCommand {
     public void init( final IOSdmsInyector inyector ) {
         //Inyect dependencies
         this.repository = inyector.get( OSdmsS3RepositoryProxy.class );
-        this.s3EngineConfig = inyector.get( IOSdmsS3EngineConfig.class );
         this.workspaceManager = inyector.get( IOSdmsWorkspaceManager.class );
         this.responseBuilder = inyector.get( IOSdmsResponseBuilder.class );
         this.responseMapper = inyector.get( IOSdmsS3ResponseMapper.class );
         this.pathValidator = inyector.get( IOSdmsPathValidator.class );
-        this.dataReader = inyector.get( IOSdmsS3DataReader.class );
+        final IOSdmsS3DataReader dataReader = inyector.get( IOSdmsS3DataReader.class );
+        final IOSdmsS3EngineConfig s3EngineConfig = inyector.get( IOSdmsS3EngineConfig.class );
         final IOSdmsS3KeyNormalize keyNormalize = inyector.get( IOSdmsS3KeyNormalize.class );
 
         //Get Data
         this.workspaceManager.active( filter.getWorkspace(), filter.getData() );
         this.workspace = workspaceManager.getActive();
-        this.bucket = this.s3EngineConfig.getBucket();
-        this.prefix = this.dataReader.readPrefix( this.data );
-        if( this.prefix == null ) this.prefix = this.dataReader.readKey( this.data );
+        this.bucket = s3EngineConfig.getBucket();
+        this.prefix = dataReader.readPrefix( this.data );
+        if( this.prefix == null ) this.prefix = dataReader.readKey( this.data );
         this.prefix = keyNormalize.normalize( this.prefix );
     }
 

@@ -3,9 +3,6 @@ package com.ontimize.jee.sdms.engine.s3.repository.event;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.ontimize.jee.sdms.common.event.IOSdmsEvent;
 
-import java.util.Arrays;
-import java.util.List;
-
 public class S3RepositoryCopyEvent implements IOSdmsEvent {
 
     private final ListObjectsRequest request;

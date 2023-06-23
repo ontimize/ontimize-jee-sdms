@@ -6,7 +6,6 @@ import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.services.s3.transfer.Upload;
 import com.ontimize.jee.sdms.engine.s3.repository.dto.OSdmsS3RepositoryDto;
-import com.ontimize.jee.sdms.engine.s3.repository.request.OSdmsS3RepositorySimpleRequest;
 import com.ontimize.jee.sdms.engine.s3.repository.response.OSdmsS3RepositoryResponse;
 import com.ontimize.jee.sdms.engine.s3.repository.response.builder.IOSdmsS3RepositoryResponseBuilder;
 import com.ontimize.jee.sdms.engine.s3.repository.response.codes.OSdmsS3RepositoryResponseCodes;
@@ -54,11 +53,6 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
 
     /** The s3 repository response builder to build the response of each operation. */
     private @Autowired IOSdmsS3RepositoryResponseBuilder oSdmsS3RepositoryResponseBuilder;
-
-// ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsS3Repository() {
-    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| FIND |--------------------------------------------------------------------------------------------------- \\
@@ -309,7 +303,7 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
             return findResponse;
         }
 
-        if( findResponse.getData().size() > 0 ) {
+        if( !findResponse.getData().isEmpty() ) {
             for( final OSdmsS3RepositoryDto target : findResponse.getData() ) {
                 final String newKey = prefix
                         .concat( target.getPrefix().replaceAll( String.format( "^%s", currentPrefix ), "" ) )
@@ -414,7 +408,7 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
             return findResponse;
         }
 
-        if( findResponse.getData().size() > 0 ) {
+        if( !findResponse.getData().isEmpty() ) {
             for( final OSdmsS3RepositoryDto target : findResponse.getData() ) {
                 final String newKey = prefix
                         .concat( target.getPrefix().replaceAll( String.format( "^%s", currentPrefix ), "" ) )

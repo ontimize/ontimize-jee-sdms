@@ -9,8 +9,6 @@ import com.ontimize.jee.sdms.common.zip.IOSdmsZippeable;
 import com.ontimize.jee.sdms.common.zip.OSdmsZipData;
 
 import java.io.InputStream;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -29,7 +27,7 @@ import java.util.Map;
 public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
 
     /** The name of the file that marks a folder in S3 */
-    public final static String FILE_NAME_MARK_FOLDER = ".ontimizeSdmsFolder";
+    public static final String FILE_NAME_MARK_FOLDER = ".ontimizeSdmsFolder";
 
     /** The bucket name of S3 */
     private String bucket;
@@ -298,7 +296,6 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
 
     @Override
     public Map<?, ?> toMap() {
-        final SimpleDateFormat simpleDateFormatter = new SimpleDateFormat( "dd/MM/yyyy HH:mm:ss" );
         final Map<String, Object> result = new HashMap<>();
 
         result.put( "bucket", this.bucket );
@@ -328,7 +325,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
     public OSdmsZipData getDataToZip() {
         OSdmsZipData result = null;
         if( ! this.folder && ! this.name.equals( OSdmsS3RepositoryDto.FILE_NAME_MARK_FOLDER ) ) {
-            String fileName = this.key.replaceAll( "/", "." );
+            String fileName = this.key.replace( "/", "." );
             if( fileName.endsWith( "." ) ) fileName = fileName.substring( 0, fileName.length() - 1 );
             result = new OSdmsZipData();
             result.setInputStream( this.file );

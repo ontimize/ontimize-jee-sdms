@@ -29,11 +29,6 @@ public class OSdmsService implements IOSdmsService {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsService() {
-    }
-
-// ------------------------------------------------------------------------------------------------------------------ \\
-
     @Override
     public void setEngine( final IOSdmsEngine engine ) {
         this.engine = engine;

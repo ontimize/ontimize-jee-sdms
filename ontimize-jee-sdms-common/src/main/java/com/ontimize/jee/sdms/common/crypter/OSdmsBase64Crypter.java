@@ -1,7 +1,5 @@
 package com.ontimize.jee.sdms.common.crypter;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -15,17 +13,6 @@ import java.util.Base64;
  */
 @Component( "OSdmsBase64Crypter" )
 public class OSdmsBase64Crypter implements IOSdmsCrypter {
-
-    /**
-     * The LOGGER constant, which is an instance of org.slf4j.Logger used for logging events and diagnostic messages
-     * during program execution.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsBase64Crypter.class );
-
-// ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsBase64Crypter() {
-    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------ \\

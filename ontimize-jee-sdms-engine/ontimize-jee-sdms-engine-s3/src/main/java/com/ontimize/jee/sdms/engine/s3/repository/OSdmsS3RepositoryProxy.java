@@ -6,8 +6,6 @@ import com.ontimize.jee.sdms.common.event.handler.IOSdmsEventHandler;
 import com.ontimize.jee.sdms.engine.s3.repository.dto.OSdmsS3RepositoryDto;
 import com.ontimize.jee.sdms.engine.s3.repository.event.*;
 import com.ontimize.jee.sdms.engine.s3.repository.response.OSdmsS3RepositoryResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -25,12 +23,6 @@ import java.util.List;
 @Repository( "OSdmsS3RepositoryProxy" )
 public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
 
-    /**
-     * The LOGGER constant, which is an instance of org.slf4j.Logger used for logging events and diagnostic messages
-     * during program execution.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsS3RepositoryProxy.class );
-
 
     /** The Ontimize EventHandler */
     private @Autowired IOSdmsEventHandler eventHandler;
@@ -39,11 +31,6 @@ public class OSdmsS3RepositoryProxy implements IOSdmsS3Repository {
     /** The S3 Repository */
     @Qualifier( "OSdmsS3Repository" )
     private @Autowired IOSdmsS3Repository repository;
-
-// ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsS3RepositoryProxy() {
-    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| FIND |--------------------------------------------------------------------------------------------------- \\

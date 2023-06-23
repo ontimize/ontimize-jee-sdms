@@ -5,14 +5,12 @@ import com.ontimize.jee.common.dto.EntityResult;
 import com.ontimize.jee.sdms.common.command.IOSdmsCommand;
 import com.ontimize.jee.sdms.common.inyector.IOSdmsInyector;
 import com.ontimize.jee.sdms.common.response.builder.IOSdmsResponseBuilder;
-import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
 import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
 import com.ontimize.jee.sdms.engine.s3.repository.IOSdmsS3Repository;
 import com.ontimize.jee.sdms.engine.s3.repository.OSdmsS3RepositoryProxy;
 import com.ontimize.jee.sdms.engine.s3.repository.dto.OSdmsS3RepositoryDto;
 import com.ontimize.jee.sdms.engine.s3.repository.response.OSdmsS3RepositoryResponse;
 import com.ontimize.jee.sdms.engine.s3.util.config.IOSdmsS3EngineConfig;
-import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.reader.IOSdmsS3FilterReader;
 import com.ontimize.jee.sdms.engine.s3.util.normalize.IOSdmsS3KeyNormalize;
@@ -35,18 +33,14 @@ public class OSdmsS3FindCommand implements IOSdmsCommand {
 
     // Dependencies
     private IOSdmsS3Repository repository;
-    private IOSdmsS3EngineConfig s3EngineConfig;
     private IOSdmsResponseBuilder responseBuilder;
     private IOSdmsS3ResponseMapper responseMapper;
-    private IOSdmsS3FilterReader filterReader;
     private IOSdmsWorkspaceManager workspaceManager;
-    private OSdmsWorkspace workspace;
 
 
     //Data
     private String bucket;
     private OSdmsS3InputFilter filter;
-    private OSdmsS3InputData data;
     private List<String> queries = new ArrayList<>();
 
 
@@ -57,9 +51,8 @@ public class OSdmsS3FindCommand implements IOSdmsCommand {
 // ------| ENTRYPOINT |---------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3FindCommand( final OSdmsS3InputFilter filter, final OSdmsS3InputData data ) {
+    public OSdmsS3FindCommand( final OSdmsS3InputFilter filter ) {
         this.filter = filter;
-        this.data = data;
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -70,18 +63,17 @@ public class OSdmsS3FindCommand implements IOSdmsCommand {
     public void init( final IOSdmsInyector inyector ) {
         //Inyect dependencies
         this.repository = inyector.get( OSdmsS3RepositoryProxy.class );
-        this.s3EngineConfig = inyector.get( IOSdmsS3EngineConfig.class );
         this.responseBuilder = inyector.get( IOSdmsResponseBuilder.class );
         this.responseMapper = inyector.get( IOSdmsS3ResponseMapper.class );
-        this.filterReader = inyector.get( IOSdmsS3FilterReader.class );
         this.workspaceManager = inyector.get( IOSdmsWorkspaceManager.class );
+        final IOSdmsS3FilterReader filterReader = inyector.get( IOSdmsS3FilterReader.class );
+        final IOSdmsS3EngineConfig s3EngineConfig = inyector.get( IOSdmsS3EngineConfig.class );
         final IOSdmsS3KeyNormalize keyNormalize = inyector.get( IOSdmsS3KeyNormalize.class );
 
         //Get Data
         this.workspaceManager.active( filter.getWorkspace(), filter.getData() );
-        this.workspace = workspaceManager.getActive();
-        this.bucket = this.s3EngineConfig.getBucket();
-        this.queries = this.filterReader.readAllKeys( this.filter );
+        this.bucket = s3EngineConfig.getBucket();
+        this.queries = filterReader.readAllKeys( this.filter );
         this.queries = this.queries.stream().map( keyNormalize::normalize ).collect( Collectors.toList() );
     }
 

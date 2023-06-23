@@ -15,7 +15,6 @@ import com.ontimize.jee.sdms.engine.s3.repository.OSdmsS3RepositoryProxy;
 import com.ontimize.jee.sdms.engine.s3.repository.dto.OSdmsS3RepositoryDto;
 import com.ontimize.jee.sdms.engine.s3.repository.response.OSdmsS3RepositoryResponse;
 import com.ontimize.jee.sdms.engine.s3.util.config.IOSdmsS3EngineConfig;
-import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
 import com.ontimize.jee.sdms.engine.s3.util.normalize.IOSdmsS3KeyNormalize;
 import com.ontimize.jee.sdms.engine.s3.util.response.mapper.IOSdmsS3ResponseMapper;
@@ -34,19 +33,16 @@ public class OSdmsS3DeleteByIdCommand implements IOSdmsCommand {
 
     // Dependencies
     private IOSdmsS3Repository repository;
-    private IOSdmsS3EngineConfig s3EngineConfig;
     private IOSdmsWorkspaceManager workspaceManager;
     private OSdmsWorkspace workspace;
     private IOSdmsResponseBuilder responseBuilder;
     private IOSdmsS3ResponseMapper responseMapper;
     private IOSdmsPathValidator pathValidator;
-    private IOSdmsCrypter crypter;
 
 
     //Data
     private String bucket;
     private OSdmsS3InputFilter filter;
-    private OSdmsS3InputData data;
     private String id;
     private String key;
 
@@ -58,10 +54,9 @@ public class OSdmsS3DeleteByIdCommand implements IOSdmsCommand {
 // ------| ENTRYPOINT |---------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3DeleteByIdCommand( final String id, final OSdmsS3InputFilter filter, final OSdmsS3InputData data ) {
+    public OSdmsS3DeleteByIdCommand( final String id, final OSdmsS3InputFilter filter ) {
         this.id = id;
         this.filter = filter;
-        this.data = data;
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -72,19 +67,19 @@ public class OSdmsS3DeleteByIdCommand implements IOSdmsCommand {
     public void init( final IOSdmsInyector inyector ) {
         //Inyect dependencies
         this.repository = inyector.get( OSdmsS3RepositoryProxy.class );
-        this.s3EngineConfig = inyector.get( IOSdmsS3EngineConfig.class );
         this.workspaceManager = inyector.get( IOSdmsWorkspaceManager.class );
         this.responseBuilder = inyector.get( IOSdmsResponseBuilder.class );
         this.responseMapper = inyector.get( IOSdmsS3ResponseMapper.class );
         this.pathValidator = inyector.get( IOSdmsPathValidator.class );
-        this.crypter = inyector.get( OSdmsBase64Crypter.class );
+        final IOSdmsCrypter crypter = inyector.get( OSdmsBase64Crypter.class );
+        final IOSdmsS3EngineConfig s3EngineConfig = inyector.get( IOSdmsS3EngineConfig.class );
         final IOSdmsS3KeyNormalize keyNormalize = inyector.get( IOSdmsS3KeyNormalize.class );
 
         //Get Data
         this.workspaceManager.active( this.filter.getWorkspace(), this.filter.getData() );
         this.workspace = workspaceManager.getActive();
-        this.bucket = this.s3EngineConfig.getBucket();
-        this.key = this.crypter.decode( this.id );
+        this.bucket = s3EngineConfig.getBucket();
+        this.key = crypter.decode( this.id );
         this.key = keyNormalize.normalize( this.key );
     }
 

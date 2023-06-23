@@ -2,8 +2,6 @@ package com.ontimize.jee.sdms.common.event.handler;
 
 import com.ontimize.jee.sdms.common.event.IOSdmsEvent;
 import com.ontimize.jee.sdms.common.event.IOSdmsEventListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,20 +15,9 @@ import java.util.stream.Collectors;
  */
 public class OSdmsEventHandler implements IOSdmsEventHandler {
 
-    /**
-     * The LOGGER constant, which is an instance of org.slf4j.Logger used for logging events and diagnostic messages
-     * during program execution.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsEventHandler.class );
-
 
     /** Map to store events as keys and listeners as values. */
     private final Map<Class<? extends IOSdmsEvent>, Set<IOSdmsEventListener>> events = new HashMap<>();
-
-// ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsEventHandler() {
-    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
@@ -70,7 +57,7 @@ public class OSdmsEventHandler implements IOSdmsEventHandler {
 
     @Override
     public void trigger( final List<IOSdmsEvent> events ) {
-        events.stream().forEach( target -> this.trigger( target ) );
+        events.stream().forEach( this::trigger );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

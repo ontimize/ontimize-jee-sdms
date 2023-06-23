@@ -1,8 +1,6 @@
 package com.ontimize.jee.sdms.common.path.builder;
 
 import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,25 +14,14 @@ import java.util.stream.Collectors;
  *
  * @see IOSdmsPathBuilder
  */
-@Component( "OSdmsS3PathBuilder" )
+@Component( "OSdmsPathBuilder" )
 public class OSdmsPathBuilder implements IOSdmsPathBuilder {
-
-    /**
-     * The LOGGER constant, which is an instance of org.slf4j.Logger used for logging events and diagnostic messages
-     * during program execution.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsPathBuilder.class );
 
     /** The pattern to check a valid characters to replace variables in the pattern by values. */
     private static final Pattern VALID_CHARACTERS_TO_REPLACE = Pattern.compile( "[\\/:\\*\\?\\\"<>|\\{\\}\\[\\]\\.]" );
 
     /** The path validator. */
     private @Autowired IOSdmsPathValidator pathValidator;
-
-// ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsPathBuilder() {
-    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------ \\
