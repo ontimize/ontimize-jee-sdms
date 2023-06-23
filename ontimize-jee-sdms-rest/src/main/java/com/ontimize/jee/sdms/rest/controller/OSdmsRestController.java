@@ -486,7 +486,6 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
     protected ResponseEntity createResponseEntitiy( final EntityResult entityResult ) {
         //Initialize the result default
         ResponseEntity result = ResponseEntity.status( HttpStatus.INTERNAL_SERVER_ERROR ).body( entityResult );
-        ;
 
         //Check if there is a result
         if( entityResult.getCode() != EntityResult.OPERATION_WRONG ) { // If there is a result

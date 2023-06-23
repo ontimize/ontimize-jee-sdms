@@ -51,11 +51,6 @@
             <artifactId>ontimize-jee-sdms-common</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>ontimize-jee-sdms-event</artifactId>
-        </dependency>
-
         <!-- ONTIMIZE JEE -->
         <dependency>
             <groupId>com.ontimize.jee</groupId>

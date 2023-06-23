@@ -25,11 +25,6 @@ public class OSdmsResponseBuilder implements IOSdmsResponseBuilder {
     private String message;
 
 // ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsResponseBuilder() {
-    }
-
-// ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
@@ -95,9 +90,9 @@ public class OSdmsResponseBuilder implements IOSdmsResponseBuilder {
      */
     private EntityResult build( final Integer code, final String message, final List<Map> data ) {
         final EntityResult result = new EntityResultMapImpl();
-        if( this.code != null ) result.setCode( Integer.valueOf( code ) );
+        if( this.code != null ) result.setCode( code );
         if( this.message != null ) result.setMessage( message );
-        if( data != null ) data.forEach( target -> result.addRecord( target ) );
+        if( data != null ) data.forEach( result::addRecord );
         this.clear();
         return result;
     }

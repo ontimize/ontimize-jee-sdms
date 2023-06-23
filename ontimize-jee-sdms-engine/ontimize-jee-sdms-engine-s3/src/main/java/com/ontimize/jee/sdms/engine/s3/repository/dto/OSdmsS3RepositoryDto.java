@@ -9,8 +9,6 @@ import com.ontimize.jee.sdms.common.zip.IOSdmsZippeable;
 import com.ontimize.jee.sdms.common.zip.OSdmsZipData;
 
 import java.io.InputStream;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -29,7 +27,7 @@ import java.util.Map;
 public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
 
     /** The name of the file that marks a folder in S3 */
-    public final static String FILE_NAME_MARK_FOLDER = ".ontimizeSdmsFolder";
+    public static final String FILE_NAME_MARK_FOLDER = ".ontimizeSdmsFolder";
 
     /** The bucket name of S3 */
     private String bucket;
@@ -272,7 +270,10 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      */
     public void setRelativeKey( final List<String> workspaces ) {
         this.relativeKey = this.key;
-        workspaces.forEach( target -> this.relativeKey = this.relativeKey.replaceFirst( target, "" ) );
+        workspaces.forEach( target -> {
+            if( target.startsWith( "/" ) ) this.relativeKey = "/".concat( this.relativeKey );
+            this.relativeKey = this.relativeKey.replaceFirst( target, "" );
+        } );
     }
 
 
@@ -283,7 +284,10 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      */
     public void setRelativePrefix( final List<String> workspaces ) {
         this.relativePrefix = this.prefix;
-        workspaces.forEach( target -> this.relativePrefix = this.relativePrefix.replaceFirst( target, "" ) );
+        workspaces.forEach( target -> {
+            if( target.startsWith( "/" ) ) this.relativePrefix = "/".concat( this.relativePrefix );
+            this.relativePrefix = this.relativePrefix.replaceFirst( target, "" );
+        });
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -292,7 +296,6 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
 
     @Override
     public Map<?, ?> toMap() {
-        final SimpleDateFormat simpleDateFormatter = new SimpleDateFormat( "dd/MM/yyyy HH:mm:ss" );
         final Map<String, Object> result = new HashMap<>();
 
         result.put( "bucket", this.bucket );
@@ -312,7 +315,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         result.put( "creationDate", creationDate );
 
         Long lastModified = null;
-        if( this.creationDate != null ) lastModified = this.lastModified.getTime();
+        if( this.lastModified != null ) lastModified = this.lastModified.getTime();
         result.put( "lastModified", lastModified );
 
         return result;
@@ -322,13 +325,37 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
     public OSdmsZipData getDataToZip() {
         OSdmsZipData result = null;
         if( ! this.folder && ! this.name.equals( OSdmsS3RepositoryDto.FILE_NAME_MARK_FOLDER ) ) {
-            String fileName = this.key.replaceAll( "/", "." );
+            String fileName = this.key.replace( "/", "." );
             if( fileName.endsWith( "." ) ) fileName = fileName.substring( 0, fileName.length() - 1 );
             result = new OSdmsZipData();
             result.setInputStream( this.file );
             result.setFileName( fileName );
         }
         return result;
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// ------| TO STRING |----------------------------------------------------------------------------------------------- \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    @Override
+    public String toString() {
+        return new StringBuilder( "OSdmsS3RepositoryDto{" )
+                .append( "bucket='" ).append( this.getBucket() ).append( '\'' )
+                .append( ", key='" ).append( this.getKey() ).append( '\'' )
+                .append( ", relativeKey='" ).append( this.getRelativeKey() ).append( '\'' )
+                .append( ", prefix='" ).append( this.getPrefix() ).append( '\'' )
+                .append( ", relativePrefix='" ).append( this.getRelativePrefix() ).append( '\'' )
+                .append( ", name='" ).append( this.getName() ).append( '\'' )
+                .append( ", owner='" ).append( this.getOwner() ).append( '\'' )
+                .append( ", size=" ).append( this.getSize() )
+                .append( ", folder=" ).append( this.isFolder() )
+                .append( ", lastModified=" ).append( this.getLastModified() )
+                .append( ", creationDate=" ).append( this.getCreationDate() )
+                .append( ", metadata=" ).append( this.getMetadata() )
+                .append( ", file=" ).append( this.getFile() )
+                .append( '}' )
+                .toString();
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -344,15 +371,28 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         //Get key
         this.key = key;
 
-        //Get name
+        //Get name and Prefix
         final String[] keyParts = key.split( "/" );
         final int lastPosition = keyParts.length - 1;
         if( lastPosition >= 0 ) {
-            this.name = keyParts[ lastPosition ];
+            this.name = "/";
+            this.prefix = "/";
+            int maxPositionToPrefix = this.key.length();
+            if( this.key.endsWith( "/" )) maxPositionToPrefix -= 1;
+
+            if( !keyParts[ lastPosition ].equals( FILE_NAME_MARK_FOLDER ) ){
+                this.name = keyParts[ lastPosition ];
+            }
+            else if( lastPosition - 1 >= 0 ){
+                this.name = keyParts[ lastPosition - 1 ];
+                maxPositionToPrefix -= keyParts[lastPosition].length() + 1;
+            }
+
+            maxPositionToPrefix -= this.name.length();
+            if( this.name != null ) this.prefix = this.key.substring( 0, maxPositionToPrefix );
         }
 
         //Get Prefix
-        if( this.name != null ) this.prefix = this.key.substring( 0, ( this.key.length() - this.name.length() ) );
         if( ! this.prefix.endsWith( "/" ) ) this.prefix = this.prefix.concat( "/" );
     }
 

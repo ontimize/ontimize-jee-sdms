@@ -36,27 +36,20 @@ public class OSdmsS3Engine implements IOSdmsEngine {
     private @Autowired OSdmsS3InputMapper<OSdmsS3InputData> oSdmsS3InputDataMapper;
 
 // ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsS3Engine() {
-    }
-
-// ------------------------------------------------------------------------------------------------------------------ \\
 // -------| DMS - FIND |--------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
     public EntityResult findById( final Serializable id, final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
-        final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
         return this.oSdmsCommandHandler.run(
-                new OSdmsS3FindByIdCommand( String.valueOf( id ), requestFilter, requestData ) );
+                new OSdmsS3FindByIdCommand( String.valueOf( id ), requestFilter ) );
     }
 
     @Override
     public EntityResult find( final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
-        final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3FindCommand( requestFilter, requestData ) );
+        return this.oSdmsCommandHandler.run( new OSdmsS3FindCommand( requestFilter ) );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -66,16 +59,14 @@ public class OSdmsS3Engine implements IOSdmsEngine {
     @Override
     public EntityResult downloadById( final Serializable id, final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
-        final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
         return this.oSdmsCommandHandler.run(
-                new OSdmsS3DownloadByIdCommand( String.valueOf( id ), requestFilter, requestData ) );
+                new OSdmsS3DownloadByIdCommand( String.valueOf( id ), requestFilter ) );
     }
 
     @Override
     public EntityResult download( final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
-        final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3DownloadCommand( requestFilter, requestData ) );
+        return this.oSdmsCommandHandler.run( new OSdmsS3DownloadCommand( requestFilter ) );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -140,16 +131,14 @@ public class OSdmsS3Engine implements IOSdmsEngine {
     @Override
     public EntityResult deleteById( final Serializable id, final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
-        final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
         return this.oSdmsCommandHandler.run(
-                new OSdmsS3DeleteByIdCommand( String.valueOf( id ), requestFilter, requestData ) );
+                new OSdmsS3DeleteByIdCommand( String.valueOf( id ), requestFilter ) );
     }
 
     @Override
     public EntityResult delete( final OSdmsRestDataDto data ) {
         final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
-        final OSdmsS3InputData requestData = this.oSdmsS3InputDataMapper.map( data );
-        return this.oSdmsCommandHandler.run( new OSdmsS3DeleteCommand( requestFilter, requestData ) );
+        return this.oSdmsCommandHandler.run( new OSdmsS3DeleteCommand( requestFilter ) );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

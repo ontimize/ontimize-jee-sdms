@@ -1,8 +1,8 @@
 package com.ontimize.jee.sdms.event.config;
 
-import com.ontimize.jee.sdms.common.event.IOSdmsEventHandler;
-import com.ontimize.jee.sdms.common.event.OSdmsEventHandler;
-import com.ontimize.jee.sdms.common.event.listener.IOSdmsEventListener;
+import com.ontimize.jee.sdms.common.event.handler.IOSdmsEventHandler;
+import com.ontimize.jee.sdms.common.event.handler.OSdmsEventHandler;
+import com.ontimize.jee.sdms.common.event.IOSdmsEventListener;
 import com.ontimize.jee.sdms.event.annotation.OSdmsEventListener;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
@@ -32,11 +32,6 @@ public class OSdmsEventHandlerConfig {
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsEventHandlerConfig() {
-    }
-
-// ------------------------------------------------------------------------------------------------------------------ \\
-
     /**
      * This method creates and returns an instance of OSdmsEventHandler as a Spring bean. It uses the
      * getAnnotedOntimzeEventListeners() method to obtain a list of all the Ontimize Event Listeners in the application
@@ -45,7 +40,7 @@ public class OSdmsEventHandlerConfig {
      * @return an instance of OSdmsEventHandler
      */
     @Bean
-    public IOSdmsEventHandler OSdmsEventHandler() {
+    public IOSdmsEventHandler oSdmsEventHandler() {
         final IOSdmsEventHandler result = new OSdmsEventHandler();
 
         final String rootPackageToFindAnnotation = this.getNameOfRootPackage();

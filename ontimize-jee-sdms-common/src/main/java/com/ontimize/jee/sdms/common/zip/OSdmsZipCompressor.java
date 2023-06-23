@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -28,11 +29,6 @@ public class OSdmsZipCompressor implements IOSdmsZipCompressor {
     private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsZipCompressor.class );
 
 // ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsZipCompressor() {
-    }
-
-// ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
@@ -41,8 +37,8 @@ public class OSdmsZipCompressor implements IOSdmsZipCompressor {
         final ByteArrayOutputStream baos = new ByteArrayOutputStream();
         final ZipOutputStream zos = new ZipOutputStream( baos );
         final Set<OSdmsZipData> data = dataToZip.stream()
-                .map( target -> target.getDataToZip() )
-                .filter( target -> target != null )
+                .map( IOSdmsZippeable::getDataToZip )
+                .filter( Objects::nonNull )
                 .collect( Collectors.toSet() );
 
         for( final OSdmsZipData zipData : data ) {

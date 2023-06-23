@@ -1,9 +1,7 @@
-package com.ontimize.jee.sdms.common.event;
+package com.ontimize.jee.sdms.common.event.handler;
 
-import com.ontimize.jee.sdms.common.event.data.IOSdmsEventData;
-import com.ontimize.jee.sdms.common.event.listener.IOSdmsEventListener;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.ontimize.jee.sdms.common.event.IOSdmsEvent;
+import com.ontimize.jee.sdms.common.event.IOSdmsEventListener;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -17,20 +15,9 @@ import java.util.stream.Collectors;
  */
 public class OSdmsEventHandler implements IOSdmsEventHandler {
 
-    /**
-     * The LOGGER constant, which is an instance of org.slf4j.Logger used for logging events and diagnostic messages
-     * during program execution.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsEventHandler.class );
-
 
     /** Map to store events as keys and listeners as values. */
-    private final Map<Enum, Set<IOSdmsEventListener>> events = new HashMap<>();
-
-// ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsEventHandler() {
-    }
+    private final Map<Class<? extends IOSdmsEvent>, Set<IOSdmsEventListener>> events = new HashMap<>();
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
@@ -53,25 +40,24 @@ public class OSdmsEventHandler implements IOSdmsEventHandler {
 
 
     @Override
-    public void clearEvent( final Enum... events ) {
-        for( final Enum event : events ) {
+    public <E extends IOSdmsEvent> void clearEvent( final Class<E>... events ) {
+        for( final Class<E> event : events ) {
             this.events.remove( event );
         }
     }
 
 
     @Override
-    public void trigger( final Enum event, final IOSdmsEventData data ) {
-        if( ! this.events.isEmpty() && this.events.containsKey( event ) ) {
-            data.setEvent( event );
-            this.events.get( event ).stream().forEach( target -> target.run( data ) );
+    public void trigger( final IOSdmsEvent event ) {
+        if( ! this.events.isEmpty() && this.events.containsKey( event.getClass() ) ) {
+            this.events.get( event.getClass() ).stream().forEach( target -> target.run( event ) );
         }
     }
 
 
     @Override
-    public void trigger( final List<Enum> events, final IOSdmsEventData data ) {
-        events.stream().forEach( target -> this.trigger( target, data ) );
+    public void trigger( final List<IOSdmsEvent> events ) {
+        events.stream().forEach( this::trigger );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -87,10 +73,8 @@ public class OSdmsEventHandler implements IOSdmsEventHandler {
      * @see IOSdmsEventListener
      */
     private void addEventListenerForEachEvent( final IOSdmsEventListener listener ) {
-        for( final Object event : listener.getEvents() ) {
-            this.events.computeIfAbsent( ( Enum ) event, key -> new HashSet<>() );
-            this.events.get( event ).add( listener );
-        }
+            this.events.computeIfAbsent( listener.getEvent(), key -> new HashSet<>() );
+            this.events.get( listener.getEvent() ).add( listener );
     }
 
 
@@ -102,14 +86,12 @@ public class OSdmsEventHandler implements IOSdmsEventHandler {
      * @see IOSdmsEventListener
      */
     private void removeEventListenerForEachEvent( final IOSdmsEventListener listener ) {
-        for( final Object event : listener.getEvents() ) {
-            final Set<IOSdmsEventListener> registerListeners = this.events.get( event );
-            final Set<IOSdmsEventListener> registerListenersIntoEvent = registerListeners.stream()
-                    .filter( target -> target == listener )
-                    .collect( Collectors.toSet() );
+        final Set<IOSdmsEventListener> registerListeners = this.events.get( listener.getEvent() );
+        final Set<IOSdmsEventListener> registerListenersIntoEvent = registerListeners.stream()
+                .filter( target -> target == listener )
+                .collect( Collectors.toSet() );
 
-            registerListenersIntoEvent.stream().forEach( registerListeners::remove );
-        }
+        registerListenersIntoEvent.stream().forEach( registerListeners::remove );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

@@ -3,10 +3,8 @@ package com.ontimize.jee.sdms.server.service;
 import com.ontimize.jee.common.dto.EntityResult;
 import com.ontimize.jee.sdms.common.dto.OSdmsRestDataDto;
 import com.ontimize.jee.sdms.common.engine.IOSdmsEngine;
-import com.ontimize.jee.sdms.common.event.IOSdmsEventHandler;
-import com.ontimize.jee.sdms.common.event.data.OSdmsEventData;
-import com.ontimize.jee.sdms.common.event.data.builder.IOSdmsEventDataBuilder;
-import com.ontimize.jee.sdms.event.OSdmsServiceEvent;
+import com.ontimize.jee.sdms.common.event.handler.IOSdmsEventHandler;
+import com.ontimize.jee.sdms.server.service.event.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,18 +22,10 @@ import java.io.Serializable;
 @Component( "OSdmsService" )
 public class OSdmsService implements IOSdmsService {
 
-    /** The Event Data builder */
-    private @Autowired IOSdmsEventDataBuilder eventDataBuilder;
-
     /** The Ontimize EventHandler */
     private @Autowired IOSdmsEventHandler eventHandler;
 
     private @Autowired IOSdmsEngine engine;
-
-// ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsService() {
-    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
@@ -50,24 +40,13 @@ public class OSdmsService implements IOSdmsService {
 
     @Override
     public EntityResult findById( final Serializable id, final OSdmsRestDataDto data ) {
-        final OSdmsEventData eventData = this.eventDataBuilder
-                .source( this.getClass() )
-                .input( PARAM_ID, id )
-                .input( PARAM_DATA, data )
-                .build();
-
-        this.eventHandler.trigger( OSdmsServiceEvent.FIND_BY_ID, eventData );
+        this.eventHandler.trigger( new OSdmsServiceFindByIdEvent( id, data ) );
         return this.engine.findById( id, data );
     }
 
     @Override
     public EntityResult find( final OSdmsRestDataDto data ) {
-        final OSdmsEventData eventData = this.eventDataBuilder
-                .source( this.getClass() )
-                .input( PARAM_DATA, data )
-                .build();
-
-        this.eventHandler.trigger( OSdmsServiceEvent.FIND, eventData );
+        this.eventHandler.trigger( new OSdmsServiceFindEvent( data ) );
         return this.engine.find( data );
     }
 
@@ -77,24 +56,13 @@ public class OSdmsService implements IOSdmsService {
 
     @Override
     public EntityResult downloadById( final Serializable id, final OSdmsRestDataDto data ) {
-        final OSdmsEventData eventData = this.eventDataBuilder
-                .source( this.getClass() )
-                .input( PARAM_ID, id )
-                .input( PARAM_DATA, data )
-                .build();
-
-        this.eventHandler.trigger( OSdmsServiceEvent.DOWNLOAD_BY_ID, eventData );
+        this.eventHandler.trigger( new OSdmsServiceDownloadByIdEvent( id, data ) );
         return this.engine.downloadById( id, data );
     }
 
     @Override
     public EntityResult download( final OSdmsRestDataDto data ) {
-        final OSdmsEventData eventData = this.eventDataBuilder
-                .source( this.getClass() )
-                .input( PARAM_DATA, data )
-                .build();
-
-        this.eventHandler.trigger( OSdmsServiceEvent.DOWNLOAD, eventData );
+        this.eventHandler.trigger( new OSdmsServiceDownloadEvent( data ) );
         return this.engine.download( data );
     }
 
@@ -104,13 +72,7 @@ public class OSdmsService implements IOSdmsService {
 
     @Override
     public EntityResult upload( final OSdmsRestDataDto data, final MultipartFile file ) {
-        final OSdmsEventData eventData = this.eventDataBuilder
-                .source( this.getClass() )
-                .input( PARAM_DATA, data )
-                .input( PARAM_FILE, file )
-                .build();
-
-        this.eventHandler.trigger( OSdmsServiceEvent.UPLOAD, eventData );
+        this.eventHandler.trigger( new OSdmsServiceUploadEvent( data, file ) );
         return this.engine.upload( data, file );
     }
 
@@ -120,12 +82,7 @@ public class OSdmsService implements IOSdmsService {
 
     @Override
     public EntityResult create( final OSdmsRestDataDto data ) {
-        final OSdmsEventData eventData = this.eventDataBuilder
-                .source( this.getClass() )
-                .input( PARAM_DATA, data )
-                .build();
-
-        this.eventHandler.trigger( OSdmsServiceEvent.CREATE, eventData );
+        this.eventHandler.trigger( new OSdmsServiceCreateEvent( data ) );
         return this.engine.create( data );
     }
 
@@ -135,12 +92,7 @@ public class OSdmsService implements IOSdmsService {
 
     @Override
     public EntityResult update( final OSdmsRestDataDto data ) {
-        final OSdmsEventData eventData = this.eventDataBuilder
-                .source( this.getClass() )
-                .input( PARAM_DATA, data )
-                .build();
-
-        this.eventHandler.trigger( OSdmsServiceEvent.UPDATE, eventData );
+        this.eventHandler.trigger( new OSdmsServiceUpdateEvent( data ) );
         return this.engine.update( data );
     }
 
@@ -150,12 +102,7 @@ public class OSdmsService implements IOSdmsService {
 
     @Override
     public EntityResult copy( final OSdmsRestDataDto data ) {
-        final OSdmsEventData eventData = this.eventDataBuilder
-                .source( this.getClass() )
-                .input( PARAM_DATA, data )
-                .build();
-
-        this.eventHandler.trigger( OSdmsServiceEvent.COPY, eventData );
+        this.eventHandler.trigger( new OSdmsServiceCopyEvent( data ) );
         return this.engine.copy( data );
     }
 
@@ -165,12 +112,7 @@ public class OSdmsService implements IOSdmsService {
 
     @Override
     public EntityResult move( final OSdmsRestDataDto data ) {
-        final OSdmsEventData eventData = this.eventDataBuilder
-                .source( this.getClass() )
-                .input( PARAM_DATA, data )
-                .build();
-
-        this.eventHandler.trigger( OSdmsServiceEvent.MOVE, eventData );
+        this.eventHandler.trigger( new OSdmsServiceMoveEvent( data ) );
         return this.engine.move( data );
     }
 
@@ -180,24 +122,13 @@ public class OSdmsService implements IOSdmsService {
 
     @Override
     public EntityResult deleteById( final Serializable id, final OSdmsRestDataDto data ) {
-        final OSdmsEventData eventData = this.eventDataBuilder
-                .source( this.getClass() )
-                .input( PARAM_ID, id )
-                .input( PARAM_DATA, data )
-                .build();
-
-        this.eventHandler.trigger( OSdmsServiceEvent.DELETE_BY_ID, eventData );
+        this.eventHandler.trigger( new OSdmsServiceDeleteByIdEvent( id, data ) );
         return this.engine.deleteById( id, data );
     }
 
     @Override
     public EntityResult delete( final OSdmsRestDataDto data ) {
-        final OSdmsEventData eventData = this.eventDataBuilder
-                .source( this.getClass() )
-                .input( PARAM_DATA, data )
-                .build();
-
-        this.eventHandler.trigger( OSdmsServiceEvent.DELETE, eventData );
+        this.eventHandler.trigger( new OSdmsServiceDeleteEvent( data ) );
         return this.engine.delete( data );
     }
 
