@@ -9,7 +9,15 @@
 
 ## [Unreleased]
 
-## [1.1.0] - 21/06/2023
+### Changed 🛠️
+* **Events:** The events of the SDMS has been refactored and now there are new events for the service and the s3 engine.
+
+### Fixed 🐛
+* **Workspace:** Fixed a bug that caused errors in the handling of DMS files with the S3 engine when a slash is specified at the beginning of the workspace value.
+* **OSdmsS3RepositoryDto:** Fixed a bug in the `OSdmsS3RepositoryDto` class that misconstructed the relativeKey and relativePrefix fields causing some errors from the frontend.
+
+
+## [1.1.0] - 2023-06-21
 
 ### Added ✔️
 * **New field on DMS files:** The system has been updated so that when a file is uploaded to the DMS, the creationDate field is added and when information is retrieved from the files, it is also retrieved.
