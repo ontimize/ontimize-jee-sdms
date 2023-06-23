@@ -371,15 +371,28 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         //Get key
         this.key = key;
 
-        //Get name
+        //Get name and Prefix
         final String[] keyParts = key.split( "/" );
         final int lastPosition = keyParts.length - 1;
         if( lastPosition >= 0 ) {
-            this.name = keyParts[ lastPosition ];
+            this.name = "/";
+            this.prefix = "/";
+            int maxPositionToPrefix = this.key.length();
+            if( this.key.endsWith( "/" )) maxPositionToPrefix -= 1;
+
+            if( !keyParts[ lastPosition ].equals( FILE_NAME_MARK_FOLDER ) ){
+                this.name = keyParts[ lastPosition ];
+            }
+            else if( lastPosition - 1 >= 0 ){
+                this.name = keyParts[ lastPosition - 1 ];
+                maxPositionToPrefix -= keyParts[lastPosition].length() + 1;
+            }
+
+            maxPositionToPrefix -= this.name.length();
+            if( this.name != null ) this.prefix = this.key.substring( 0, maxPositionToPrefix );
         }
 
         //Get Prefix
-        if( this.name != null ) this.prefix = this.key.substring( 0, ( this.key.length() - this.name.length() ) );
         if( ! this.prefix.endsWith( "/" ) ) this.prefix = this.prefix.concat( "/" );
     }
 
