@@ -17,10 +17,12 @@ import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.reader.IOSdmsS3DataReader;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.reader.IOSdmsS3FilterReader;
+import com.ontimize.jee.sdms.engine.s3.util.normalize.IOSdmsS3KeyNormalize;
 import com.ontimize.jee.sdms.engine.s3.util.response.mapper.IOSdmsS3ResponseMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -86,6 +88,7 @@ public class OSdmsS3CopyCommand implements IOSdmsCommand {
         this.pathValidator = inyector.get( IOSdmsPathValidator.class );
         this.filterReader = inyector.get( IOSdmsS3FilterReader.class );
         this.dataReader = inyector.get( IOSdmsS3DataReader.class );
+        final IOSdmsS3KeyNormalize keyNormalize = inyector.get( IOSdmsS3KeyNormalize.class );
 
         //Get Data
         this.workspaceManager.active( filter.getWorkspace(), filter.getData() );
@@ -95,6 +98,9 @@ public class OSdmsS3CopyCommand implements IOSdmsCommand {
         this.destinationKey = this.dataReader.readKey( this.data );
         this.destinationPrefix = this.dataReader.readPrefix( this.data );
         this.currentPrefix = this.dataReader.readCurrentPrefix( this.data );
+        this.keys = this.keys.stream().map( keyNormalize::normalize ).collect( Collectors.toList() );
+        this.destinationPrefix = keyNormalize.normalize( this.destinationPrefix );
+        this.currentPrefix = keyNormalize.normalize( this.currentPrefix );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

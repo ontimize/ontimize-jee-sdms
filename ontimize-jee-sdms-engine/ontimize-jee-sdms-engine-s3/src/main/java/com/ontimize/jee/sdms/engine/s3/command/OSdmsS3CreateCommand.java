@@ -17,6 +17,7 @@ import com.ontimize.jee.sdms.engine.s3.util.config.IOSdmsS3EngineConfig;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.reader.IOSdmsS3DataReader;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
+import com.ontimize.jee.sdms.engine.s3.util.normalize.IOSdmsS3KeyNormalize;
 import com.ontimize.jee.sdms.engine.s3.util.response.mapper.IOSdmsS3ResponseMapper;
 
 import java.io.ByteArrayInputStream;
@@ -78,6 +79,7 @@ public class OSdmsS3CreateCommand implements IOSdmsCommand {
         this.responseMapper = inyector.get( IOSdmsS3ResponseMapper.class );
         this.pathValidator = inyector.get( IOSdmsPathValidator.class );
         this.dataReader = inyector.get( IOSdmsS3DataReader.class );
+        final IOSdmsS3KeyNormalize keyNormalize = inyector.get( IOSdmsS3KeyNormalize.class );
 
         //Get Data
         this.workspaceManager.active( filter.getWorkspace(), filter.getData() );
@@ -85,6 +87,7 @@ public class OSdmsS3CreateCommand implements IOSdmsCommand {
         this.bucket = this.s3EngineConfig.getBucket();
         this.prefix = this.dataReader.readPrefix( this.data );
         if( this.prefix == null ) this.prefix = this.dataReader.readKey( this.data );
+        this.prefix = keyNormalize.normalize( this.prefix );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

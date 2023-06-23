@@ -18,6 +18,7 @@ import com.ontimize.jee.sdms.engine.s3.util.config.IOSdmsS3EngineConfig;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.reader.IOSdmsS3FilterReader;
+import com.ontimize.jee.sdms.engine.s3.util.normalize.IOSdmsS3KeyNormalize;
 import com.ontimize.jee.sdms.engine.s3.util.response.mapper.IOSdmsS3ResponseMapper;
 
 import java.util.ArrayList;
@@ -84,12 +85,14 @@ public class OSdmsS3DownloadCommand implements IOSdmsCommand {
         this.filterParamReader = inyector.get( IOSdmsS3FilterReader.class );
         this.zipCompressor = inyector.get( IOSdmsZipCompressor.class );
         this.workspaceManager = inyector.get( IOSdmsWorkspaceManager.class );
+        final IOSdmsS3KeyNormalize keyNormalize = inyector.get( IOSdmsS3KeyNormalize.class );
 
         //Get Data
         this.workspaceManager.active( this.filter.getWorkspace(), this.filter.getData() );
         this.workspace = workspaceManager.getActive();
         this.bucket = this.s3EngineConfig.getBucket();
         this.queries = this.filterParamReader.readAllKeys( this.filter );
+        this.queries = this.queries.stream().map( keyNormalize::normalize ).collect( Collectors.toList() );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

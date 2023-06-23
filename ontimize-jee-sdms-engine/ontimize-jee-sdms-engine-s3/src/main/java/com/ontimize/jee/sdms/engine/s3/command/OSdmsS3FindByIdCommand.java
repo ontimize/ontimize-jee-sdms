@@ -18,6 +18,7 @@ import com.ontimize.jee.sdms.engine.s3.repository.response.codes.OSdmsS3Reposito
 import com.ontimize.jee.sdms.engine.s3.util.config.IOSdmsS3EngineConfig;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
+import com.ontimize.jee.sdms.engine.s3.util.normalize.IOSdmsS3KeyNormalize;
 import com.ontimize.jee.sdms.engine.s3.util.response.mapper.IOSdmsS3ResponseMapper;
 
 import java.util.List;
@@ -81,12 +82,14 @@ public class OSdmsS3FindByIdCommand implements IOSdmsCommand {
         this.responseMapper = inyector.get( IOSdmsS3ResponseMapper.class );
         this.pathValidator = inyector.get( IOSdmsPathValidator.class );
         this.crypter = inyector.get( OSdmsBase64Crypter.class );
+        final IOSdmsS3KeyNormalize keyNormalize = inyector.get( IOSdmsS3KeyNormalize.class );
 
         //Get Data
         this.workspaceManager.active( this.filter.getWorkspace(), this.filter.getData() );
         this.workspace = workspaceManager.getActive();
         this.bucket = this.s3EngineConfig.getBucket();
         this.key = this.crypter.decode( this.id );
+        this.key = keyNormalize.normalize( this.key );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

@@ -38,7 +38,7 @@ public class OSdmsPathValidator implements IOSdmsPathValidator {
     }
 
     @Override
-    public boolean validate( final String path, final String pattern ) {
+    public boolean validate( final String path, String pattern ) {
         boolean result = true;
 
         if( path == null || pattern == null ) return false;
@@ -48,12 +48,15 @@ public class OSdmsPathValidator implements IOSdmsPathValidator {
             final Pattern slashRegex = Pattern.compile( "\\/" );
             final Pattern pathVariableRegex = Pattern.compile( "\\{[\\d\\w\\-_:;,.]*\\}" );
 
+            //Remove init stalsh if exists from pattern
+            if( pattern.startsWith( "/" ) ) pattern = pattern.substring( 1 );
+
             //Build pattern
             final String patternRegexString = pattern
                     .replaceAll( slashRegex.pattern(), "\\\\/" )
                     .replaceAll( pathVariableRegex.pattern(), "[\\\\d\\\\w\\\\-_:;,.]*" );
 
-            final Pattern patternRegex = Pattern.compile( String.format( "^(%s).*", patternRegexString ) );
+            final Pattern patternRegex = Pattern.compile( String.format( "^\\/?(%s).*", patternRegexString ) );
 
             //Return result
             result = patternRegex.matcher( path ).find() &&

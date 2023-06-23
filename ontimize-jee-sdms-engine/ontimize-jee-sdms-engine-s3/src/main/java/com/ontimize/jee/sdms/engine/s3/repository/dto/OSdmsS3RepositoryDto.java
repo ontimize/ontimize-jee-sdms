@@ -272,7 +272,10 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      */
     public void setRelativeKey( final List<String> workspaces ) {
         this.relativeKey = this.key;
-        workspaces.forEach( target -> this.relativeKey = this.relativeKey.replaceFirst( target, "" ) );
+        workspaces.forEach( target -> {
+            if( target.startsWith( "/" ) ) this.relativeKey = "/".concat( this.relativeKey );
+            this.relativeKey = this.relativeKey.replaceFirst( target, "" );
+        } );
     }
 
 
@@ -283,7 +286,10 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      */
     public void setRelativePrefix( final List<String> workspaces ) {
         this.relativePrefix = this.prefix;
-        workspaces.forEach( target -> this.relativePrefix = this.relativePrefix.replaceFirst( target, "" ) );
+        workspaces.forEach( target -> {
+            if( target.startsWith( "/" ) ) this.relativePrefix = "/".concat( this.relativePrefix );
+            this.relativePrefix = this.relativePrefix.replaceFirst( target, "" );
+        });
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -312,7 +318,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         result.put( "creationDate", creationDate );
 
         Long lastModified = null;
-        if( this.creationDate != null ) lastModified = this.lastModified.getTime();
+        if( this.lastModified != null ) lastModified = this.lastModified.getTime();
         result.put( "lastModified", lastModified );
 
         return result;
