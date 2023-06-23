@@ -9,6 +9,8 @@
 
 ## [Unreleased]
 
+## [1.2.0] - 2023-06-23
+
 ### Changed 🛠️
 * **Events:** The events of the SDMS has been refactored and now there are new events for the service and the s3 engine.
 
@@ -45,6 +47,7 @@
 * **OSdmsWorkspace Annotation:** Added an annotation to establish multiple query workspaces on the DMS system for an
   entity.
 
-[unreleased]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.1.0...HEAD
+[unreleased]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.2.0...HEAD
+[1.2.0]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/ontimize/ontimize-jee-sdms/releases/tag/1.0.0
