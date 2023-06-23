@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ontimize.jee.sdms</groupId>
     <artifactId>ontimize-jee-sdms-engine-s3</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <packaging>jar</packaging>
     <name>Ontimize EE SDMS (Engine S3 module)</name>
     <description>Ontimize EE Storage DMS (SDMS) - Engine S3 module</description>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>com.ontimize.jee.sdms</groupId>
         <artifactId>ontimize-jee-sdms-engine</artifactId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
     </parent>
 
     <organization>
@@ -49,11 +49,6 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>ontimize-jee-sdms-common</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>ontimize-jee-sdms-event</artifactId>
         </dependency>
 
         <!-- ONTIMIZE JEE -->

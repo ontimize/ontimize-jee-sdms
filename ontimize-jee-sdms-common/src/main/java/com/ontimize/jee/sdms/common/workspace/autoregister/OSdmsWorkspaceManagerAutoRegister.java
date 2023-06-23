@@ -3,6 +3,8 @@ package com.ontimize.jee.sdms.common.workspace.autoregister;
 import com.ontimize.jee.sdms.common.workspace.annotation.OSdmsWorkspace;
 import com.ontimize.jee.sdms.common.workspace.annotation.OSdmsWorkspaces;
 import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.AnnotatedElement;
@@ -19,10 +21,11 @@ import java.util.Map;
 @Component( "OSdmsWorkspaceManagerAutoRegister" )
 public class OSdmsWorkspaceManagerAutoRegister implements IOSdmsWorkspaceManagerAutoRegister {
 
-// ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsWorkspaceManagerAutoRegister() {
-    }
+    /**
+     * The LOGGER constant, which is an instance of org.slf4j.Logger used for logging events and diagnostic messages
+     * during program execution.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsWorkspaceManagerAutoRegister.class );
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
@@ -36,10 +39,10 @@ public class OSdmsWorkspaceManagerAutoRegister implements IOSdmsWorkspaceManager
             data.putAll( this.getWorkspaceDataFromAnnotationsFromCallerElement() );
         }
         catch( final ClassNotFoundException e ) {
-            e.printStackTrace();
+            LOGGER.debug( e.getMessage(), e );
         }
 
-        data.forEach( ( key, value ) -> factory.register( key, value ) );
+        data.forEach( factory::register );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

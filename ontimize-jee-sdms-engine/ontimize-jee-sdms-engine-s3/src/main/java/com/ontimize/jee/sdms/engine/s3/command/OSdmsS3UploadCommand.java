@@ -17,6 +17,7 @@ import com.ontimize.jee.sdms.engine.s3.util.config.IOSdmsS3EngineConfig;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.reader.IOSdmsS3DataReader;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
+import com.ontimize.jee.sdms.engine.s3.util.normalize.IOSdmsS3KeyNormalize;
 import com.ontimize.jee.sdms.engine.s3.util.response.mapper.IOSdmsS3ResponseMapper;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,13 +41,11 @@ public class OSdmsS3UploadCommand implements IOSdmsCommand {
 
     // Dependencies
     private IOSdmsS3Repository repository;
-    private IOSdmsS3EngineConfig s3EngineConfig;
     private IOSdmsWorkspaceManager workspaceManager;
     private OSdmsWorkspace workspace;
     private IOSdmsResponseBuilder responseBuilder;
     private IOSdmsS3ResponseMapper responseMapper;
     private IOSdmsPathValidator pathValidator;
-    private IOSdmsS3DataReader dataReader;
 
 
     //Data
@@ -78,18 +77,20 @@ public class OSdmsS3UploadCommand implements IOSdmsCommand {
     public void init( final IOSdmsInyector inyector ) {
         //Inyect dependencies
         this.repository = inyector.get( OSdmsS3RepositoryProxy.class );
-        this.s3EngineConfig = inyector.get( IOSdmsS3EngineConfig.class );
         this.workspaceManager = inyector.get( IOSdmsWorkspaceManager.class );
         this.responseBuilder = inyector.get( IOSdmsResponseBuilder.class );
         this.responseMapper = inyector.get( IOSdmsS3ResponseMapper.class );
         this.pathValidator = inyector.get( IOSdmsPathValidator.class );
-        this.dataReader = inyector.get( IOSdmsS3DataReader.class );
+        final IOSdmsS3DataReader dataReader = inyector.get( IOSdmsS3DataReader.class );
+        final IOSdmsS3EngineConfig s3EngineConfig = inyector.get( IOSdmsS3EngineConfig.class );
+        final IOSdmsS3KeyNormalize keyNormalize = inyector.get( IOSdmsS3KeyNormalize.class );
 
         //Get Data
         this.workspaceManager.active( filter.getWorkspace(), filter.getData() );
         this.workspace = workspaceManager.getActive();
-        this.bucket = this.s3EngineConfig.getBucket();
-        this.key = this.dataReader.readKey( this.data );
+        this.bucket = s3EngineConfig.getBucket();
+        this.key = dataReader.readKey( this.data );
+        this.key = keyNormalize.normalize( this.key );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

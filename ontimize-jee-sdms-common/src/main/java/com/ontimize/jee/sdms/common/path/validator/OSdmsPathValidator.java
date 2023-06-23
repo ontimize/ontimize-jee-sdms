@@ -1,7 +1,5 @@
 package com.ontimize.jee.sdms.common.path.validator;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -14,19 +12,10 @@ import java.util.regex.Pattern;
  *
  * @see IOSdmsPathValidator
  */
-@Component( "OSdmsS3PathValidator" )
+@Component( "OSdmsPathValidator" )
 public class OSdmsPathValidator implements IOSdmsPathValidator {
 
-    /**
-     * The LOGGER constant, which is an instance of org.slf4j.Logger used for logging events and diagnostic messages
-     * during program execution.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsPathValidator.class );
-
-// ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsPathValidator() {
-    }
+    private static final Pattern PATH_VARIABLE_REGEX = Pattern.compile( "\\{[\\d\\w\\-_:;,.]*\\}" );
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
@@ -38,27 +27,27 @@ public class OSdmsPathValidator implements IOSdmsPathValidator {
     }
 
     @Override
-    public boolean validate( final String path, final String pattern ) {
+    public boolean validate( final String path, String pattern ) {
         boolean result = true;
 
         if( path == null || pattern == null ) return false;
 
-        if( pattern != null ) {
-            //Initialize patterns
-            final Pattern slashRegex = Pattern.compile( "\\/" );
-            final Pattern pathVariableRegex = Pattern.compile( "\\{[\\d\\w\\-_:;,.]*\\}" );
+        //Initialize patterns
+        final Pattern slashRegex = Pattern.compile( "\\/" );
 
-            //Build pattern
-            final String patternRegexString = pattern
-                    .replaceAll( slashRegex.pattern(), "\\\\/" )
-                    .replaceAll( pathVariableRegex.pattern(), "[\\\\d\\\\w\\\\-_:;,.]*" );
+        //Remove init stalsh if exists from pattern
+        if( pattern.startsWith( "/" ) ) pattern = pattern.substring( 1 );
 
-            final Pattern patternRegex = Pattern.compile( String.format( "^(%s).*", patternRegexString ) );
+        //Build pattern
+        final String patternRegexString = pattern
+                .replaceAll( slashRegex.pattern(), "\\\\/" )
+                .replaceAll( PATH_VARIABLE_REGEX.pattern(), "[\\\\d\\\\w\\\\-_:;,.]*" );
 
-            //Return result
-            result = patternRegex.matcher( path ).find() &&
-                    ! pathVariableRegex.matcher( path ).find();
-        }
+        final Pattern patternRegex = Pattern.compile( String.format( "^\\/?(%s).*", patternRegexString ) );
+
+        //Return result
+        result = patternRegex.matcher( path ).find() &&
+                ! PATH_VARIABLE_REGEX.matcher( path ).find();
 
         return result;
     }
@@ -75,8 +64,7 @@ public class OSdmsPathValidator implements IOSdmsPathValidator {
 
     @Override
     public boolean isPattern( final String path ) {
-        final Pattern pathVariableRegex = Pattern.compile( "\\{[\\d\\w\\-_:;,.]*\\}" );
-        return pathVariableRegex.matcher( path ).find();
+        return PATH_VARIABLE_REGEX.matcher( path ).find();
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

@@ -3,7 +3,6 @@ package com.ontimize.jee.sdms.engine.s3.repository;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ontimize.jee.sdms.engine.s3.repository.dto.OSdmsS3RepositoryDto;
-import com.ontimize.jee.sdms.engine.s3.repository.request.OSdmsS3RepositorySimpleRequest;
 import com.ontimize.jee.sdms.engine.s3.repository.response.OSdmsS3RepositoryResponse;
 
 import java.util.List;
@@ -136,7 +135,7 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> copy( List<ListObjectsRequest> requests, String bucket, String prefix, String currentPrefix );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> copyAll( List<ListObjectsRequest> requests, String bucket, String prefix, String currentPrefix );
 
 
     /**
@@ -169,7 +168,7 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryResponse
      * @see OSdmsS3RepositoryDto
      */
-    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> move( List<ListObjectsRequest> requests, String bucket, String prefix, String currentPrefix );
+    OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> moveAll( List<ListObjectsRequest> requests, String bucket, String prefix, String currentPrefix );
 
 
     /**
@@ -198,18 +197,5 @@ public interface IOSdmsS3Repository {
      * @see OSdmsS3RepositoryDto
      */
     OSdmsS3RepositoryResponse<OSdmsS3RepositoryDto> delete( List<ListObjectsRequest> requests );
-
-
-    /**
-     * Method that checks if the S3 objects that match with a request exist.
-     *
-     * @param request The request to check if the S3 objects exist
-     *
-     * @return The S3 repository response with the boolean flag that indicates if the S3 objects exist
-     *
-     * @see OSdmsS3RepositorySimpleRequest
-     * @see OSdmsS3RepositoryResponse
-     */
-    OSdmsS3RepositoryResponse<Boolean> exists( OSdmsS3RepositorySimpleRequest request );
 
 }

@@ -6,8 +6,6 @@ import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
 import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
 import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
 import com.ontimize.jee.sdms.engine.s3.util.input.filter.OSdmsS3InputFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -24,12 +22,6 @@ import java.util.stream.Collectors;
 @Component( "OSdmsS3FilterReader" )
 public class OSdmsS3FilterReader implements IOSdmsS3FilterReader {
 
-    /**
-     * The LOGGER constant, which is an instance of org.slf4j.Logger used for logging events and diagnostic messages
-     * during program execution.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsS3FilterReader.class );
-
     /** The workspace manager. */
     private @Autowired IOSdmsWorkspaceManager workspaceManager;
 
@@ -44,11 +36,6 @@ public class OSdmsS3FilterReader implements IOSdmsS3FilterReader {
     private @Autowired IOSdmsCrypter crypter;
 
 // ------------------------------------------------------------------------------------------------------------------ \\
-
-    public OSdmsS3FilterReader() {
-    }
-
-// ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
@@ -58,6 +45,7 @@ public class OSdmsS3FilterReader implements IOSdmsS3FilterReader {
 
         final Set<String> result = new HashSet<>();
         final OSdmsWorkspace activeWorkspace = this.workspaceManager.getActive();
+        final List<String> patterns = activeWorkspace != null ? activeWorkspace.getPatterns() : Collections.emptyList();
 
         if( filter.hasIds() ) {
             final List<String> id = filter.getIds();
@@ -84,11 +72,11 @@ public class OSdmsS3FilterReader implements IOSdmsS3FilterReader {
         }
 
         if( ! prefixes.isEmpty() || ! fileNames.isEmpty() ) {
-            result.addAll( this.pathBuilder.buildKeyList( activeWorkspace.getPatterns(), prefixes, fileNames ) );
+            result.addAll( this.pathBuilder.buildKeyList( patterns, prefixes, fileNames ) );
         }
 
         return result.stream()
-                .filter( key -> this.pathValidator.validate( key, activeWorkspace.getPatterns() ) )
+                .filter( key -> this.pathValidator.validate( key, patterns ) )
                 .collect( Collectors.toList() );
     }
 
@@ -99,7 +87,7 @@ public class OSdmsS3FilterReader implements IOSdmsS3FilterReader {
 
         String result = null;
 
-        if( result == null && filter.hasIds() ) {
+        if( filter.hasIds() ) {
             final List<String> ids = filter.getIds();
             if( ids.size() == 1 ) {
                 result = this.crypter.decode( ids.get( 0 ) );

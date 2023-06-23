@@ -1,7 +1,7 @@
-package com.ontimize.jee.sdms.common.event;
+package com.ontimize.jee.sdms.common.event.handler;
 
-import com.ontimize.jee.sdms.common.event.data.IOSdmsEventData;
-import com.ontimize.jee.sdms.common.event.listener.IOSdmsEventListener;
+import com.ontimize.jee.sdms.common.event.IOSdmsEvent;
+import com.ontimize.jee.sdms.common.event.IOSdmsEventListener;
 
 import java.util.List;
 
@@ -36,29 +36,23 @@ public interface IOSdmsEventHandler {
      *
      * @param events The events from which event listeners are to be removed.
      */
-    void clearEvent( Enum... events );
+    <E extends IOSdmsEvent> void clearEvent( Class<E>... events );
 
 
     /**
-     * Triggers the specified event with the given data.
+     * Triggers the specified event.
      *
      * @param event The event to trigger.
-     * @param data  The data to pass to the event listeners.
-     *
-     * @see IOSdmsEventData
      */
-    void trigger( Enum event, IOSdmsEventData data );
+    void trigger( IOSdmsEvent event );
 
 
     /**
-     * Triggers the specified list of events with the given data.
+     * Triggers the specified list of events.
      *
      * @param events The list of events to trigger.
-     * @param data   The data to pass to the event listeners.
-     *
-     * @see IOSdmsEventData
      */
-    void trigger( List<Enum> events, IOSdmsEventData data );
+    void trigger( List<IOSdmsEvent> events );
 
 }
 

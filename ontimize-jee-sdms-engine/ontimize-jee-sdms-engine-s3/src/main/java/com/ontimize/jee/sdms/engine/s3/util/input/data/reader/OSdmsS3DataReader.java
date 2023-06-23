@@ -6,8 +6,6 @@ import com.ontimize.jee.sdms.common.path.validator.IOSdmsPathValidator;
 import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
 import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
 import com.ontimize.jee.sdms.engine.s3.util.input.data.OSdmsS3InputData;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -20,12 +18,6 @@ import org.springframework.stereotype.Component;
  */
 @Component( "OSdmsS3DataReader" )
 public class OSdmsS3DataReader implements IOSdmsS3DataReader {
-
-    /**
-     * The LOGGER constant, which is an instance of org.slf4j.Logger used for logging events and diagnostic messages
-     * during program execution.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger( OSdmsS3DataReader.class );
 
     /** The workspace manager. */
     private @Autowired IOSdmsWorkspaceManager workspaceManager;
@@ -50,7 +42,7 @@ public class OSdmsS3DataReader implements IOSdmsS3DataReader {
 
         String result = null;
 
-        if( result == null && data.hasId() ) {
+        if( data.hasId() ) {
             result = this.crypter.decode( data.getId() );
         }
 
