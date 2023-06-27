@@ -348,8 +348,9 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
     public OSdmsZipData getDataToZip() {
         OSdmsZipData result = null;
         if( ! this.folder && ! this.name.equals( OSdmsS3RepositoryDto.FILE_NAME_MARK_FOLDER ) ) {
-            String fileName = this.key.replace( "/", "." );
-            if( fileName.endsWith( "." ) ) fileName = fileName.substring( 0, fileName.length() - 1 );
+            final String sanitizedKey = this.key.startsWith( "/" ) ? this.key.substring( 1 ) : this.key;
+            String fileName = sanitizedKey.replace( "/", "_" );
+            if( fileName.endsWith( "_" ) ) fileName = fileName.substring( 0, fileName.length() - 1 );
             result = new OSdmsZipData();
             result.setInputStream( this.file );
             result.setFileName( fileName );
