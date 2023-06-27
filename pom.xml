@@ -75,6 +75,7 @@
         <ontimize-jee.version>5.7.0</ontimize-jee.version>
         <reflections.version>0.10.2</reflections.version>
         <amazonaws.version>1.12.382</amazonaws.version>
+        <springboot.test.version>2.5.0</springboot.test.version>
         <junit.version>5.9.3</junit.version>
         <mockito.version>5.4.0</mockito.version>
 
@@ -160,6 +161,13 @@
                 <version>${amazonaws.version}</version>
             </dependency>
 
+            <!-- SPRING BOOT TEST -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${springboot.test.version}</version>
+            </dependency>
+
             <!-- JUNIT -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
@@ -184,6 +192,14 @@
     </dependencyManagement>
 
     <dependencies>
+
+        <!-- SPRING BOOT TEST -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- JUNIT -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
