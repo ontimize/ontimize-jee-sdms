@@ -2,20 +2,20 @@ package com.ontimize.jee.sdms.engine.s3.repository.dto;
 
 
 import com.amazonaws.services.s3.model.*;
+import com.ontimize.jee.sdms.common.zip.OSdmsZipData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class OSdmsS3RepositoryDtoTest {
 
@@ -326,27 +326,6 @@ public class OSdmsS3RepositoryDtoTest {
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
-// --------| SET CREATION DATE |------------------------------------------------------------------------------------- \\
-// ------------------------------------------------------------------------------------------------------------------ \\
-
-    @Test
-    public void givenAValidCreationDateAsString_whenSetCreationDate_thenCreationDateIsSet() {
-        final SimpleDateFormat formatDate = new SimpleDateFormat( "dd/MM/yyyy-HH:mm:ss" );
-
-        //Given
-        final String givenCreationDateAsString = "27/06/2023-10:30:20";
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
-
-        //When
-        dto.setCreationDate( givenCreationDateAsString );
-
-        //Then
-        final Date creationDate = dto.getCreationDate();
-        assertNotNull( creationDate, () -> "The creation date should not be null" );
-        assertEquals( givenCreationDateAsString, formatDate.format( creationDate ), () -> "Unexpected bucket" );
-    }
-
-// ------------------------------------------------------------------------------------------------------------------ \\
 // --------| TO MAP |------------------------------------------------------------------------------------------------ \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
@@ -464,6 +443,345 @@ public class OSdmsS3RepositoryDtoTest {
         assertNotNull( result.get( "lastModified" ), () -> "The lastModified should not be null" );
         assertTrue( result.get( "lastModified" ) instanceof Long, () -> "The result should contain a long type" );
         assertEquals( dto.getLastModified().getTime(), result.get( "lastModified" ), () -> "Unexpected lastModified" );
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// --------| DATA TO ZIP |------------------------------------------------------------------------------------------- \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    @Test
+    public void givenOSdmsS3RepositoryDto_whenCallGetDataToZip_thenOSdmsZipData() {
+        //Expected
+        final String expectedFileName = "entity_1_proof.txt";
+
+        //Given
+        final String givenKey = "/entity/1/proof.txt";
+        final String givenName = "proof.txt";
+        final boolean givenFolder = false;
+        final S3ObjectInputStream givenS3ObjectInputStream = Mockito.mock( S3ObjectInputStream.class );
+
+        //Set Data in DTO
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        dto.setKey( givenKey );
+        dto.setName( givenName );
+        dto.setFolder( givenFolder );
+        dto.setFile( givenS3ObjectInputStream );
+
+        //When
+        final OSdmsZipData result = dto.getDataToZip();
+
+        //Then
+        assertNotNull( result, () -> "The result should not be null" );
+
+        final InputStream inputStream = result.getInputStream();
+        assertNotNull( inputStream, () -> "The inputStream should not be null" );
+
+        final String fileName = result.getFileName();
+        assertEquals( expectedFileName, fileName, () -> "Unexpected fileName" );
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// --------| CONSTRUCTOR |------------------------------------------------------------------------------------------- \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    @Test
+    public void givenS3Data_whenCallConstructor_thenCreateNewInstanceWithSameData(){
+        //Given
+        final String givenBucket = "bucket";
+        final String givenKey = "key";
+        final Long givenSize = 1L;
+        final String givenOwnerDisplayName = "owner";
+        final Date givenLastModified = new Date();
+
+        //ObjectMetadata
+        final ObjectMetadata givenObjectMetadata = Mockito.mock( ObjectMetadata.class );
+        when( givenObjectMetadata.getContentLength() ).thenReturn( givenSize );
+        when( givenObjectMetadata.getUserMetadata() ).thenReturn( Collections.EMPTY_MAP );
+
+        //S3Object
+        final S3Object givenS3Object = Mockito.mock( S3Object.class );
+        when( givenS3Object.getKey() ).thenReturn( givenKey );
+        when( givenS3Object.getBucketName() ).thenReturn( givenBucket );
+        when( givenS3Object.getObjectMetadata() ).thenReturn( givenObjectMetadata );
+        when( givenS3Object.getObjectContent() ).thenReturn( Mockito.mock( S3ObjectInputStream.class ) );
+
+        //S3ObjectSummary
+        final S3ObjectSummary givenS3ObjectSummary = Mockito.mock( S3ObjectSummary.class );
+        when( givenS3ObjectSummary.getKey() ).thenReturn( givenKey );
+        when( givenS3ObjectSummary.getBucketName() ).thenReturn( givenBucket );
+        when( givenS3ObjectSummary.getSize() ).thenReturn( givenSize );
+        when( givenS3ObjectSummary.getLastModified() ).thenReturn( givenLastModified );
+        when( givenS3ObjectSummary.getOwner() ).thenReturn( Mockito.mock( Owner.class ) );
+        when( givenS3ObjectSummary.getOwner().getDisplayName() ).thenReturn( givenOwnerDisplayName );
+
+        //When
+        final OSdmsS3RepositoryDto result = new OSdmsS3RepositoryDto( givenS3Object, givenS3ObjectSummary, givenObjectMetadata );
+
+        //Then
+        assertNotNull( result, () -> "The result should not be null" );
+        verify( givenS3Object, times( 1 ) ).getKey();
+        verify( givenS3ObjectSummary, times( 1 ) ).getKey();
+        verify( givenObjectMetadata, times( 2 ) ).getContentLength();
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// --------| SETTERS AND GETTERS |----------------------------------------------------------------------------------- \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    //Bucket
+    @Test
+    public void givenBucketNameAsString_whenCallSetBucket_thenCheckTheNewValueWithCallGetter(){
+        //Given
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final String givenBucketName = "bucket";
+
+        //When
+        dto.setBucket( givenBucketName );
+
+        //Then
+        final String result = dto.getBucket();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertEquals( givenBucketName, result, () -> "Unexpected result" );
+    }
+
+    //Key
+    @Test
+    public void givenKeyAsString_whenCallSetKey_thenCheckTheNewValueWithCallGetter(){
+        //Given
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final String givenKey = "key";
+
+        //When
+        dto.setKey( givenKey );
+
+        //Then
+        final String result = dto.getKey();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertEquals( givenKey, result, () -> "Unexpected result" );
+    }
+
+    //Relative Key
+    @Test
+    public void givenRelativeKeyAsString_whenCallSetRelativeKey_thenCheckTheNewValueWithCallGetter(){
+        //Given
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final String givenRelativeKey = "relativeKey";
+
+        //When
+        dto.setRelativeKey( givenRelativeKey );
+
+        //Then
+        final String result = dto.getRelativeKey();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertEquals( givenRelativeKey, result, () -> "Unexpected result" );
+    }
+
+    //Relative Prefix
+    @Test
+    public void givenRelativePrefixAsString_whenCallSetRelativePrefix_thenCheckTheNewValueWithCallGetter(){
+        //Given
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final String givenRelativePrefix = "relativePrefix";
+
+        //When
+        dto.setRelativePrefix( givenRelativePrefix );
+
+        //Then
+        final String result = dto.getRelativePrefix();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertEquals( givenRelativePrefix, result, () -> "Unexpected result" );
+    }
+
+    //Prefix
+    @Test
+    public void givenPrefixAsString_whenCallSetPrefix_thenCheckTheNewValueWithCallGetter(){
+        //Given
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final String givenPrefix = "prefix";
+
+        //When
+        dto.setPrefix( givenPrefix );
+
+        //Then
+        final String result = dto.getPrefix();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertEquals( givenPrefix, result, () -> "Unexpected result" );
+    }
+
+    //Name
+    @Test
+    public void givenNameAsString_whenCallSetName_thenCheckTheNewValueWithCallGetter(){
+        //Given
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final String givenName = "name";
+
+        //When
+        dto.setName( givenName );
+
+        //Then
+        final String result = dto.getName();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertEquals( givenName, result, () -> "Unexpected result" );
+    }
+
+    //Owner
+    @Test
+    public void givenOwnerAsString_whenCallSetOwner_thenCheckTheNewValueWithCallGetter(){
+        //Given
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final String givenOwner = "owner";
+
+        //When
+        dto.setOwner( givenOwner );
+
+        //Then
+        final String result = dto.getOwner();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertEquals( givenOwner, result, () -> "Unexpected result" );
+    }
+
+    //Size
+    @Test
+    public void givenSizeAsLong_whenCallSetSize_thenCheckTheNewValueWithCallGetter(){
+        //Given
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final Long givenSize = 1L;
+
+        //When
+        dto.setSize( givenSize );
+
+        //Then
+        final Long result = dto.getSize();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertEquals( givenSize, result, () -> "Unexpected result" );
+    }
+
+    //Folder
+    @Test
+    public void givenFolderFlagAsBoolean_whenCallSetFolder_thenCheckTheNewValueWithCallGetter(){
+        //Given
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final boolean givenFolderFlag = true;
+
+        //When
+        dto.setFolder( givenFolderFlag );
+
+        //Then
+        final boolean result = dto.isFolder();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertTrue( result, () -> "The result should be true" );
+    }
+
+    //Creation Date
+    @Test
+    public void givenCreationDateAsDate_whenCallSetCreationDate_thenCheckTheNewValueWithCallGetter() {
+        //Given
+        final Date givenCreationDate = new Date();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+
+        //When
+        dto.setCreationDate( givenCreationDate );
+
+        //Then
+        final Date result = dto.getCreationDate();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertEquals( givenCreationDate, result, () -> "Unexpected result" );
+    }
+
+    @Test
+    public void givenCreationDateAsString_whenCallSetCreationDate_thenCheckTheNewValueWithCallGetter() {
+        final SimpleDateFormat formatDate = new SimpleDateFormat( "dd/MM/yyyy-HH:mm:ss" );
+
+        //Given
+        final String givenCreationDate = "27/06/2023-10:30:20";
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+
+        //When
+        dto.setCreationDate( givenCreationDate );
+
+        //Then
+        final Date result = dto.getCreationDate();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertEquals( givenCreationDate, formatDate.format( result ), () -> "Unexpected result" );
+    }
+
+    //Creation Date
+    @Test
+    public void givenLastModifiedAsDate_whenCallSetLastModified_thenCheckTheNewValueWithCallGetter() {
+        //Given
+        final Date givenLastModified = new Date();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+
+        //When
+        dto.setLastModified( givenLastModified );
+
+        //Then
+        final Date result = dto.getLastModified();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertEquals( givenLastModified, result, () -> "Unexpected result" );
+    }
+
+    //Metadata
+    @Test
+    public void givenMetadadataAsMap_whenCallSetMetadata_thenCheckTheNewValueWithCallGetter() {
+        //Given
+        final int expectedSize = 10;
+        final Map<String, Object> givenMetadata = Mockito.mock( Map.class );
+        when( givenMetadata.size() ).thenReturn( expectedSize );
+
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+
+        //When
+        dto.setMetadata( givenMetadata );
+
+        //Then
+        final Map<String, Object> result = dto.getMetadata();
+        assertNotNull( result, () -> "The result should not be null" );
+        assertFalse( result.isEmpty(), () -> "The result should not be empty" );
+        assertEquals( expectedSize, result.size(), () -> "The result should not expected size" );
+    }
+
+    //File
+    @Test
+    public void givenFileAsS3ObjectInputStream_whenCallSetFile_thenCheckTheNewValueWithCallGetter() {
+        //Given
+        final S3ObjectInputStream givenFile = Mockito.mock( S3ObjectInputStream.class );
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+
+        //When
+        dto.setFile( givenFile );
+
+        //Then
+        final InputStream result = dto.getFile();
+        assertNotNull( result, () -> "The result should not be null" );
+    }
+
+// ------------------------------------------------------------------------------------------------------------------ \\
+// --------| TO STRING |--------------------------------------------------------------------------------------------- \\
+// ------------------------------------------------------------------------------------------------------------------ \\
+
+    @Test
+    public void givenOSdmsS3RepositoryDto_whenCallToString_thenCorrectStringRepresentation() {
+        //Given
+        final String givenKey = "/entity/1/proof.txt";
+        final String givenName = "proof.txt";
+        final boolean givenFolder = false;
+        final S3ObjectInputStream givenS3ObjectInputStream = Mockito.mock( S3ObjectInputStream.class );
+
+        //Set Data in DTO
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        dto.setKey( givenKey );
+        dto.setName( givenName );
+        dto.setFolder( givenFolder );
+        dto.setFile( givenS3ObjectInputStream );
+
+        //When
+        final String result = dto.toString();
+
+        //Then
+        assertNotNull( result, () -> "The result should not be null" );
+        assertTrue( result.length() > 220, () -> "The result size should be greater than 220" );
+
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
