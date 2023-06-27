@@ -1,27 +1,16 @@
 package com.ontimize.jee.sdms.common.path.validator;
 
-import com.ontimize.jee.sdms.common.path.builder.IOSdmsPathBuilder;
-import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
-import com.ontimize.jee.sdms.common.workspace.autoregister.IOSdmsWorkspaceManagerAutoRegister;
-import com.ontimize.jee.sdms.common.workspace.manager.IOSdmsWorkspaceManager;
-import com.ontimize.jee.sdms.common.workspace.manager.OSdmsWorkspaceManager;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Spy;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith( SpringExtension.class )
 public class OSdmsPathValidatorTest {
