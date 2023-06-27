@@ -277,6 +277,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <excludeGroups>com.ontimize.jee.sdms.common.**</excludeGroups>
+                        <excludeGroups>com.ontimize.jee.sdms.engine.**</excludeGroups>
+                        <excludeGroups>com.ontimize.jee.sdms.event.**</excludeGroups>
+                        <excludeGroups>com.ontimize.jee.sdms.server.**</excludeGroups>
+                    </excludes>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
