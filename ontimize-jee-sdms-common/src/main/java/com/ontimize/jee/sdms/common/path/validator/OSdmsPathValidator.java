@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 @Component( "OSdmsPathValidator" )
 public class OSdmsPathValidator implements IOSdmsPathValidator {
 
-    private static final Pattern PATH_VARIABLE_REGEX = Pattern.compile( "\\{[\\d\\w\\-_:;,.]*\\}" );
+    private static final Pattern PATH_VARIABLE_REGEX = Pattern.compile( "\\{[\\w-:;,]+\\}" );
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IMPLEMENTED METHODS |------------------------------------------------------------------------------------- \\
@@ -41,9 +41,9 @@ public class OSdmsPathValidator implements IOSdmsPathValidator {
         //Build pattern
         final String patternRegexString = pattern
                 .replaceAll( slashRegex.pattern(), "\\\\/" )
-                .replaceAll( PATH_VARIABLE_REGEX.pattern(), "[\\\\d\\\\w\\\\-_:;,.]*" );
+                .replaceAll( PATH_VARIABLE_REGEX.pattern(), "[\\\\w-:;,]+" );
 
-        final Pattern patternRegex = Pattern.compile( String.format( "^\\/?(%s).*", patternRegexString ) );
+        final Pattern patternRegex = Pattern.compile( String.format( "^\\/?(%s)+", patternRegexString ) );
 
         //Return result
         result = patternRegex.matcher( path ).find() &&

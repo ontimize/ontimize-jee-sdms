@@ -9,6 +9,17 @@
 
 ## [Unreleased]
 
+### Added ✔️
+* **Unit Tests:** Added unit tests for the `OSDmsS3RepositoryDto`, `OSdmsPathValidator` and `OSdmsWorkspaceManager`. 
+
+### Changed 🛠️
+* **OSdmsS3RepositoryDto:** Changed the way the name of the file to be added to the zip was constructed. Now the filename instead of constructing the full path separated by `.`, is the same but separated by `_`.
+
+### Fixed 🐛
+* **OSdmsPathValidator:** Fixed a bug in the regular expressions of the class validating paths that in some cases was not performing as expected.
+* **OSdmsWorkspaceManager:** Fixed a bug that occurred when not setting a workspace. Now if none or none with the name `default` is set, it will default to one with the name set to `default` and the value set to `/{id}`.
+* **OSdmsS3RepositoryDto:** Fixed a bug that was caused when the relativeKey and relativePrefix were constructed incorrectly in some cases.
+
 ## [1.2.0] - 2023-06-23
 
 ### Changed 🛠️

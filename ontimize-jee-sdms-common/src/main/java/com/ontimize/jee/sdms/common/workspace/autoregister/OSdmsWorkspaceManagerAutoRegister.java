@@ -12,6 +12,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace.DEFAULT_NAME;
+import static com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace.DEFAULT_VALUE;
+
 
 /**
  * Implementation of {@link IOSdmsWorkspaceManagerAutoRegister} that registers the workspaces from annotations.
@@ -40,6 +43,10 @@ public class OSdmsWorkspaceManagerAutoRegister implements IOSdmsWorkspaceManager
         }
         catch( final ClassNotFoundException e ) {
             LOGGER.debug( e.getMessage(), e );
+        }
+
+        if( data.isEmpty() || ( !data.isEmpty() && !data.containsKey( DEFAULT_NAME ) ) ){
+            data.put( DEFAULT_NAME, DEFAULT_VALUE );
         }
 
         data.forEach( factory::register );

@@ -22,7 +22,7 @@ import java.util.*;
 public class OSdmsWorkspaceManager implements IOSdmsWorkspaceManager {
 
     /** The workspaces registered. */
-    private Set<OSdmsWorkspace> workspaces = new HashSet<>( Set.of( new OSdmsWorkspace() ) );
+    private Set<OSdmsWorkspace> workspaces = new HashSet<>();
 
     /** The default workspace. */
     private OSdmsWorkspace workspaceDefault = null;
