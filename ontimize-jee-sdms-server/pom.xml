@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ontimize.jee.sdms</groupId>
     <artifactId>ontimize-jee-sdms-server</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Ontimize EE SDMS (Server module)</name>
     <description>Ontimize EE Storage DMS (SDMS) - Server module</description>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>com.ontimize.jee.sdms</groupId>
         <artifactId>ontimize-jee-sdms</artifactId>
-        <version>1.3.0</version>
+        <version>1.4.0-SNAPSHOT</version>
     </parent>
 
     <organization>
