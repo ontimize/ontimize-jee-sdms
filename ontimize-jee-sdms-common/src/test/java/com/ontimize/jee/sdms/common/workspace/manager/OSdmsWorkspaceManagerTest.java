@@ -5,11 +5,10 @@ import com.ontimize.jee.sdms.common.workspace.OSdmsWorkspace;
 import com.ontimize.jee.sdms.common.workspace.autoregister.IOSdmsWorkspaceManagerAutoRegister;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,15 +17,14 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith( SpringExtension.class )
 class OSdmsWorkspaceManagerTest {
-    private @Spy IOSdmsWorkspaceManagerAutoRegister workspaceManagerAutoRegister;
+    private @Mock IOSdmsWorkspaceManagerAutoRegister workspaceManagerAutoRegister;
     private @Mock IOSdmsPathBuilder pathBuilder;
     private @InjectMocks IOSdmsWorkspaceManager workspaceManager = new OSdmsWorkspaceManager();
 
     @BeforeEach
     void setUp() {
-        //when( this.pathBuilder.buildKeyListFromPattern( anyString(), anyMap() ) ).thenReturn( Collections.emptyList() );
+        MockitoAnnotations.openMocks( this );
         doAnswer( invocation -> {
             this.workspaceManager.register( OSdmsWorkspace.DEFAULT_NAME, OSdmsWorkspace.DEFAULT_VALUE );
             return null;

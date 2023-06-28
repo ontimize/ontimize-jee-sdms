@@ -1,20 +1,16 @@
 package com.ontimize.jee.sdms.common.path.validator;
 
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.InjectMocks;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith( SpringExtension.class )
 class OSdmsPathValidatorTest {
-    private @InjectMocks IOSdmsPathValidator oSdmsPathValidator = new OSdmsPathValidator();
+    private IOSdmsPathValidator oSdmsPathValidator = new OSdmsPathValidator();
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // ------| IS PATTERN |---------------------------------------------------------------------------------------------- \\
