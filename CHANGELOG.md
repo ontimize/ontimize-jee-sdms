@@ -10,10 +10,7 @@
 ## [Unreleased]
 
 ### Added ✔️
-* **Unit Tests:** Added unit tests for the system.
-  - Unit Test for the `OSDmsS3RepositoryDto` class. 
-  - Unit Test for the `OSdmsPathValidator` class. 
-  - Unit Test for the `OSdmsWorkspaceManager` class. 
+* **Unit Tests:** Added unit tests for the `OSDmsS3RepositoryDto`, `OSdmsPathValidator` and `OSdmsWorkspaceManager`. 
 
 ### Changed 🛠️
 * **OSdmsS3RepositoryDto:** Changed the way the name of the file to be added to the zip was constructed. Now the filename instead of constructing the full path separated by `.`, is the same but separated by `_`.
