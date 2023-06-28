@@ -15,7 +15,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class OSdmsS3RepositoryDtoTest {
+class OSdmsS3RepositoryDtoTest {
 
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -29,7 +29,7 @@ public class OSdmsS3RepositoryDtoTest {
             "proof/proof.txt,proof/,proof.txt",
             "/proof/proof.txt,/proof/,proof.txt"
     })
-    public void givenAValidS3Object_whenSetS3Object_thenDataIsSet( final String givenKey, final String expectedPrefix, final String expectedName ){
+    void givenAValidS3Object_whenSetS3Object_thenDataIsSet( final String givenKey, final String expectedPrefix, final String expectedName ){
         final SimpleDateFormat formatDate = new SimpleDateFormat( "dd/MM/yyyy-HH:mm:ss" );
 
         //Given
@@ -101,7 +101,7 @@ public class OSdmsS3RepositoryDtoTest {
             "proof/proof.txt,proof/,proof.txt",
             "/proof/proof.txt,/proof/,proof.txt"
     })
-    public void givenAValidS3ObjectSummary_whenSetS3ObjectSummary_thenDataIsSet( final String givenKey, final String expectedPrefix, final String expectedName ){
+    void givenAValidS3ObjectSummary_whenSetS3ObjectSummary_thenDataIsSet( final String givenKey, final String expectedPrefix, final String expectedName ){
         //Given
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
         final String givenBucket = "bucket";
@@ -161,7 +161,7 @@ public class OSdmsS3RepositoryDtoTest {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Test
-    public void givenAValidS3ObjectMetadata_whenSetS3ObjectMetadata_thenDataIsSet(){
+    void givenAValidS3ObjectMetadata_whenSetS3ObjectMetadata_thenDataIsSet(){
         final SimpleDateFormat formatDate = new SimpleDateFormat( "dd/MM/yyyy-HH:mm:ss" );
 
         //Given
@@ -221,7 +221,7 @@ public class OSdmsS3RepositoryDtoTest {
             "/proof/,/,proof",
             "/proof/subproof/,/proof/,subproof",
     })
-    public void givenAValidFolderKey_whenSetFolderData_thenFolderDataIsSet( final String givenKey, final String expectedPrefix, final String expectedName ) {
+    void givenAValidFolderKey_whenSetFolderData_thenFolderDataIsSet( final String givenKey, final String expectedPrefix, final String expectedName ) {
         //Given
         final String givenBucket = "bucket";
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
@@ -274,7 +274,7 @@ public class OSdmsS3RepositoryDtoTest {
             "entity/images/top/image.png,/image.png",
             "entity/images/top/profile/image.png,/profile/image.png"
     })
-    public void givenAValidKeyAndSpecificWorkspaces_whenSetRelativeKey_thenRelativeKeyIsSet( final String givenKey, final String expectedRelativeKey ) {
+    void givenAValidKeyAndSpecificWorkspaces_whenSetRelativeKey_thenRelativeKeyIsSet( final String givenKey, final String expectedRelativeKey ) {
         //Given
         final List<String> givenWorkspaces = Arrays.asList( "entity/1", "entity/5", "entity/10", "entity/50", "entity/images/top" );
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
@@ -307,7 +307,7 @@ public class OSdmsS3RepositoryDtoTest {
             "entity/images/top/profile/,/profile/",
             "entity/images/top/profile,/profile/"
     })
-    public void givenAValidKeyAndSpecificWorkspaces_whenSetRelativePrefix_thenRelativePrefixIsSet( final String givenPrefix, final String expectedRelativePrefix ) {
+    void givenAValidKeyAndSpecificWorkspaces_whenSetRelativePrefix_thenRelativePrefixIsSet( final String givenPrefix, final String expectedRelativePrefix ) {
         //Given
         final List<String> givenWorkspaces = Arrays.asList( "entity/1", "entity/5", "entity/10", "entity/50", "entity/images/top" );
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
@@ -328,7 +328,7 @@ public class OSdmsS3RepositoryDtoTest {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Test
-    public void givenOSdmsS3RepositoryDto_whenCallToMap_thenBuildACorrectMap() {
+    void givenOSdmsS3RepositoryDto_whenCallToMap_thenBuildACorrectMap() {
         //Expected
         final String expectedName = "proof.txt";
         final String expectedPrefix = "/entity/1/";
@@ -389,57 +389,16 @@ public class OSdmsS3RepositoryDtoTest {
         assertNotNull( result, () -> "The result should not be null" );
         assertEquals( 13, result.size(), () -> "Unexpected size" );
 
-        assertTrue( result.containsKey( "bucket" ), () -> "The result should contain the bucket" );
-        assertNotNull( result.get( "bucket" ), () -> "The bucket should not be null" );
         assertEquals( givenBucket, result.get( "bucket" ), () -> "Unexpected bucket" );
-
-        assertTrue( result.containsKey( "key" ), () -> "The result should contain the key" );
-        assertNotNull( result.get( "key" ), () -> "The key should not be null" );
         assertEquals( givenKey, result.get( "key" ), () -> "Unexpected key" );
-
-        assertTrue( result.containsKey( "relativeKey" ), () -> "The result should contain the relativeKey" );
-        assertNotNull( result.get( "relativeKey" ), () -> "The relativeKey should not be null" );
         assertEquals( expectedRelativeKey, result.get( "relativeKey" ), () -> "Unexpected relativeKey" );
-
-        assertTrue( result.containsKey( "prefix" ), () -> "The result should contain the prefix" );
-        assertNotNull( result.get( "prefix" ), () -> "The prefix should not be null" );
         assertEquals( expectedPrefix, result.get( "prefix" ), () -> "Unexpected prefix" );
-
-        assertTrue( result.containsKey( "relativePrefix" ), () -> "The result should contain the relativePrefix" );
-        assertNotNull( result.get( "relativePrefix" ), () -> "The relativePrefix should not be null" );
         assertEquals( expectedRelativePrefix, result.get( "relativePrefix" ), () -> "Unexpected relativePrefix" );
-
-        assertTrue( result.containsKey( "name" ), () -> "The result should contain the name" );
-        assertNotNull( result.get( "name" ), () -> "The name should not be null" );
         assertEquals( expectedName, result.get( "name" ), () -> "Unexpected name" );
-
-        assertTrue( result.containsKey( "owner" ), () -> "The result should contain the owner" );
-        assertNotNull( result.get( "owner" ), () -> "The result should not be null" );
         assertEquals( givenOwnerDisplayName, result.get( "owner" ), () -> "Unexpected owner" );
-
-        assertTrue( result.containsKey( "file" ), () -> "The result should contain the file" );
-        assertNotNull(result.get( "file" ), () -> "The result should not be null" );
-
-        assertTrue( result.containsKey( "size" ), () -> "The result should contain the size" );
-        assertNotNull( result.get( "size" ), () -> "The size should not be null" );
         assertEquals( givenSize, result.get( "size" ), () -> "Unexpected size" );
-
-        assertTrue( result.containsKey( "metadata" ), () -> "The result should contain the metadata" );
-        assertNotNull( result.get( "metadata" ), () -> "The metadata should not be null" );
-
-        assertTrue( result.containsKey( "folder" ), () -> "The result should contain the folder" );
-        assertNotNull( result.get( "folder" ), () -> "The folder should not be null" );
-        assertTrue( result.get( "folder" ) instanceof Boolean, () -> "The result should contain a boolean type" );
         assertFalse( ( boolean ) result.get( "folder" ), () -> "The result should not be a folder" );
-
-        assertTrue( result.containsKey( "creationDate" ), () -> "The result should contain the creationDate" );
-        assertNotNull( result.get( "creationDate" ), () -> "The creationDate should not be null" );
-        assertTrue( result.get( "creationDate" ) instanceof Long, () -> "The result should contain a long type" );
         assertEquals( dto.getCreationDate().getTime(), result.get( "creationDate" ), () -> "Unexpected creationDate" );
-
-        assertTrue( result.containsKey( "lastModified" ), () -> "The result should contain the lastModified" );
-        assertNotNull( result.get( "lastModified" ), () -> "The lastModified should not be null" );
-        assertTrue( result.get( "lastModified" ) instanceof Long, () -> "The result should contain a long type" );
         assertEquals( dto.getLastModified().getTime(), result.get( "lastModified" ), () -> "Unexpected lastModified" );
     }
 
@@ -448,7 +407,7 @@ public class OSdmsS3RepositoryDtoTest {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Test
-    public void givenOSdmsS3RepositoryDto_whenCallGetDataToZip_thenOSdmsZipData() {
+    void givenOSdmsS3RepositoryDto_whenCallGetDataToZip_thenOSdmsZipData() {
         //Expected
         final String expectedFileName = "entity_1_proof.txt";
 
@@ -483,7 +442,7 @@ public class OSdmsS3RepositoryDtoTest {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Test
-    public void givenS3Data_whenCallConstructor_thenCreateNewInstanceWithSameData(){
+    void givenS3Data_whenCallConstructor_thenCreateNewInstanceWithSameData(){
         //Given
         final String givenBucket = "bucket";
         final String givenKey = "key";
@@ -528,7 +487,7 @@ public class OSdmsS3RepositoryDtoTest {
 
     //Bucket
     @Test
-    public void givenBucketNameAsString_whenCallSetBucket_thenCheckTheNewValueWithCallGetter(){
+    void givenBucketNameAsString_whenCallSetBucket_thenCheckTheNewValueWithCallGetter(){
         //Given
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
         final String givenBucketName = "bucket";
@@ -544,7 +503,7 @@ public class OSdmsS3RepositoryDtoTest {
 
     //Key
     @Test
-    public void givenKeyAsString_whenCallSetKey_thenCheckTheNewValueWithCallGetter(){
+    void givenKeyAsString_whenCallSetKey_thenCheckTheNewValueWithCallGetter(){
         //Given
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
         final String givenKey = "key";
@@ -560,7 +519,7 @@ public class OSdmsS3RepositoryDtoTest {
 
     //Relative Key
     @Test
-    public void givenRelativeKeyAsString_whenCallSetRelativeKey_thenCheckTheNewValueWithCallGetter(){
+    void givenRelativeKeyAsString_whenCallSetRelativeKey_thenCheckTheNewValueWithCallGetter(){
         //Given
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
         final String givenRelativeKey = "relativeKey";
@@ -576,7 +535,7 @@ public class OSdmsS3RepositoryDtoTest {
 
     //Relative Prefix
     @Test
-    public void givenRelativePrefixAsString_whenCallSetRelativePrefix_thenCheckTheNewValueWithCallGetter(){
+    void givenRelativePrefixAsString_whenCallSetRelativePrefix_thenCheckTheNewValueWithCallGetter(){
         //Given
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
         final String givenRelativePrefix = "relativePrefix";
@@ -592,7 +551,7 @@ public class OSdmsS3RepositoryDtoTest {
 
     //Prefix
     @Test
-    public void givenPrefixAsString_whenCallSetPrefix_thenCheckTheNewValueWithCallGetter(){
+    void givenPrefixAsString_whenCallSetPrefix_thenCheckTheNewValueWithCallGetter(){
         //Given
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
         final String givenPrefix = "prefix";
@@ -608,7 +567,7 @@ public class OSdmsS3RepositoryDtoTest {
 
     //Name
     @Test
-    public void givenNameAsString_whenCallSetName_thenCheckTheNewValueWithCallGetter(){
+    void givenNameAsString_whenCallSetName_thenCheckTheNewValueWithCallGetter(){
         //Given
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
         final String givenName = "name";
@@ -624,7 +583,7 @@ public class OSdmsS3RepositoryDtoTest {
 
     //Owner
     @Test
-    public void givenOwnerAsString_whenCallSetOwner_thenCheckTheNewValueWithCallGetter(){
+    void givenOwnerAsString_whenCallSetOwner_thenCheckTheNewValueWithCallGetter(){
         //Given
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
         final String givenOwner = "owner";
@@ -640,7 +599,7 @@ public class OSdmsS3RepositoryDtoTest {
 
     //Size
     @Test
-    public void givenSizeAsLong_whenCallSetSize_thenCheckTheNewValueWithCallGetter(){
+    void givenSizeAsLong_whenCallSetSize_thenCheckTheNewValueWithCallGetter(){
         //Given
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
         final Long givenSize = 1L;
@@ -656,7 +615,7 @@ public class OSdmsS3RepositoryDtoTest {
 
     //Folder
     @Test
-    public void givenFolderFlagAsBoolean_whenCallSetFolder_thenCheckTheNewValueWithCallGetter(){
+    void givenFolderFlagAsBoolean_whenCallSetFolder_thenCheckTheNewValueWithCallGetter(){
         //Given
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
         final boolean givenFolderFlag = true;
@@ -666,13 +625,12 @@ public class OSdmsS3RepositoryDtoTest {
 
         //Then
         final boolean result = dto.isFolder();
-        assertNotNull( result, () -> "The result should not be null" );
         assertTrue( result, () -> "The result should be true" );
     }
 
     //Creation Date
     @Test
-    public void givenCreationDateAsDate_whenCallSetCreationDate_thenCheckTheNewValueWithCallGetter() {
+    void givenCreationDateAsDate_whenCallSetCreationDate_thenCheckTheNewValueWithCallGetter() {
         //Given
         final Date givenCreationDate = new Date();
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
@@ -687,7 +645,7 @@ public class OSdmsS3RepositoryDtoTest {
     }
 
     @Test
-    public void givenCreationDateAsString_whenCallSetCreationDate_thenCheckTheNewValueWithCallGetter() {
+    void givenCreationDateAsString_whenCallSetCreationDate_thenCheckTheNewValueWithCallGetter() {
         final SimpleDateFormat formatDate = new SimpleDateFormat( "dd/MM/yyyy-HH:mm:ss" );
 
         //Given
@@ -705,7 +663,7 @@ public class OSdmsS3RepositoryDtoTest {
 
     //Creation Date
     @Test
-    public void givenLastModifiedAsDate_whenCallSetLastModified_thenCheckTheNewValueWithCallGetter() {
+    void givenLastModifiedAsDate_whenCallSetLastModified_thenCheckTheNewValueWithCallGetter() {
         //Given
         final Date givenLastModified = new Date();
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
@@ -721,7 +679,7 @@ public class OSdmsS3RepositoryDtoTest {
 
     //Metadata
     @Test
-    public void givenMetadadataAsMap_whenCallSetMetadata_thenCheckTheNewValueWithCallGetter() {
+    void givenMetadadataAsMap_whenCallSetMetadata_thenCheckTheNewValueWithCallGetter() {
         //Given
         final int expectedSize = 10;
         final Map<String, Object> givenMetadata = Mockito.mock( Map.class );
@@ -741,7 +699,7 @@ public class OSdmsS3RepositoryDtoTest {
 
     //File
     @Test
-    public void givenFileAsS3ObjectInputStream_whenCallSetFile_thenCheckTheNewValueWithCallGetter() {
+    void givenFileAsS3ObjectInputStream_whenCallSetFile_thenCheckTheNewValueWithCallGetter() {
         //Given
         final S3ObjectInputStream givenFile = Mockito.mock( S3ObjectInputStream.class );
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
@@ -759,7 +717,7 @@ public class OSdmsS3RepositoryDtoTest {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Test
-    public void givenOSdmsS3RepositoryDto_whenCallToString_thenCorrectStringRepresentation() {
+    void givenOSdmsS3RepositoryDto_whenCallToString_thenCorrectStringRepresentation() {
         //Given
         final String givenKey = "/entity/1/proof.txt";
         final String givenName = "proof.txt";

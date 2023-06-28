@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith( SpringExtension.class )
-public class OSdmsPathValidatorTest {
+class OSdmsPathValidatorTest {
     private @InjectMocks IOSdmsPathValidator oSdmsPathValidator = new OSdmsPathValidator();
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -22,14 +22,14 @@ public class OSdmsPathValidatorTest {
 
     @ParameterizedTest( name = "Pattern: {0}" )
     @ValueSource( strings = { "/{id}", "/{id}/", "/{id}/test", "/{id}/test/", "/{id}/test/{id}", "/{id}/test/{id}/", "/{id}/test/{id}/test", "/{id}/test/{id}/test/" } )
-    public void givenPattern_whenCallIsPattern_thenTrue( final String pattern ) {
+    void givenPattern_whenCallIsPattern_thenTrue( final String pattern ) {
         //When - Then
         assertTrue( this.oSdmsPathValidator.isPattern( pattern ) );
     }
 
     @ParameterizedTest( name = "Pattern: {0}" )
     @ValueSource( strings = { "/5}", "/5/", "/5/test", "/5/test/", "/5/test/5", "/5/test/5/", "/5/test/5/test", "/5/test/5/test/" } )
-    public void givenNoPattern_whenCallIsPattern_thenFalse( final String pattern ) {
+    void givenNoPattern_whenCallIsPattern_thenFalse( final String pattern ) {
         //When - Then
         assertFalse( this.oSdmsPathValidator.isPattern( pattern ) );
     }
@@ -44,7 +44,7 @@ public class OSdmsPathValidatorTest {
             ",pattern",
             ","
     })
-    public void givenNullParameters_whenCallValidateWithSingleParameters_thenReturnFalse( final String path, final String pattern ){
+    void givenNullParameters_whenCallValidateWithSingleParameters_thenReturnFalse( final String path, final String pattern ){
         //When - Then
         assertFalse( this.oSdmsPathValidator.validate( path, pattern ) );
     }
@@ -64,7 +64,7 @@ public class OSdmsPathValidatorTest {
             "/entity/1/proof/2/,entity/{id-1}/proof/{id-2}",
             "entity/1/proof/2/,entity/{id-1}/proof/{id-2}"
     })
-    public void givenValidParameters_whenCallValidateWithSingleParameters_thenReturnTrue( final String path, final String pattern ){
+    void givenValidParameters_whenCallValidateWithSingleParameters_thenReturnTrue( final String path, final String pattern ){
         //When - Then
         assertTrue( this.oSdmsPathValidator.validate( path, pattern ) );
     }
@@ -82,7 +82,7 @@ public class OSdmsPathValidatorTest {
             "entity/1,entity/{id-1}/proof/{id-2}",
             "entity/1/,entity/{id-1}/proof/{id-2}"
     })
-    public void givenInvalidParameters_whenCallValidateWithSingleParameters_thenReturnTrue( final String path, final String pattern ){
+    void givenInvalidParameters_whenCallValidateWithSingleParameters_thenReturnTrue( final String path, final String pattern ){
         //When - Then
         assertFalse( this.oSdmsPathValidator.validate( path, pattern ) );
     }
@@ -98,7 +98,7 @@ public class OSdmsPathValidatorTest {
             "new-entity/1/image/2000/top/example/3",
             "/new-entity/1/image/2000/top/example/3"
     })
-    public void givenValidPAth_whenCallValidateWithMultiplePatterns_thenReturnTrue( final String path ){
+    void givenValidPAth_whenCallValidateWithMultiplePatterns_thenReturnTrue( final String path ){
         //Given
         final List<String> patterns = List.of( "/entity/{id}", "/new-entity/{id-1}/image/{id-2}/top" );
 
@@ -117,7 +117,7 @@ public class OSdmsPathValidatorTest {
             "new-entity/1/image/2000/top/example/3",
             "/new-entity/1/image/2000/top/example/3"
     })
-    public void givenValidPAth_whenCallValidate_thenReturnTrue( final String path ){
+    void givenValidPAth_whenCallValidate_thenReturnTrue( final String path ){
         //When - Then
         assertTrue( this.oSdmsPathValidator.validate( path ) );
     }

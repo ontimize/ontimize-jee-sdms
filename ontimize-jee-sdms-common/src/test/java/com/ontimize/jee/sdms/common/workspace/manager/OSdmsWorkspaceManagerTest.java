@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith( SpringExtension.class )
-public class OSdmsWorkspaceManagerTest {
+class OSdmsWorkspaceManagerTest {
     private @Spy IOSdmsWorkspaceManagerAutoRegister workspaceManagerAutoRegister;
     private @Mock IOSdmsPathBuilder pathBuilder;
     private @InjectMocks IOSdmsWorkspaceManager workspaceManager = new OSdmsWorkspaceManager();
@@ -38,7 +38,7 @@ public class OSdmsWorkspaceManagerTest {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Test
-    public void givenNameAndValueOfWorkspaceThatNotExists_whenRegister_thenCheckIfWorkspaceIsRegistered(){
+    void givenNameAndValueOfWorkspaceThatNotExists_whenRegister_thenCheckIfWorkspaceIsRegistered(){
         //Given
         final OSdmsWorkspace givenWorkspace = new OSdmsWorkspace( "name", "value", Collections.emptyList() );
 
@@ -61,7 +61,7 @@ public class OSdmsWorkspaceManagerTest {
     }
 
     @Test
-    public void givenNameOfWorkspaceThatAlreadyExistsAndValueThatNotExists_whenRegister_thenCheckIfWorkspaceValueHasBeenUpdated(){
+    void givenNameOfWorkspaceThatAlreadyExistsAndValueThatNotExists_whenRegister_thenCheckIfWorkspaceValueHasBeenUpdated(){
         //Given
         final OSdmsWorkspace givenWorkspace = new OSdmsWorkspace( "name", "value", Collections.emptyList() );
         final String givenValueThatNotExists = "value-not-exists";
@@ -91,7 +91,7 @@ public class OSdmsWorkspaceManagerTest {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Test
-    public void givenWorkspaceRegistered_whenUnregisterFromName_thenCheckIfWorkspaceIsUnregistered(){
+    void givenWorkspaceRegistered_whenUnregisterFromName_thenCheckIfWorkspaceIsUnregistered(){
         //Given
         final OSdmsWorkspace givenWorkspace = new OSdmsWorkspace( "name", "value", Collections.emptyList() );
 
@@ -114,7 +114,7 @@ public class OSdmsWorkspaceManagerTest {
     }
 
     @Test
-    public void givenWorkspaceRegistered_whenUnregister_thenCheckIfWorkspaceIsUnregistered(){
+    void givenWorkspaceRegistered_whenUnregister_thenCheckIfWorkspaceIsUnregistered(){
         //Given
         final OSdmsWorkspace givenWorkspace = new OSdmsWorkspace( "name", "value", Collections.emptyList() );
 
@@ -141,7 +141,7 @@ public class OSdmsWorkspaceManagerTest {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Test
-    public void givenWorkspaceThatExists_whenUpdate_thenCheckIfWorkspaceIsUpadted(){
+    void givenWorkspaceThatExists_whenUpdate_thenCheckIfWorkspaceIsUpadted(){
         //Given
         final OSdmsWorkspace givenWorkspace1 = new OSdmsWorkspace( "name", "value", Collections.emptyList() );
         final OSdmsWorkspace givenWorkspace2 = new OSdmsWorkspace( "name", "new-value", Collections.emptyList() );
@@ -172,7 +172,7 @@ public class OSdmsWorkspaceManagerTest {
 
     //Get Workspace
     @Test
-    public void givenWorkspaceThatExists_whenGetByNameString_thenCheckIfWorkspaceIsReturned(){
+    void givenWorkspaceThatExists_whenGetByNameString_thenCheckIfWorkspaceIsReturned(){
         //Given
         final OSdmsWorkspace givenWorkspace = new OSdmsWorkspace( "name", "value", Collections.emptyList() );
         this.workspaceManager.register( givenWorkspace );
@@ -193,7 +193,7 @@ public class OSdmsWorkspaceManagerTest {
 
     //Get Default
     @Test
-    public void givenWorkspaceDefault_whenGetDefaultFirstTime_thenCheckIfWorkspaceDefaultIsReturned(){
+    void givenWorkspaceDefault_whenGetDefaultFirstTime_thenCheckIfWorkspaceDefaultIsReturned(){
         //When
         final OSdmsWorkspace result = this.workspaceManager.getDefault();
 
@@ -210,7 +210,7 @@ public class OSdmsWorkspaceManagerTest {
     }
 
     @Test
-    public void givenWorkspaceDefaultAlreadySelected_whenGetDefaultSecondTime_thenCheckIfWorkspaceDefaultIsReturned(){
+    void givenWorkspaceDefaultAlreadySelected_whenGetDefaultSecondTime_thenCheckIfWorkspaceDefaultIsReturned(){
         //When
         this.workspaceManager.getDefault();
         final OSdmsWorkspace result = this.workspaceManager.getDefault();
@@ -229,7 +229,7 @@ public class OSdmsWorkspaceManagerTest {
 
     //Get Active
     @Test
-    public void givenWorkspaceActive_whenGetActiveFirstTime_thenCheckIfWorkspaceDefaultIsReturned(){
+    void givenWorkspaceActive_whenGetActiveFirstTime_thenCheckIfWorkspaceDefaultIsReturned(){
         //When
         final OSdmsWorkspace result = this.workspaceManager.getActive();
 
@@ -246,7 +246,7 @@ public class OSdmsWorkspaceManagerTest {
     }
 
     @Test
-    public void givenWorkspaceActiveAlreadySelected_whenGetActiveSecondTime_thenCheckIfWorkspaceDefaultIsReturned(){
+    void givenWorkspaceActiveAlreadySelected_whenGetActiveSecondTime_thenCheckIfWorkspaceDefaultIsReturned(){
         //When
         this.workspaceManager.getActive();
         final OSdmsWorkspace result = this.workspaceManager.getDefault();
@@ -267,7 +267,7 @@ public class OSdmsWorkspaceManagerTest {
 // ------| ACTIVE |-------------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
     @Test
-    public void givenWorkspaceDefault_whenActiveDefault_thenCheckIfWorkspaceDefaultIsActive(){
+    void givenWorkspaceDefault_whenActiveDefault_thenCheckIfWorkspaceDefaultIsActive(){
         //Given
         when( this.pathBuilder.buildKeyListFromPattern( anyString(), anyMap() ) ).thenReturn( List.of( "/1", "/2", "/3" ) );
 
@@ -288,7 +288,7 @@ public class OSdmsWorkspaceManagerTest {
     }
 
     @Test
-    public void givenWorkspaceDefault_whenActiveDefaultWithData_thenCheckIfWorkspaceDefaultIsActive(){
+    void givenWorkspaceDefault_whenActiveDefaultWithData_thenCheckIfWorkspaceDefaultIsActive(){
         //Given
         final Map<String, Object> givenData = Map.of( "id", List.of( 1, 2, 3));
         when( this.pathBuilder.buildKeyListFromPattern( anyString(), anyMap() ) ).thenReturn( List.of( "/1", "/2", "/3" ) );
@@ -311,7 +311,7 @@ public class OSdmsWorkspaceManagerTest {
 
     //Active no Default
     @Test
-    public void givenWorkspace_whenActiveByWorkspaceName_thenCheckIfWorkspaceIsActive(){
+    void givenWorkspace_whenActiveByWorkspaceName_thenCheckIfWorkspaceIsActive(){
         //Given
         final String givenName = "workspace";
         final String givenValue = "/wk/{id}";
@@ -335,7 +335,7 @@ public class OSdmsWorkspaceManagerTest {
     }
 
     @Test
-    public void givenWorkspace_whenActiveByWorkspaceObject_thenCheckIfWorkspaceIsActive(){
+    void givenWorkspace_whenActiveByWorkspaceObject_thenCheckIfWorkspaceIsActive(){
         //Given
         final String givenName = "workspace";
         final String givenValue = "/wk/{id}";
@@ -360,7 +360,7 @@ public class OSdmsWorkspaceManagerTest {
     }
 
     @Test
-    public void givenWorkspace_whenActiveByWorkspaceObjectWithData_thenCheckIfWorkspaceIsActive(){
+    void givenWorkspace_whenActiveByWorkspaceObjectWithData_thenCheckIfWorkspaceIsActive(){
         //Given
         final String givenName = "workspace";
         final String givenValue = "/wk/{id}";
@@ -391,7 +391,7 @@ public class OSdmsWorkspaceManagerTest {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Test
-    public void givenWorkspacesRegistered_whenGetListOfWorkspacesRegistered_thenCheckIfEditTheReturnedListNoChangedTheWorkspacesRegistered(){
+    void givenWorkspacesRegistered_whenGetListOfWorkspacesRegistered_thenCheckIfEditTheReturnedListNoChangedTheWorkspacesRegistered(){
         //Given
         final List<OSdmsWorkspace> workspaces = this.workspaceManager.list();
         workspaces.clear();
@@ -411,7 +411,7 @@ public class OSdmsWorkspaceManagerTest {
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Test
-    public void givenWorkspaceRegister_whenCallExistsByName_thenReturnsTrue(){
+    void givenWorkspaceRegister_whenCallExistsByName_thenReturnsTrue(){
         //Given
         final String givenName = "workspace";
         final String givenValue = "/wk/{id}";
@@ -422,14 +422,13 @@ public class OSdmsWorkspaceManagerTest {
         final boolean result = this.workspaceManager.exists( givenWorkspace.getName() );
 
         //Then
-        assertNotNull( result, () -> "The result should not be null" );
         assertTrue( result, () -> "The result should be true" );
 
         verify( this.workspaceManagerAutoRegister, times( 1 ) ).run( any() );
     }
 
     @Test
-    public void givenWorkspaceRegister_whenCallExistsByWorkspace_thenReturnsTrue(){
+    void givenWorkspaceRegister_whenCallExistsByWorkspace_thenReturnsTrue(){
         //Given
         final String givenName = "workspace";
         final String givenValue = "/wk/{id}";
@@ -440,31 +439,28 @@ public class OSdmsWorkspaceManagerTest {
         final boolean result = this.workspaceManager.exists( givenWorkspace );
 
         //Then
-        assertNotNull( result, () -> "The result should not be null" );
         assertTrue( result, () -> "The result should be true" );
 
         verify( this.workspaceManagerAutoRegister, times( 1 ) ).run( any() );
     }
 
     @Test
-    public void givenWorkspaceNotRegister_whenCallExistsByName_thenReturnsFalse(){
+    void givenWorkspaceNotRegister_whenCallExistsByName_thenReturnsFalse(){
         //When
         final boolean result = this.workspaceManager.exists( "name" );
 
         //Then
-        assertNotNull( result, () -> "The result should not be null" );
         assertFalse( result, () -> "The result should be false" );
 
         verify( this.workspaceManagerAutoRegister, times( 1 ) ).run( any() );
     }
 
     @Test
-    public void givenWorkspaceNotRegister_whenCallExistsByWorkspace_thenReturnsFalse(){
+    void givenWorkspaceNotRegister_whenCallExistsByWorkspace_thenReturnsFalse(){
         //When
         final boolean result = this.workspaceManager.exists( "name" );
 
         //Then
-        assertNotNull( result, () -> "The result should not be null" );
         assertFalse( result, () -> "The result should be false" );
 
         verify( this.workspaceManagerAutoRegister, times( 1 ) ).run( any() );
