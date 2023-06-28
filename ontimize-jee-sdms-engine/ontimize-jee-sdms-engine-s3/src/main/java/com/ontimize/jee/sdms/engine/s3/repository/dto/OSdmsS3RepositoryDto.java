@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.PatternSyntaxException;
 
 
 /**
@@ -256,10 +257,9 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      * @param prefix The prefix.
      */
     public void setFolderData( final String bucket, final String prefix ) {
-        this.processKey( prefix );
-        this.key = prefix;
         this.bucket = bucket;
         this.folder = true;
+        this.processKey( prefix );
     }
 
 
@@ -269,11 +269,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      * @param workspaces The workspace list.
      */
     public void setRelativeKey( final List<String> workspaces ) {
-        this.relativeKey = this.key;
-        workspaces.forEach( target -> {
-            if( target.startsWith( "/" ) ) this.relativeKey = "/".concat( this.relativeKey );
-            this.relativeKey = this.relativeKey.replaceFirst( target, "" );
-        } );
+        this.relativeKey = this.setRelativeFromTarget( this.key, workspaces );
     }
 
 
@@ -283,11 +279,38 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      * @param workspaces The workspace list.
      */
     public void setRelativePrefix( final List<String> workspaces ) {
-        this.relativePrefix = this.prefix;
-        workspaces.forEach( target -> {
-            if( target.startsWith( "/" ) ) this.relativePrefix = "/".concat( this.relativePrefix );
-            this.relativePrefix = this.relativePrefix.replaceFirst( target, "" );
-        });
+        final String result = this.setRelativeFromTarget( this.prefix, workspaces );
+        this.relativePrefix = result.endsWith( "/" ) ? result : result.concat( "/" );
+    }
+
+    private String setRelativeFromTarget( final String value, final List<String> workspaces ) {
+
+        String result = "/";
+        boolean workIsDonde = false;
+        for( int i = 0 ; i < workspaces.size() && !workIsDonde ; i++ ) {
+            final String workspace = workspaces.get( i );
+            String target = value;
+            if( workspace.startsWith( "/" ) ) target = "/".concat( target );
+            if( !workspace.equals( target ) ) {
+                String pattern = workspace;
+                if( !pattern.endsWith( "/" ) ) pattern = pattern.concat( "/" );
+                try {
+                    target = target.replaceFirst( pattern, "" );
+                    if( !target.equals( value ) ){
+                        workIsDonde = true;
+                        result = target;
+                    }
+                }
+                catch( final PatternSyntaxException e ) {
+                    //Next Workspace
+                }
+            }
+            else{
+                workIsDonde = true;
+            }
+        }
+        if( !result.startsWith( "/" ) ) result = "/".concat( result );
+        return result;
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -325,8 +348,9 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
     public OSdmsZipData getDataToZip() {
         OSdmsZipData result = null;
         if( ! this.folder && ! this.name.equals( OSdmsS3RepositoryDto.FILE_NAME_MARK_FOLDER ) ) {
-            String fileName = this.key.replace( "/", "." );
-            if( fileName.endsWith( "." ) ) fileName = fileName.substring( 0, fileName.length() - 1 );
+            final String sanitizedKey = this.key.startsWith( "/" ) ? this.key.substring( 1 ) : this.key;
+            String fileName = sanitizedKey.replace( "/", "_" );
+            if( fileName.endsWith( "_" ) ) fileName = fileName.substring( 0, fileName.length() - 1 );
             result = new OSdmsZipData();
             result.setInputStream( this.file );
             result.setFileName( fileName );
@@ -367,29 +391,20 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
      *
      * @param key The key.
      */
-    public void processKey( final String key ) {
+    private void processKey( final String key ) {
         //Get key
         this.key = key;
+        this.name = "/";
+        this.prefix = "/";
 
         //Get name and Prefix
-        final String[] keyParts = key.split( "/" );
-        final int lastPosition = keyParts.length - 1;
-        if( lastPosition >= 0 ) {
-            this.name = "/";
+        final String sanitizedKey = key.endsWith( "/" ) ? key.substring( 0, key.length() - 1 ) : key;
+        final String[] keyParts = sanitizedKey.split( "/" );
+        int lastPosition = keyParts.length - 1;
+        if( !sanitizedKey.isBlank() && lastPosition >= 0 ) {
+            this.name = keyParts[ lastPosition ];
             this.prefix = "/";
-            int maxPositionToPrefix = this.key.length();
-            if( this.key.endsWith( "/" )) maxPositionToPrefix -= 1;
-
-            if( !keyParts[ lastPosition ].equals( FILE_NAME_MARK_FOLDER ) ){
-                this.name = keyParts[ lastPosition ];
-            }
-            else if( lastPosition - 1 >= 0 ){
-                this.name = keyParts[ lastPosition - 1 ];
-                maxPositionToPrefix -= keyParts[lastPosition].length() + 1;
-            }
-
-            maxPositionToPrefix -= this.name.length();
-            if( this.name != null ) this.prefix = this.key.substring( 0, maxPositionToPrefix );
+            if( this.name != null && !sanitizedKey.equals( this.name ) ) this.prefix = sanitizedKey.substring( 0, sanitizedKey.length() - this.name.length() );
         }
 
         //Get Prefix
