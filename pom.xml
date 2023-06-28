@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ontimize.jee.sdms</groupId>
     <artifactId>ontimize-jee-sdms</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>1.3.1</version>
     <packaging>pom</packaging>
     <name>Ontimize EE SDMS</name>
     <description>Ontimize EE Storage DMS (SDMS) is a system for storing and managing files by entity.</description>
