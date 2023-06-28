@@ -9,6 +9,13 @@
 
 ## [Unreleased]
 
+## [1.3.1] - 2023-06-28
+
+### Fixed 🐛
+* **Changelog**: The version in the CHANGELOG.md has been set.
+
+## [1.3.0] - 2023-06-28
+
 ### Added ✔️
 * **Unit Tests:** Added unit tests for the `OSDmsS3RepositoryDto`, `OSdmsPathValidator` and `OSdmsWorkspaceManager`. 
 
@@ -58,7 +65,9 @@
 * **OSdmsWorkspace Annotation:** Added an annotation to establish multiple query workspaces on the DMS system for an
   entity.
 
-[unreleased]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.2.0...HEAD
+[unreleased]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.3.1...HEAD
+[1.3.1]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.3.0...1.3.1
+[1.3.0]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.0.0...1.1.0
 [1.0.0]: https://github.com/ontimize/ontimize-jee-sdms/releases/tag/1.0.0
