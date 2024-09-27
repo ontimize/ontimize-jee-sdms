@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ontimize.jee.sdms</groupId>
     <artifactId>ontimize-jee-sdms</artifactId>
-    <version>1.4.0-SNAPSHOT</version>
+    <version>17.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Ontimize EE SDMS</name>
     <description>Ontimize EE Storage DMS (SDMS) is a system for storing and managing files by entity.</description>
@@ -13,7 +13,7 @@
     <parent>
         <groupId>com.ontimize.jee</groupId>
         <artifactId>ontimize-jee</artifactId>
-        <version>5.7.0</version>
+        <version>17.0.0-SNAPSHOT</version>
     </parent>
 
     <organization>
@@ -64,15 +64,15 @@
 
     <properties>
         <!-- JAVA -->
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
 
         <!-- ENCODING -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- DEPENDENCIES -->
-        <ontimize-jee.version>5.7.0</ontimize-jee.version>
+        <ontimize-jee.version>17.0.0-SNAPSHOT</ontimize-jee.version>
         <reflections.version>0.10.2</reflections.version>
         <amazonaws.version>1.12.382</amazonaws.version>
         <junit.version>5.9.3</junit.version>
