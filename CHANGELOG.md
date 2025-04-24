@@ -9,6 +9,9 @@
 
 ## [Unreleased]
 
+### Changed 🛠️
+* **S3 Connection:** The connection to S3 has been optimized.
+
 ## [1.3.1] - 2023-06-28
 
 ### Fixed 🐛

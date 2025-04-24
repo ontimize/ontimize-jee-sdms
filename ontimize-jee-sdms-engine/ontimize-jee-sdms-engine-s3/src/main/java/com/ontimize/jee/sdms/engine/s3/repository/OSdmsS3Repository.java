@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -143,12 +144,15 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
         final List<OSdmsS3RepositoryDto> findResponseData = findResponse.getData();
         findResponseData.forEach( target -> {
             final GetObjectRequest getObjectRequest = new GetObjectRequest( target.getBucket(), target.getKey() );
-            final S3Object s3Object = this.amazonS3.getObject( getObjectRequest );
-
-            if( s3Object != null ) {
-                final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
-                dto.set( s3Object );
-                data.add( dto );
+            try( final S3Object s3Object = this.amazonS3.getObject( getObjectRequest )){
+                if( s3Object != null ) {
+                    final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+                    dto.set( s3Object );
+                    data.add( dto );
+                }
+            }
+            catch( final IOException e ){
+                LOGGER.error("Error closing S3Object stream: {}", e.getMessage());
             }
         } );
 
@@ -200,6 +204,7 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
         try {
             final Upload upload = transferManager.upload( request );
             upload.waitForCompletion();
+            transferManager.shutdownNow(false);
 
             final ListObjectsRequest findRequest = new ListObjectsRequest()
                     .withBucketName( request.getBucketName() )
