@@ -8,6 +8,7 @@ import com.ontimize.jee.sdms.common.response.builder.IOSdmsMappeable;
 import com.ontimize.jee.sdms.common.zip.IOSdmsZippeable;
 import com.ontimize.jee.sdms.common.zip.OSdmsZipData;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -66,7 +67,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
     private Map<String, Object> metadata;
 
     /** The bytes of S3 file */
-    private InputStream file;
+    private byte[] file;
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
@@ -185,11 +186,11 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         this.metadata = metadata;
     }
 
-    public InputStream getFile() {
+    public byte[] getFile() {
         return this.file;
     }
 
-    public void setFile( final InputStream file ) {
+    public void setFile( final byte[] file ) {
         this.file = file;
     }
 
@@ -207,7 +208,12 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
     public void set( final S3Object s3Object ) {
         this.processKey( s3Object.getKey() );
         this.bucket = s3Object.getBucketName();
-        this.file = s3Object.getObjectContent();
+        try (final InputStream is = s3Object.getObjectContent()) {
+            this.file = is.readAllBytes();
+            if( this.file != null ) this.size = (long) this.file.length;
+        } catch ( IOException e) {
+            this.file = null;
+        }
         final ObjectMetadata objectMetadata = s3Object.getObjectMetadata();
         this.set( objectMetadata );
     }
@@ -352,7 +358,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
             String fileName = sanitizedKey.replace( "/", "_" );
             if( fileName.endsWith( "_" ) ) fileName = fileName.substring( 0, fileName.length() - 1 );
             result = new OSdmsZipData();
-            result.setInputStream( this.file );
+            result.setFileContent( this.file );
             result.setFileName( fileName );
         }
         return result;
