@@ -27,10 +27,7 @@ import java.util.stream.Collectors;
 /**
  * Command to download files from S3
  */
-public class  OSdmsS3DownloadCommand implements IOSdmsCommand {
-
-    //Constants
-    private static final String ZIP_NAME = "data.zip";
+public class OSdmsS3GetTemporalFilesCommand implements IOSdmsCommand {
 
 
     //Messages
@@ -43,7 +40,6 @@ public class  OSdmsS3DownloadCommand implements IOSdmsCommand {
     private IOSdmsS3Repository repository;
     private IOSdmsResponseBuilder responseBuilder;
     private IOSdmsS3ResponseMapper responseMapper;
-    private IOSdmsZipCompressor zipCompressor;
     private IOSdmsWorkspaceManager workspaceManager;
 
 
@@ -60,7 +56,7 @@ public class  OSdmsS3DownloadCommand implements IOSdmsCommand {
 // ------| ENTRYPOINT |---------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3DownloadCommand( final OSdmsS3InputFilter filter ) {
+    public OSdmsS3GetTemporalFilesCommand( final OSdmsS3InputFilter filter ) {
         this.filter = filter;
     }
 
@@ -74,7 +70,6 @@ public class  OSdmsS3DownloadCommand implements IOSdmsCommand {
         this.repository = inyector.get( OSdmsS3RepositoryProxy.class );
         this.responseBuilder = inyector.get( IOSdmsResponseBuilder.class );
         this.responseMapper = inyector.get( IOSdmsS3ResponseMapper.class );
-        this.zipCompressor = inyector.get( IOSdmsZipCompressor.class );
         this.workspaceManager = inyector.get( IOSdmsWorkspaceManager.class );
         final IOSdmsS3FilterReader filterParamReader = inyector.get( IOSdmsS3FilterReader.class );
         final IOSdmsS3EngineConfig s3EngineConfig = inyector.get( IOSdmsS3EngineConfig.class );
@@ -152,11 +147,9 @@ public class  OSdmsS3DownloadCommand implements IOSdmsCommand {
                 List<OSdmsS3RepositoryDto> data = this.response.getData().stream()
                         .filter( target -> ! target.getName().equals( OSdmsS3RepositoryDto.FILE_NAME_MARK_FOLDER ) )
                         .collect( Collectors.toList() );
+                this.response.setData( data );
 
-                if( ! data.isEmpty() ) {
-                    final OSdmsZipDto zip = this.zipCompressor.compress( ZIP_NAME, data );
-                    result = this.responseMapper.map( zip );
-                }
+                if( data != null && !data.isEmpty() ) result = this.responseMapper.map( this.response );
             }
         }
 
