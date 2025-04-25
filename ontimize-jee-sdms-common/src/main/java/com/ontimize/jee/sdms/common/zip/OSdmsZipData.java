@@ -1,5 +1,6 @@
 package com.ontimize.jee.sdms.common.zip;
 
+import java.io.File;
 import java.util.Objects;
 
 
@@ -14,18 +15,18 @@ public class OSdmsZipData {
     private String fileName;
 
     /**
-     * The inputStream field represents the input stream to be zipped.
+     * The File field represents the file to be zipped.
      */
-    private byte[] fileContent;
+    private File file;
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     public OSdmsZipData() {
     }
 
-    public OSdmsZipData( final String fileName, final byte[] fileContent ) {
+    public OSdmsZipData( final String fileName, final File file ) {
         this.setFileName( fileName );
-        this.setFileContent( fileContent );
+        this.setFile( file );
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
@@ -40,12 +41,12 @@ public class OSdmsZipData {
         this.fileName = fileName;
     }
 
-    public byte[] getFileContent() {
-        return this.fileContent;
+    public File getFile() {
+        return this.file;
     }
 
-    public void setFileContent( final byte[] content ) {
-        this.fileContent = content;
+    public void setFile( final File file ) {
+        this.file = file;
     }
 
 // ------------------------------------------------------------------------------------------------------------------ \\

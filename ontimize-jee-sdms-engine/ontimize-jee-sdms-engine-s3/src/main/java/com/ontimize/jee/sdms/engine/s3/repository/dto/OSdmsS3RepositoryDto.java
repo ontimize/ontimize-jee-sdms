@@ -4,10 +4,12 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.Owner;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.ontimize.jee.sdms.common.file.TemporalFileManager;
 import com.ontimize.jee.sdms.common.response.builder.IOSdmsMappeable;
 import com.ontimize.jee.sdms.common.zip.IOSdmsZippeable;
 import com.ontimize.jee.sdms.common.zip.OSdmsZipData;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -30,6 +32,8 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
 
     /** The name of the file that marks a folder in S3 */
     public static final String FILE_NAME_MARK_FOLDER = ".ontimizeSdmsFolder";
+
+    private final TemporalFileManager temporalFileManager;
 
     /** The bucket name of S3 */
     private String bucket;
@@ -66,15 +70,17 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
     /** The metadata of S3 object */
     private Map<String, Object> metadata;
 
-    /** The bytes of S3 file */
-    private byte[] file;
+    /** The Temporal File of S3 file */
+    private File file;
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 
-    public OSdmsS3RepositoryDto() {
+    public OSdmsS3RepositoryDto(final TemporalFileManager temporalFileManager ) {
+        this.temporalFileManager = temporalFileManager;
     }
 
-    public OSdmsS3RepositoryDto( final S3Object s3Object, final S3ObjectSummary s3ObjectSummary, final ObjectMetadata objectMetadata ) {
+    public OSdmsS3RepositoryDto( final TemporalFileManager temporalFileManager, final S3Object s3Object, final S3ObjectSummary s3ObjectSummary, final ObjectMetadata objectMetadata ) {
+        this.temporalFileManager = temporalFileManager;
         this.set( s3Object );
         this.set( s3ObjectSummary );
         this.set( objectMetadata );
@@ -186,11 +192,11 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         this.metadata = metadata;
     }
 
-    public byte[] getFile() {
+    public File getFile() {
         return this.file;
     }
 
-    public void setFile( final byte[] file ) {
+    public void setFile( final File file ) {
         this.file = file;
     }
 
@@ -209,8 +215,8 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         this.processKey( s3Object.getKey() );
         this.bucket = s3Object.getBucketName();
         try (final InputStream is = s3Object.getObjectContent()) {
-            this.file = is.readAllBytes();
-            if( this.file != null ) this.size = (long) this.file.length;
+            this.file = this.temporalFileManager.create( this.key, is );
+            if( this.file != null ) this.size = this.file.length();
         } catch ( IOException e) {
             this.file = null;
         }
@@ -358,7 +364,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
             String fileName = sanitizedKey.replace( "/", "_" );
             if( fileName.endsWith( "_" ) ) fileName = fileName.substring( 0, fileName.length() - 1 );
             result = new OSdmsZipData();
-            result.setFileContent( this.file );
+            result.setFile( this.file );
             result.setFileName( fileName );
         }
         return result;

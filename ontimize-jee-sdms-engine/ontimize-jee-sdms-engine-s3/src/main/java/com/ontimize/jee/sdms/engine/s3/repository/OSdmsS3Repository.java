@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.*;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.services.s3.transfer.Upload;
+import com.ontimize.jee.sdms.common.file.TemporalFileManager;
 import com.ontimize.jee.sdms.engine.s3.repository.dto.OSdmsS3RepositoryDto;
 import com.ontimize.jee.sdms.engine.s3.repository.response.OSdmsS3RepositoryResponse;
 import com.ontimize.jee.sdms.engine.s3.repository.response.builder.IOSdmsS3RepositoryResponseBuilder;
@@ -54,6 +55,7 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
 
     /** The s3 repository response builder to build the response of each operation. */
     private @Autowired IOSdmsS3RepositoryResponseBuilder oSdmsS3RepositoryResponseBuilder;
+    private @Autowired TemporalFileManager temporalFileManager;
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| FIND |--------------------------------------------------------------------------------------------------- \\
@@ -77,7 +79,7 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
                     final ObjectMetadata objectMetadata = this.amazonS3.getObjectMetadata( target.getBucketName(),
                                                                                            target.getKey()
                                                                                          );
-                    final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+                    final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
                     dto.set( target );
                     dto.set( objectMetadata );
                     return dto;
@@ -88,7 +90,7 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
             final List<String> commonPrefixes = requestResult.getCommonPrefixes();
             if( commonPrefixes != null && ! commonPrefixes.isEmpty() ) {
                 final List<OSdmsS3RepositoryDto> folders = commonPrefixes.stream().map( target -> {
-                    final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+                    final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
                     dto.setFolderData( request.getBucketName(), target );
                     return dto;
                 } ).collect( Collectors.toList() );
@@ -146,7 +148,7 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
             final GetObjectRequest getObjectRequest = new GetObjectRequest( target.getBucket(), target.getKey() );
             try( final S3Object s3Object = this.amazonS3.getObject( getObjectRequest )){
                 if( s3Object != null ) {
-                    final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+                    final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
                     dto.set( s3Object );
                     data.add( dto );
                 }
