@@ -5,10 +5,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Component
@@ -39,18 +43,22 @@ public class DefaultTemporalFileManager implements TemporalFileManager{
     }
 
     @Override
-    public void delete( final File file ) {
-        this.files.stream().filter( target -> target.getAbsolutePath().equals( file.getAbsolutePath() ) )
-                .findFirst()
-                .ifPresent( target -> {
-                    this.files.remove( target );
-                    if( target.exists() ) target.delete();
-                });
+    public void delete( final File file ) throws IOException {
+        final Optional<File> result = this.files.stream()
+                .filter( target -> target.getAbsolutePath().equals( file.getAbsolutePath() ) )
+                .findFirst();
+        if( result.isPresent() ){
+            final File target = result.get();
+            this.files.remove( target );
+            if( target.exists() ) Files.delete( target.toPath() );
+        }
     }
 
     @PreDestroy
     @Override
-    public void cleanUp() {
-        this.files.forEach( file -> { if( file.exists() ) file.delete(); });
+    public void cleanUp() throws IOException {
+        for( final File file : this.files ){
+            if( file.exists() ) Files.delete( file.toPath() );
+        }
     }
 }
