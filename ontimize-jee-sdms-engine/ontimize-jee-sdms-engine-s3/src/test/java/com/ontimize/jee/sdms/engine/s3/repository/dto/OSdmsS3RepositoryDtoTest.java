@@ -3,12 +3,16 @@ package com.ontimize.jee.sdms.engine.s3.repository.dto;
 
 import com.amazonaws.services.s3.model.*;
 import com.ontimize.jee.sdms.common.zip.OSdmsZipData;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -37,7 +41,7 @@ class OSdmsS3RepositoryDtoTest {
         final String givenBucket = "bucket";
         final Long givenSize = 1L;
         final String givenCreationDate = "27/06/2023-10:30:20";
-        final S3ObjectInputStream givenFile = Mockito.mock( S3ObjectInputStream.class );
+        final S3ObjectInputStream givenFile = new S3ObjectInputStream( new ByteArrayInputStream( "contenido de prueba".getBytes( StandardCharsets.UTF_8 )), Mockito.mock( HttpRequestBase.class ));
 
         final Map<String, String> givenUserMetadata = Mockito.mock( Map.class );
         when(  givenUserMetadata.containsKey( "creation_date" ) ).thenReturn( true );
@@ -62,7 +66,7 @@ class OSdmsS3RepositoryDtoTest {
         final String key = dto.getKey();
         final String prefix = dto.getPrefix();
         final String name = dto.getName();
-        final InputStream file = dto.getFile();
+        final byte[] file = dto.getFile();
         final Date creationDate = dto.getCreationDate();
         final Long size = dto.getSize();
         final Map<String, Object> metadata = dto.getMetadata();
@@ -415,14 +419,14 @@ class OSdmsS3RepositoryDtoTest {
         final String givenKey = "/entity/1/proof.txt";
         final String givenName = "proof.txt";
         final boolean givenFolder = false;
-        final S3ObjectInputStream givenS3ObjectInputStream = Mockito.mock( S3ObjectInputStream.class );
+        final byte[] givenFileBytes = "contenido de prueba".getBytes( StandardCharsets.UTF_8 );
 
         //Set Data in DTO
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
         dto.setKey( givenKey );
         dto.setName( givenName );
         dto.setFolder( givenFolder );
-        dto.setFile( givenS3ObjectInputStream );
+        dto.setFile( givenFileBytes );
 
         //When
         final OSdmsZipData result = dto.getDataToZip();
@@ -430,8 +434,8 @@ class OSdmsS3RepositoryDtoTest {
         //Then
         assertNotNull( result, () -> "The result should not be null" );
 
-        final InputStream inputStream = result.getInputStream();
-        assertNotNull( inputStream, () -> "The inputStream should not be null" );
+        final byte[] fileContent = result.getFileContent();
+        assertNotNull( fileContent, () -> "The File Content should not be null" );
 
         final String fileName = result.getFileName();
         assertEquals( expectedFileName, fileName, () -> "Unexpected fileName" );
@@ -699,16 +703,16 @@ class OSdmsS3RepositoryDtoTest {
 
     //File
     @Test
-    void givenFileAsS3ObjectInputStream_whenCallSetFile_thenCheckTheNewValueWithCallGetter() {
+    void givenFileAsBytes_whenCallSetFile_thenCheckTheNewValueWithCallGetter() {
         //Given
-        final S3ObjectInputStream givenFile = Mockito.mock( S3ObjectInputStream.class );
+        final byte[] givenFileBytes = "contenido de prueba".getBytes( StandardCharsets.UTF_8 );
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
 
         //When
-        dto.setFile( givenFile );
+        dto.setFile( givenFileBytes );
 
         //Then
-        final InputStream result = dto.getFile();
+        final byte[] result = dto.getFile();
         assertNotNull( result, () -> "The result should not be null" );
     }
 
@@ -722,14 +726,14 @@ class OSdmsS3RepositoryDtoTest {
         final String givenKey = "/entity/1/proof.txt";
         final String givenName = "proof.txt";
         final boolean givenFolder = false;
-        final S3ObjectInputStream givenS3ObjectInputStream = Mockito.mock( S3ObjectInputStream.class );
+        final byte[] givenFileBytes = "contenido de prueba".getBytes( StandardCharsets.UTF_8 );
 
         //Set Data in DTO
         final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
         dto.setKey( givenKey );
         dto.setName( givenName );
         dto.setFolder( givenFolder );
-        dto.setFile( givenS3ObjectInputStream );
+        dto.setFile( givenFileBytes );
 
         //When
         final String result = dto.toString();

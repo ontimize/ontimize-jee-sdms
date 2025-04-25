@@ -81,7 +81,7 @@ public class OSdmsS3Repository implements IOSdmsS3Repository {
                     dto.set( target );
                     dto.set( objectMetadata );
                     return dto;
-                } ).collect( Collectors.toList() );
+                }).collect( Collectors.toList() );
                 data.addAll( files );
             }
 

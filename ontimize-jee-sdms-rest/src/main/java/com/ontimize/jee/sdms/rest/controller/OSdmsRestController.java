@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Serializable;
 import java.util.Map;
@@ -512,11 +513,12 @@ public abstract class OSdmsRestController<S> extends ORestController<S> {
             final Map<String, Object> recordValues = entityResult.getRecordValues( 0 );
 
             //Get Data
-            file = new InputStreamResource( ( InputStream ) recordValues.get( "file" ) );
+            byte[] fileBytes = (byte[]) recordValues.get("file");
             fileName = ( String ) recordValues.get( "name" );
             fileSize = ( long ) recordValues.get( "size" );
 
-            if( fileSize != 0 ) {
+            if( fileSize != 0 && fileBytes != null && fileBytes.length > 0 ) {
+                file = new InputStreamResource(new ByteArrayInputStream( fileBytes));
                 //Build the result
                 result = ResponseEntity.ok()
                         .contentType( MediaType.APPLICATION_OCTET_STREAM )

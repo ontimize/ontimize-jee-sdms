@@ -9,6 +9,9 @@
 
 ## [Unreleased]
 
+### Fixed 🐛
+- Closed `S3ObjectInputStream` instances properly to avoid `CLOSE_WAIT` socket issues and potential memory/resource leaks during file download operations.
+
 ### Changed 🛠️
 * **S3 Connection:** The connection to S3 has been optimized.
 
