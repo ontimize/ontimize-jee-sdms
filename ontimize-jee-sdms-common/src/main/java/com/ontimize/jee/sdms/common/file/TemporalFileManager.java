@@ -8,6 +8,6 @@ public interface TemporalFileManager {
 
     File create( InputStream inputStream ) throws IOException;
     File create( String name, InputStream inputStream ) throws IOException;
-    void delete( File file );
-    void cleanUp();
+    void delete( File file ) throws IOException;
+    void cleanUp() throws IOException;
 }
