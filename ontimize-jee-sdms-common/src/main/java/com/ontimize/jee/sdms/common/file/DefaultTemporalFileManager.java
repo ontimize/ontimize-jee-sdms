@@ -19,7 +19,7 @@ public class DefaultTemporalFileManager implements TemporalFileManager{
     @Value( "${ontimize.sdms.file.temporal.directory}" )
     private String temporalDirectory;
 
-    private final List<File> files = new ArrayList<>();
+    private static final ThreadLocal<List<File>> FILES = new ThreadLocal<>();
 
     @Override
     public File create( final String name, final InputStream inputStream ) throws IOException {
@@ -30,7 +30,8 @@ public class DefaultTemporalFileManager implements TemporalFileManager{
         try( FileOutputStream fos = new FileOutputStream( file)) {
             inputStream.transferTo(fos);
         }
-        this.files.add( file );
+        if( FILES.get() == null ) FILES.set( new ArrayList<>() );
+        FILES.get().add( file );
         return file;
     }
 
@@ -41,21 +42,22 @@ public class DefaultTemporalFileManager implements TemporalFileManager{
 
     @Override
     public void delete( final File file ) throws IOException {
-        final Optional<File> result = this.files.stream()
+        if( FILES.get() == null ) return;
+        final Optional<File> result = FILES.get().stream()
                 .filter( target -> target.getAbsolutePath().equals( file.getAbsolutePath() ) )
                 .findFirst();
         if( result.isPresent() ){
             final File target = result.get();
-            this.files.remove( target );
+            FILES.get().remove( target );
             if( target.exists() ) Files.delete( target.toPath() );
         }
     }
 
     @Override
     public void cleanUp() throws IOException {
-        for( final File file : this.files ){
+        for( final File file : FILES.get() ){
             if( file.exists() ) Files.delete( file.toPath() );
         }
-        this.files.clear();
+        FILES.remove();
     }
 }
