@@ -24,4 +24,6 @@ public interface IOSdmsService extends IOSdmsAction {
      */
     void setEngine( IOSdmsEngine engine );
 
+    void removeTemporalFiles();
+
 }

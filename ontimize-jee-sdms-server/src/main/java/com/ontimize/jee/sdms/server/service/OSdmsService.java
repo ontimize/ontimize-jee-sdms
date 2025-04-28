@@ -4,12 +4,14 @@ import com.ontimize.jee.common.dto.EntityResult;
 import com.ontimize.jee.sdms.common.dto.OSdmsRestDataDto;
 import com.ontimize.jee.sdms.common.engine.IOSdmsEngine;
 import com.ontimize.jee.sdms.common.event.handler.IOSdmsEventHandler;
+import com.ontimize.jee.sdms.common.file.TemporalFileManager;
 import com.ontimize.jee.sdms.server.service.event.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 
@@ -27,6 +29,8 @@ public class OSdmsService implements IOSdmsService {
 
     private @Autowired IOSdmsEngine engine;
 
+    private @Autowired TemporalFileManager temporalFileManager;
+
 // ------------------------------------------------------------------------------------------------------------------ \\
 
     @Override
@@ -34,7 +38,17 @@ public class OSdmsService implements IOSdmsService {
         this.engine = engine;
     }
 
-// ------------------------------------------------------------------------------------------------------------------ \\
+    @Override
+    public void removeTemporalFiles() {
+        try {
+            this.temporalFileManager.cleanUp();
+        }
+        catch( final IOException e ) {
+            throw new RuntimeException( e );
+        }
+    }
+
+    // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| DMS - FIND |--------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
 
