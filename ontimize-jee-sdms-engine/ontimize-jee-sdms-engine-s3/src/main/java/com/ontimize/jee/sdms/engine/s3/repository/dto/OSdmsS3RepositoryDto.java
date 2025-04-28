@@ -215,7 +215,7 @@ public class OSdmsS3RepositoryDto implements IOSdmsMappeable, IOSdmsZippeable {
         this.processKey( s3Object.getKey() );
         this.bucket = s3Object.getBucketName();
         try (final InputStream is = s3Object.getObjectContent()) {
-            this.file = this.temporalFileManager.create( this.key, is );
+            this.file = this.temporalFileManager.create( is );
             if( this.file != null ) this.size = this.file.length();
         } catch ( IOException e) {
             this.file = null;

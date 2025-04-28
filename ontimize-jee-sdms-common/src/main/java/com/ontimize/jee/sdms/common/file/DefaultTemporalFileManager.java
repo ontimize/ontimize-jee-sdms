@@ -2,6 +2,7 @@ package com.ontimize.jee.sdms.common.file;
 
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
@@ -16,7 +17,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Component
-@RequestScope
+@RequestScope( proxyMode = ScopedProxyMode.TARGET_CLASS )
 public class DefaultTemporalFileManager implements TemporalFileManager{
 
     @Value( "${ontimize.sdms.file.temporal.directory}" )
@@ -60,5 +61,6 @@ public class DefaultTemporalFileManager implements TemporalFileManager{
         for( final File file : this.files ){
             if( file.exists() ) Files.delete( file.toPath() );
         }
+        this.files.clear();
     }
 }
