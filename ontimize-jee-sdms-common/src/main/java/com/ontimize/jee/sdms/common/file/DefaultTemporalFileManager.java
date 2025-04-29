@@ -27,8 +27,8 @@ public class DefaultTemporalFileManager implements TemporalFileManager{
         final File file;
         if( directory.exists() && directory.isDirectory() ) file = File.createTempFile( name, ".tmp", directory );
         else file = File.createTempFile( name, ".tmp" );
-        try( FileOutputStream fos = new FileOutputStream( file)) {
-            inputStream.transferTo(fos);
+        try( FileOutputStream fos = new FileOutputStream( file )) {
+            inputStream.transferTo( fos );
         }
         if( FILES.get() == null ) FILES.set( new ArrayList<>() );
         FILES.get().add( file );
@@ -44,7 +44,7 @@ public class DefaultTemporalFileManager implements TemporalFileManager{
     public void delete( final File file ) throws IOException {
         if( FILES.get() == null ) return;
         final Optional<File> result = FILES.get().stream()
-                .filter( target -> target.getAbsolutePath().equals( file.getAbsolutePath() ) )
+                .filter( target -> target.getAbsolutePath().equals( file.getAbsolutePath() ))
                 .findFirst();
         if( result.isPresent() ){
             final File target = result.get();
@@ -55,9 +55,8 @@ public class DefaultTemporalFileManager implements TemporalFileManager{
 
     @Override
     public void cleanUp() throws IOException {
-        for( final File file : FILES.get() ){
-            if( file.exists() ) Files.delete( file.toPath() );
-        }
+        if( FILES.get() == null ) return;
+        for( final File file : FILES.get() ) if( file.exists() ) Files.delete( file.toPath() );
         FILES.remove();
     }
 }
