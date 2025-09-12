@@ -1,16 +1,16 @@
 # Ontimize JEE Storage SDMS
 
 ## 📜 Introduction
-Ontimize JEE Storage SDMS es un módulo del framework Ontimize que proporciona una solución de gestión documental para aplicaciones empresariales basadas en Java Enterprise Edition (JEE). Este módulo permite a las organizaciones almacenar y gestionar documentos dentro de sus aplicaciones empresariales.
+Ontimize JEE Storage SDMS is a module of the Ontimize framework that provides a document management solution for Java Enterprise Edition (JEE) based enterprise applications. This module enables organizations to store and manage documents within their enterprise applications.
 
-## ✍ Uso
-Para utilizar este módulo, solo necesitas importarlo en tu proyecto. En la entidad que requiera disponer de los endpoints SDMS, tendrás que extender los drivers y añadir los métodos SDMS correspondientes en los servicios de dicha entidad. Para más información, consulta la [documentación](https://ontimize.github.io/docs/v3/systems/sdms/).
+## ✍ Usage
+To use this module, you only need to import it into your project. For entities requiring SDMS endpoints, you must extend the drivers and add the corresponding SDMS methods to the entity's services. For more information, please refer to the [documentation](https://ontimize.github.io/docs/v3/systems/sdms/).
 
-## 💼 Documentación
-Toda la documentación relacionada con su uso en proyectos, tutoriales y detalles de sus sistemas y modos de uso puede encontrarse en línea, accediendo al siguiente enlace de la [documentación de Ontimize Boot](https://ontimize.github.io/docs/).
+## 💼 Documentation
+All documentation related to project integration, tutorials, and details about its systems and usage can be found online via the following link to the [Ontimize Boot documentation](https://ontimize.github.io/docs/).
 
-## 👁️‍🗨️ Versiones y dependencias
-Todas las versiones y dependencias de los artefactos contenidos en este proyecto pueden descargarse desde [Maven Central](https://central.sonatype.dev/namespace/com.ontimize.boot), así como conocer cada una de sus dependencias.
+## 👁️‍🗨️ Versions and Dependencies
+All versions and dependencies of the artifacts included in this project can be downloaded from [Maven Central](https://central.sonatype.com/namespace/com.ontimize.jee.sdms), as well as viewing each of their dependencies.
 
-## 📣 Registro de cambios
-Puedes consultar nuestro registro de cambios en el siguiente [enlace](CHANGELOG.md)
+## :gear: Changelog
+You can consult our changelog at the following [link](CHANGELOG.md)
