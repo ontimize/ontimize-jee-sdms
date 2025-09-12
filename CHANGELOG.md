@@ -9,6 +9,19 @@
 
 ## [Unreleased]
 
+## [1.4.0] - 2025-05-13
+
+### Added ✔️
+* The `TemporalFileManager` has been created to manage temporary files per request.  
+
+* **OSdmsService:** Added `getTemporalFiles` method has been added to `OSdmsService`.
+
+### Fixed 🐛
+* Closed `S3ObjectInputStream` instances properly to avoid `CLOSE_WAIT` socket issues and potential memory/resource leaks during file download operations.
+
+### Changed 🛠️
+* **S3 Connection:** The connection to S3 has been optimized.
+
 ## [1.3.1] - 2023-06-28
 
 ### Fixed 🐛
@@ -65,7 +78,8 @@
 * **OSdmsWorkspace Annotation:** Added an annotation to establish multiple query workspaces on the DMS system for an
   entity.
 
-[unreleased]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.3.1...HEAD
+[unreleased]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.4.0...HEAD
+[1.4.0]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.3.1...1.4.0
 [1.3.1]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/ontimize/ontimize-jee-sdms/compare/1.1.0...1.2.0

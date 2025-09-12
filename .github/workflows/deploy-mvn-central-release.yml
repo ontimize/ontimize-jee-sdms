@@ -28,16 +28,16 @@ jobs:
         run: |
           echo "BRANCH=${{ github.event.inputs.RELEASE_BRANCH || github.ref }}" >> $GITHUB_ENV
       - name: Checkout repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ env.BRANCH }}
           fetch-depth: 0
       - name: Setup Java JDK and Maven
-        uses: ontimize/setup-java-maven-gitAction@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '11'
-          server-id: ossrh
+          server-id: central
           server-username: MAVEN_USERNAME
           server-password: MAVEN_CENTRAL_TOKEN
           gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
@@ -69,3 +69,12 @@ jobs:
         run: |
           version=${{ steps.tag.outputs.version }}
           gh pr create -B develop -H sync/$version --title "Backmerge from main into develop" --body "Created by a GitHub Action → Resync develop branch with main branch and increase project version"
+      - name: Create release on Github
+        uses: ncipollo/release-action@2792aea87063cfd0d27953ac38e3ab45afacc154
+        with:
+          commit: ${{ env.BRANCH }}
+          tag: ${{ steps.tag.outputs.version }}
+          name: ${{ steps.tag.outputs.version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: |
+            Check out the [changelog](CHANGELOG.md) for version ${{ steps.tag.outputs.version }}

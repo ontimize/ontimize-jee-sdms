@@ -2,13 +2,20 @@ package com.ontimize.jee.sdms.engine.s3.repository.dto;
 
 
 import com.amazonaws.services.s3.model.*;
+import com.ontimize.jee.sdms.common.file.TemporalFileManager;
 import com.ontimize.jee.sdms.common.zip.OSdmsZipData;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mockito;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -16,7 +23,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class OSdmsS3RepositoryDtoTest {
+    private TemporalFileManager temporalFileManager;
 
+    @BeforeEach
+    void setUp() throws IOException {
+        this.temporalFileManager = mock( TemporalFileManager.class );
+        when( this.temporalFileManager.create( any( InputStream.class )) ).thenReturn( new File( "temp.txt" ) );
+        when( this.temporalFileManager.create( any( String.class ), any( InputStream.class )) ).thenReturn( new File( "temp.txt" ) );
+    }
 
 // ------------------------------------------------------------------------------------------------------------------ \\
 // --------| SET (S3Object) |---------------------------------------------------------------------------------------- \\
@@ -33,11 +47,11 @@ class OSdmsS3RepositoryDtoTest {
         final SimpleDateFormat formatDate = new SimpleDateFormat( "dd/MM/yyyy-HH:mm:ss" );
 
         //Given
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         final String givenBucket = "bucket";
         final Long givenSize = 1L;
         final String givenCreationDate = "27/06/2023-10:30:20";
-        final S3ObjectInputStream givenFile = Mockito.mock( S3ObjectInputStream.class );
+        final S3ObjectInputStream givenFile = new S3ObjectInputStream( new ByteArrayInputStream( "contenido de prueba".getBytes( StandardCharsets.UTF_8 )), Mockito.mock( HttpRequestBase.class ));
 
         final Map<String, String> givenUserMetadata = Mockito.mock( Map.class );
         when(  givenUserMetadata.containsKey( "creation_date" ) ).thenReturn( true );
@@ -62,7 +76,7 @@ class OSdmsS3RepositoryDtoTest {
         final String key = dto.getKey();
         final String prefix = dto.getPrefix();
         final String name = dto.getName();
-        final InputStream file = dto.getFile();
+        final File file = dto.getFile();
         final Date creationDate = dto.getCreationDate();
         final Long size = dto.getSize();
         final Map<String, Object> metadata = dto.getMetadata();
@@ -103,7 +117,7 @@ class OSdmsS3RepositoryDtoTest {
     })
     void givenAValidS3ObjectSummary_whenSetS3ObjectSummary_thenDataIsSet( final String givenKey, final String expectedPrefix, final String expectedName ){
         //Given
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         final String givenBucket = "bucket";
         final Long givenSize = 1L;
         final Date givenLastModified = new Date();
@@ -165,7 +179,7 @@ class OSdmsS3RepositoryDtoTest {
         final SimpleDateFormat formatDate = new SimpleDateFormat( "dd/MM/yyyy-HH:mm:ss" );
 
         //Given
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager  );
         final Long givenSize = 1L;
         final String givenCreationDate = "27/06/2023-10:30:20";
 
@@ -224,7 +238,7 @@ class OSdmsS3RepositoryDtoTest {
     void givenAValidFolderKey_whenSetFolderData_thenFolderDataIsSet( final String givenKey, final String expectedPrefix, final String expectedName ) {
         //Given
         final String givenBucket = "bucket";
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
 
         //When
         dto.setFolderData( givenBucket, givenKey );
@@ -277,7 +291,7 @@ class OSdmsS3RepositoryDtoTest {
     void givenAValidKeyAndSpecificWorkspaces_whenSetRelativeKey_thenRelativeKeyIsSet( final String givenKey, final String expectedRelativeKey ) {
         //Given
         final List<String> givenWorkspaces = Arrays.asList( "entity/1", "entity/5", "entity/10", "entity/50", "entity/images/top" );
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         dto.setKey( givenKey );
 
         //When
@@ -310,7 +324,7 @@ class OSdmsS3RepositoryDtoTest {
     void givenAValidKeyAndSpecificWorkspaces_whenSetRelativePrefix_thenRelativePrefixIsSet( final String givenPrefix, final String expectedRelativePrefix ) {
         //Given
         final List<String> givenWorkspaces = Arrays.asList( "entity/1", "entity/5", "entity/10", "entity/50", "entity/images/top" );
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         dto.setPrefix( givenPrefix );
 
         //When
@@ -376,7 +390,7 @@ class OSdmsS3RepositoryDtoTest {
         when( givenS3Object.getObjectMetadata() ).thenReturn( givenObjectMetadata );
 
         //Set Data in DTO
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         dto.set( givenS3ObjectSummary );
         dto.set( givenS3Object );
         dto.setRelativeKey( givenWorkspaces );
@@ -415,14 +429,13 @@ class OSdmsS3RepositoryDtoTest {
         final String givenKey = "/entity/1/proof.txt";
         final String givenName = "proof.txt";
         final boolean givenFolder = false;
-        final S3ObjectInputStream givenS3ObjectInputStream = Mockito.mock( S3ObjectInputStream.class );
 
         //Set Data in DTO
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         dto.setKey( givenKey );
         dto.setName( givenName );
         dto.setFolder( givenFolder );
-        dto.setFile( givenS3ObjectInputStream );
+        dto.setFile( new File( givenName ));
 
         //When
         final OSdmsZipData result = dto.getDataToZip();
@@ -430,8 +443,8 @@ class OSdmsS3RepositoryDtoTest {
         //Then
         assertNotNull( result, () -> "The result should not be null" );
 
-        final InputStream inputStream = result.getInputStream();
-        assertNotNull( inputStream, () -> "The inputStream should not be null" );
+        final File file = result.getFile();
+        assertNotNull( file, () -> "The File should not be null" );
 
         final String fileName = result.getFileName();
         assertEquals( expectedFileName, fileName, () -> "Unexpected fileName" );
@@ -472,7 +485,7 @@ class OSdmsS3RepositoryDtoTest {
         when( givenS3ObjectSummary.getOwner().getDisplayName() ).thenReturn( givenOwnerDisplayName );
 
         //When
-        final OSdmsS3RepositoryDto result = new OSdmsS3RepositoryDto( givenS3Object, givenS3ObjectSummary, givenObjectMetadata );
+        final OSdmsS3RepositoryDto result = new OSdmsS3RepositoryDto( this.temporalFileManager, givenS3Object, givenS3ObjectSummary, givenObjectMetadata );
 
         //Then
         assertNotNull( result, () -> "The result should not be null" );
@@ -489,7 +502,7 @@ class OSdmsS3RepositoryDtoTest {
     @Test
     void givenBucketNameAsString_whenCallSetBucket_thenCheckTheNewValueWithCallGetter(){
         //Given
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         final String givenBucketName = "bucket";
 
         //When
@@ -505,7 +518,7 @@ class OSdmsS3RepositoryDtoTest {
     @Test
     void givenKeyAsString_whenCallSetKey_thenCheckTheNewValueWithCallGetter(){
         //Given
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         final String givenKey = "key";
 
         //When
@@ -521,7 +534,7 @@ class OSdmsS3RepositoryDtoTest {
     @Test
     void givenRelativeKeyAsString_whenCallSetRelativeKey_thenCheckTheNewValueWithCallGetter(){
         //Given
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         final String givenRelativeKey = "relativeKey";
 
         //When
@@ -537,7 +550,7 @@ class OSdmsS3RepositoryDtoTest {
     @Test
     void givenRelativePrefixAsString_whenCallSetRelativePrefix_thenCheckTheNewValueWithCallGetter(){
         //Given
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         final String givenRelativePrefix = "relativePrefix";
 
         //When
@@ -553,7 +566,7 @@ class OSdmsS3RepositoryDtoTest {
     @Test
     void givenPrefixAsString_whenCallSetPrefix_thenCheckTheNewValueWithCallGetter(){
         //Given
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         final String givenPrefix = "prefix";
 
         //When
@@ -569,7 +582,7 @@ class OSdmsS3RepositoryDtoTest {
     @Test
     void givenNameAsString_whenCallSetName_thenCheckTheNewValueWithCallGetter(){
         //Given
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         final String givenName = "name";
 
         //When
@@ -585,7 +598,7 @@ class OSdmsS3RepositoryDtoTest {
     @Test
     void givenOwnerAsString_whenCallSetOwner_thenCheckTheNewValueWithCallGetter(){
         //Given
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         final String givenOwner = "owner";
 
         //When
@@ -601,7 +614,7 @@ class OSdmsS3RepositoryDtoTest {
     @Test
     void givenSizeAsLong_whenCallSetSize_thenCheckTheNewValueWithCallGetter(){
         //Given
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         final Long givenSize = 1L;
 
         //When
@@ -617,7 +630,7 @@ class OSdmsS3RepositoryDtoTest {
     @Test
     void givenFolderFlagAsBoolean_whenCallSetFolder_thenCheckTheNewValueWithCallGetter(){
         //Given
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         final boolean givenFolderFlag = true;
 
         //When
@@ -633,7 +646,7 @@ class OSdmsS3RepositoryDtoTest {
     void givenCreationDateAsDate_whenCallSetCreationDate_thenCheckTheNewValueWithCallGetter() {
         //Given
         final Date givenCreationDate = new Date();
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
 
         //When
         dto.setCreationDate( givenCreationDate );
@@ -650,7 +663,7 @@ class OSdmsS3RepositoryDtoTest {
 
         //Given
         final String givenCreationDate = "27/06/2023-10:30:20";
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
 
         //When
         dto.setCreationDate( givenCreationDate );
@@ -666,7 +679,7 @@ class OSdmsS3RepositoryDtoTest {
     void givenLastModifiedAsDate_whenCallSetLastModified_thenCheckTheNewValueWithCallGetter() {
         //Given
         final Date givenLastModified = new Date();
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
 
         //When
         dto.setLastModified( givenLastModified );
@@ -685,7 +698,7 @@ class OSdmsS3RepositoryDtoTest {
         final Map<String, Object> givenMetadata = Mockito.mock( Map.class );
         when( givenMetadata.size() ).thenReturn( expectedSize );
 
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
 
         //When
         dto.setMetadata( givenMetadata );
@@ -699,16 +712,15 @@ class OSdmsS3RepositoryDtoTest {
 
     //File
     @Test
-    void givenFileAsS3ObjectInputStream_whenCallSetFile_thenCheckTheNewValueWithCallGetter() {
+    void givenFileAsBytes_whenCallSetFile_thenCheckTheNewValueWithCallGetter() {
         //Given
-        final S3ObjectInputStream givenFile = Mockito.mock( S3ObjectInputStream.class );
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto(this.temporalFileManager );
 
         //When
-        dto.setFile( givenFile );
+        dto.setFile( new File( "proof.tmp" ) );
 
         //Then
-        final InputStream result = dto.getFile();
+        final File result = dto.getFile();
         assertNotNull( result, () -> "The result should not be null" );
     }
 
@@ -722,14 +734,13 @@ class OSdmsS3RepositoryDtoTest {
         final String givenKey = "/entity/1/proof.txt";
         final String givenName = "proof.txt";
         final boolean givenFolder = false;
-        final S3ObjectInputStream givenS3ObjectInputStream = Mockito.mock( S3ObjectInputStream.class );
 
         //Set Data in DTO
-        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto();
+        final OSdmsS3RepositoryDto dto = new OSdmsS3RepositoryDto( this.temporalFileManager );
         dto.setKey( givenKey );
         dto.setName( givenName );
         dto.setFolder( givenFolder );
-        dto.setFile( givenS3ObjectInputStream );
+        dto.setFile( new File( givenName ));
 
         //When
         final String result = dto.toString();

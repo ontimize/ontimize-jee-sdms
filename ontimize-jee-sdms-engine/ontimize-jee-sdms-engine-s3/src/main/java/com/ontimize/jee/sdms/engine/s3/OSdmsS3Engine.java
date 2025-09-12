@@ -69,6 +69,12 @@ public class OSdmsS3Engine implements IOSdmsEngine {
         return this.oSdmsCommandHandler.run( new OSdmsS3DownloadCommand( requestFilter ) );
     }
 
+    @Override
+    public EntityResult getTemporalFiles( final OSdmsRestDataDto data ) {
+        final OSdmsS3InputFilter requestFilter = this.oSdmsS3InputFilterMapper.map( data );
+        return this.oSdmsCommandHandler.run( new OSdmsS3GetTemporalFilesCommand( requestFilter ) );
+    }
+
 // ------------------------------------------------------------------------------------------------------------------ \\
 // -------| DMS - UPLOAD |------------------------------------------------------------------------------------------- \\
 // ------------------------------------------------------------------------------------------------------------------ \\
